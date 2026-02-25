@@ -67,16 +67,16 @@ export default function ApplicationsTable() {
         />
       </div>
       <div style={{ maxHeight: '500px', overflowY: 'auto', border: '1px solid #ddd' }}>
-        <table className="min-w-full bg-white border">
+        <table className="min-w-full bg-white data-table">
           <thead>
             <tr>
-              <th className="border px-2 py-1">Company</th>
-              <th className="border px-2 py-1">Role</th>
-              <th className="border px-2 py-1">Location</th>
-              <th className="border px-2 py-1">Source</th>
-                <th className="border px-2 py-1">Status</th>
-                <th className="border px-2 py-1">Date</th>
-                <th className="border px-2 py-1">Actions</th>
+              <th className="px-2 py-1">Company</th>
+              <th className="px-2 py-1">Role</th>
+              <th className="px-2 py-1">Location</th>
+              <th className="px-2 py-1">Source</th>
+              <th className="px-2 py-1">Status</th>
+              <th className="px-2 py-1">Date</th>
+              <th className="px-2 py-1">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -93,13 +93,13 @@ export default function ApplicationsTable() {
                 })();
               return (
                 <tr key={app.id || app._id} style={stagnant ? { backgroundColor: '#fff8e1' } : undefined}>
-                  <td className="border px-2 py-1">{app.company_name}</td>
-                  <td className="border px-2 py-1">{app.role_title}</td>
-                  <td className="border px-2 py-1">{app.location}</td>
-                  <td className="border px-2 py-1">{app.source}</td>
-                    <td className="border px-2 py-1">{app.timeline?.[app.timeline.length-1]?.stage}</td>
-                    <td className="border px-2 py-1">{statusDate ? new Date(statusDate).toLocaleDateString() : ''}</td>
-                    <td className="border px-2 py-1">
+                  <td className="px-2 py-1">{app.company_name}</td>
+                  <td className="px-2 py-1">{app.role_title}</td>
+                  <td className="px-2 py-1">{app.location}</td>
+                  <td className="px-2 py-1">{app.source}</td>
+                  <td className="px-2 py-1">{app.timeline?.[app.timeline.length-1]?.stage}</td>
+                  <td className="px-2 py-1">{statusDate ? new Date(statusDate).toLocaleDateString() : ''}</td>
+                  <td className="px-2 py-1">
                     <button
                       type="button"
                       className="btn-secondary"

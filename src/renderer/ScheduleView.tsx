@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getAllApplications } from './db';
 import { JobApplication, TimelineEvent } from '../types';
 
@@ -30,27 +31,38 @@ export default function ScheduleView() {
     });
   }, []);
 
+  const navigate = useNavigate();
+
   return (
-    <div>
+    <div className="w-full">
       <h2 className="text-xl font-bold mb-4">Upcoming Assessments & Interviews</h2>
-      <table className="min-w-full bg-white border">
+      <table className="min-w-full bg-white data-table">
         <thead>
           <tr>
-            <th className="border px-2 py-1">Company</th>
-            <th className="border px-2 py-1">Role</th>
-            <th className="border px-2 py-1">Type</th>
-            <th className="border px-2 py-1">Due Date</th>
-            <th className="border px-2 py-1">Notes</th>
+            <th className="px-2 py-1">Company</th>
+            <th className="px-2 py-1">Role</th>
+            <th className="px-2 py-1">Type</th>
+            <th className="px-2 py-1">Due Date</th>
+            <th className="px-2 py-1">Notes</th>
+            <th className="px-2 py-1">Actions</th>
           </tr>
         </thead>
         <tbody>
           {events.map(({ app, event }, idx) => (
             <tr key={idx}>
-              <td className="border px-2 py-1">{app.company_name}</td>
-              <td className="border px-2 py-1">{app.role_title}</td>
-              <td className="border px-2 py-1">{event.stage}</td>
-              <td className="border px-2 py-1">{(event as any).due_date || event.date}</td>
-              <td className="border px-2 py-1">{event.notes}</td>
+              <td className="px-2 py-1">{app.company_name}</td>
+              <td className="px-2 py-1">{app.role_title}</td>
+              <td className="px-2 py-1">{event.stage}</td>
+              <td className="px-2 py-1">{(event as any).due_date || event.date}</td>
+              <td className="px-2 py-1">{event.notes}</td>
+              <td className="px-2 py-1">
+                <button
+                  className="text-blue-600 hover:underline"
+                  onClick={() => navigate(`/applications/${app.id || app._id}/edit`)}
+                >
+                  Edit
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
