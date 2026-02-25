@@ -74,6 +74,7 @@ export default function ApplicationsTable() {
               <th className="px-2 py-1">Role</th>
               <th className="px-2 py-1">Location</th>
               <th className="px-2 py-1">Source</th>
+              <th className="px-2 py-1">App Link</th>
               <th className="px-2 py-1">Status</th>
               <th className="px-2 py-1">Date</th>
               <th className="px-2 py-1">Actions</th>
@@ -97,6 +98,13 @@ export default function ApplicationsTable() {
                   <td className="px-2 py-1">{app.role_title}</td>
                   <td className="px-2 py-1">{app.location}</td>
                   <td className="px-2 py-1">{app.source}</td>
+                  <td className="px-2 py-1">
+                    {app.job_url ? (
+                      <a href={app.job_url} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">Link</a>
+                    ) : (app.contacts && app.contacts[0] && app.contacts[0].email ? (
+                      <a href={`mailto:${app.contacts[0].email}`} className="text-blue-600 hover:underline">{app.contacts[0].email}</a>
+                    ) : '' )}
+                  </td>
                   <td className="px-2 py-1">{app.timeline?.[app.timeline.length-1]?.stage}</td>
                   <td className="px-2 py-1">{statusDate ? new Date(statusDate).toLocaleDateString() : ''}</td>
                   <td className="px-2 py-1">
@@ -113,6 +121,9 @@ export default function ApplicationsTable() {
             })}
           </tbody>
         </table>
+      </div>
+      <div style={{ marginTop: 12 }}>
+        <button className="btn-primary" onClick={() => navigate('/applications/add')}>Add New Application</button>
       </div>
     </div>
   );

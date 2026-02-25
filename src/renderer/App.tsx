@@ -33,24 +33,19 @@ export default function App() {
   const navigate = useNavigate();
   const [snackOpen, setSnackOpen] = React.useState(false);
   const handleAddApplication = async (app: any) => {
-    // Determine next numeric id in DB (stored as strings)
-    try {
-      const all = await getAllApplications();
-      const numericIds = all
-        .map(a => parseInt((a.id || '').toString(), 10))
-        .filter(n => !isNaN(n));
-      const nextIdNum = numericIds.length ? Math.max(...numericIds) + 1 : 1;
-      const id = `${nextIdNum}`;
-      await addApplication({ ...app, id });
-      setSnackOpen(true);
-      setTimeout(() => navigate('/applications'), 700);
-    } catch (e) {
-      // fallback to timestamp id
-      const id = `${app.company_name || 'draft'}-${Date.now()}`;
-      await addApplication({ ...app, id });
-      setSnackOpen(true);
-      setTimeout(() => navigate('/applications'), 700);
-    }
+    // Use a UUID for new application IDs
+    const generateUuid = () => {
+      if (typeof crypto !== 'undefined' && (crypto as any).randomUUID) return (crypto as any).randomUUID();
+      // fallback simple uuid v4
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0; const v = c === 'x' ? r : (r & 0x3 | 0x8); return v.toString(16);
+      });
+    };
+
+    const id = generateUuid();
+    await addApplication({ ...app, id });
+    setSnackOpen(true);
+    return id;
   };
 
   return (

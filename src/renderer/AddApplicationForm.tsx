@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { JobApplication } from '../types';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -17,7 +18,7 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 
 interface AddApplicationFormProps {
-  onSubmit: (app: Partial<JobApplication>) => Promise<void> | void;
+  onSubmit: (app: Partial<JobApplication>) => Promise<string | void> | string | void;
 }
 
 const SOURCE_OPTIONS = [
@@ -36,6 +37,9 @@ export default function AddApplicationForm({ onSubmit }: AddApplicationFormProps
   });
   const [status, setStatus] = React.useState<'draft' | 'submitted'>('draft');
   const [snackOpen, setSnackOpen] = React.useState(false);
+  const [confirmOpen, setConfirmOpen] = React.useState(false);
+  const [createdId, setCreatedId] = React.useState<string | null>(null);
+  const navigate = useNavigate();
 
   const handleChange = (name: string, value: any) => setForm((prev) => ({ ...(prev || {}), [name]: value }));
 
@@ -69,8 +73,14 @@ export default function AddApplicationForm({ onSubmit }: AddApplicationFormProps
       ...timeline,
       { stage: status === 'submitted' ? 'Application Submitted' : 'Draft', date: now, notes: null },
     ];
-    await onSubmit({ ...form, timeline });
-    setSnackOpen(true);
+    const result = await onSubmit({ ...form, timeline });
+    // If caller returned an id, show confirmation dialog
+    if (typeof result === 'string') {
+      setCreatedId(result);
+      setConfirmOpen(true);
+    } else {
+      setSnackOpen(true);
+    }
   };
 
   return (
@@ -127,10 +137,16 @@ export default function AddApplicationForm({ onSubmit }: AddApplicationFormProps
         </div>
 
         <FormControl>
-          <RadioGroup row value={status} onChange={(e) => setStatus(e.target.value as any)}>
-            <FormControlLabel value="draft" control={<Radio />} label="Save as Draft" />
-            <FormControlLabel value="submitted" control={<Radio />} label="Mark as Application Submitted" />
-          </RadioGroup>
+          {/** Disable Draft option if an Application Submitted event exists in timeline */}
+          {(() => {
+            const hasSubmitted = (form.timeline || []).some((t: any) => (t && (t.stage === 'Application Submitted')));
+            return (
+              <RadioGroup row value={status} onChange={(e) => setStatus(e.target.value as any)}>
+                <FormControlLabel value="draft" control={<Radio />} label="Save as Draft" disabled={hasSubmitted} />
+                <FormControlLabel value="submitted" control={<Radio />} label="Mark as Application Submitted" />
+              </RadioGroup>
+            );
+          })()}
         </FormControl>
 
         <div>
@@ -141,6 +157,22 @@ export default function AddApplicationForm({ onSubmit }: AddApplicationFormProps
       <Snackbar open={snackOpen} autoHideDuration={3000} onClose={() => setSnackOpen(false)}>
         <Alert onClose={() => setSnackOpen(false)} severity="success" sx={{ width: '100%' }}>Application saved</Alert>
       </Snackbar>
+      {/* Confirmation dialog after create - gives navigation options */}
+
+      {/* For navigation actions we'll show a simple in-page dialog using the browser confirm alternatives */}
+      {confirmOpen && createdId && (
+        <div style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 60 }}>
+          <div style={{ background: '#fff', padding: 20, borderRadius: 8, boxShadow: '0 8px 24px rgba(0,0,0,0.2)', width: 420 }}>
+            <h3 style={{ marginTop: 0 }}>Application added</h3>
+            <p>Application was added to the tracker.</p>
+            <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+              <button onClick={() => { setConfirmOpen(false); setCreatedId(null); /* stay on add page */ }} className="btn-secondary">Add another</button>
+              <button onClick={() => { setConfirmOpen(false); (window as any).__navigate__?.(`/applications/${createdId}/edit`); }} className="btn-primary">Edit</button>
+              <button onClick={() => { setConfirmOpen(false); (window as any).__navigate__?.('/applications'); }} className="btn-outline">Go to Applications</button>
+            </div>
+          </div>
+        </div>
+      )}
     </form>
   );
 }

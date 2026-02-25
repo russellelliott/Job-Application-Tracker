@@ -159,10 +159,29 @@ export default function EditApplicationForm() {
             <div style={{ marginBottom: 8, fontWeight: 600 }}>Timeline</div>
             {(app.timeline || []).map((ev, idx) => {
               const stage = (ev as any).stage || '';
+              const hasSubmitted = (app.timeline || []).some(t => ((t as any).stage || '') === 'Application Submitted');
+              const hasInterview1 = (app.timeline || []).some(t => typeof (t as any).stage === 'string' && (t as any).stage.toLowerCase().includes('interview 1'));
               const isInterview = typeof stage === 'string' && stage.toLowerCase().includes('interview');
               return (
                 <div key={idx} style={{ border: '1px solid #e5e7eb', borderRadius: 6, padding: 12, marginBottom: 8 }}>
-                  <div style={{ marginBottom: 8, fontWeight: 600 }}>{stage || 'Event'}</div>
+                  <div style={{ marginBottom: 8, fontWeight: 600 }}>
+                    <FormControl fullWidth>
+                      <InputLabel id={`timeline-stage-label-${idx}`}>Event Type</InputLabel>
+                      <Select
+                        labelId={`timeline-stage-label-${idx}`}
+                        label="Event Type"
+                        value={stage}
+                        onChange={(e) => setTimelineEvent(idx, 'stage', e.target.value)}
+                      >
+                        <MenuItem value="Draft" disabled={hasSubmitted && stage !== 'Draft'}>Draft</MenuItem>
+                        <MenuItem value="Application Submitted">Application Submitted</MenuItem>
+                        <MenuItem value="Follow-up">Follow-up</MenuItem>
+                        <MenuItem value="Assessment">Assessment</MenuItem>
+                        <MenuItem value="Interview 1">Interview 1</MenuItem>
+                        <MenuItem value="Interview 2" disabled={!hasInterview1 && stage !== 'Interview 2'}>Interview 2</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </div>
                   {isInterview ? (
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
                       <div>
