@@ -110,7 +110,7 @@ export default function EditApplicationForm() {
     <div style={{ padding: 24, height: '100%', boxSizing: 'border-box' }}>
       <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 12 }}>Edit Application</h2>
       <form onSubmit={handleSubmit}>
-        <div style={{ maxHeight: 'calc(100vh - 120px)', overflowY: 'auto', paddingRight: 12 }}>
+        <div style={{ maxHeight: 'calc(100vh - 180px)', overflowY: 'auto', paddingRight: 12 }}>
           <Stack spacing={2} sx={{ maxWidth: 800 }}>
           <TextField label="Company Name" value={app.company_name || ''} onChange={handleChange} name="company_name" />
           <TextField label="Role Title" value={app.role_title || ''} onChange={handleChange} name="role_title" />
@@ -156,30 +156,49 @@ export default function EditApplicationForm() {
 
           <div>
             <div style={{ marginBottom: 8, fontWeight: 600 }}>Timeline</div>
-            {(app.timeline || []).map((ev, idx) => (
-              <div key={idx} style={{ border: '1px solid #e5e7eb', borderRadius: 6, padding: 12, marginBottom: 8 }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
-                  <TextField value={(ev as any).stage || ''} onChange={(e) => setTimelineEvent(idx, 'stage', e.target.value)} placeholder="Stage" />
-                  <TextField type="date" value={(ev as any).date ? new Date((ev as any).date).toISOString().slice(0,10) : ''} onChange={(e) => setTimelineEvent(idx, 'date', e.target.value)} />
-                  <TextField type="date" value={(ev as any).due_date ? new Date((ev as any).due_date).toISOString().slice(0,10) : ''} onChange={(e) => setTimelineEvent(idx, 'due_date', e.target.value)} />
+            {(app.timeline || []).map((ev, idx) => {
+              const stage = (ev as any).stage || '';
+              const isInterview = typeof stage === 'string' && stage.toLowerCase().includes('interview');
+              return (
+                <div key={idx} style={{ border: '1px solid #e5e7eb', borderRadius: 6, padding: 12, marginBottom: 8 }}>
+                  <div style={{ marginBottom: 8, fontWeight: 600 }}>{stage || 'Event'}</div>
+                  {isInterview ? (
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                      <div>
+                        <div style={{ fontSize: 12, color: '#374151', marginBottom: 4 }}>Received</div>
+                        <TextField fullWidth type="date" value={(ev as any).date ? new Date((ev as any).date).toISOString().slice(0,10) : ''} onChange={(e) => setTimelineEvent(idx, 'date', e.target.value)} />
+                      </div>
+                      <div>
+                        <div style={{ fontSize: 12, color: '#374151', marginBottom: 4 }}>Interview Date</div>
+                        <TextField fullWidth type="date" value={(ev as any).due_date ? new Date((ev as any).due_date).toISOString().slice(0,10) : ''} onChange={(e) => setTimelineEvent(idx, 'due_date', e.target.value)} />
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <div style={{ fontSize: 12, color: '#374151', marginBottom: 4 }}>Date</div>
+                      <TextField fullWidth type="date" value={(ev as any).date ? new Date((ev as any).date).toISOString().slice(0,10) : ''} onChange={(e) => setTimelineEvent(idx, 'date', e.target.value)} />
+                    </div>
+                  )}
+
+                  <div style={{ marginTop: 8 }}>
+                    <TextField multiline fullWidth value={(ev as any).notes || ''} onChange={(e) => setTimelineEvent(idx, 'notes', e.target.value)} placeholder="Notes" />
+                  </div>
+                  <div style={{ marginTop: 8 }}>
+                    <Button size="small" onClick={() => removeTimelineEvent(idx)}>Remove Event</Button>
+                  </div>
                 </div>
-                <div style={{ marginTop: 8 }}>
-                  <TextField multiline fullWidth value={(ev as any).notes || ''} onChange={(e) => setTimelineEvent(idx, 'notes', e.target.value)} placeholder="Notes" />
-                </div>
-                <div style={{ marginTop: 8 }}>
-                  <Button size="small" onClick={() => removeTimelineEvent(idx)}>Remove Event</Button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
             <Button size="small" startIcon={<AddIcon />} onClick={addTimelineEvent}>Add Event</Button>
           </div>
-
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-            <Button variant="text" onClick={() => navigate(-1)}>Back</Button>
-            {isChanged && <Button variant="contained" type="submit">Submit Changes</Button>}
-            <Button variant="outlined" onClick={() => navigate('/applications')}>Exit</Button>
+          <div style={{ position: 'sticky', bottom: 0, background: '#fff', paddingTop: 12, paddingBottom: 12, marginTop: 12, borderTop: '1px solid #e5e7eb', zIndex: 20 }}>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center', justifyContent: 'flex-start' }}>
+              <Button variant="text" onClick={() => navigate(-1)}>Back</Button>
+              {isChanged && <Button variant="contained" type="submit">Submit Changes</Button>}
+              <Button variant="outlined" onClick={() => navigate('/applications')}>Exit</Button>
+            </div>
           </div>
-          </Stack>
+        </Stack>
         </div>
       </form>
     </div>
