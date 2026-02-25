@@ -1,23 +1,29 @@
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 
 export default function Sidebar({ children }: { children: React.ReactNode }) {
-
   return (
-    <div className="flex h-screen">
-      <nav className="w-56 bg-gray-900 text-white flex flex-col py-6 px-4">
-        <div className="mb-8 text-2xl font-bold tracking-tight">Job Tracker</div>
-        <ul className="flex-1 space-y-4">
-          <li><NavLink to="/" className={({ isActive }) => isActive ? 'text-blue-400' : 'hover:text-blue-400'}>Dashboard</NavLink></li>
-          <li><NavLink to="/applications" className={({ isActive }) => isActive ? 'text-blue-400' : 'hover:text-blue-400'}>Applications</NavLink></li>
-          <li><NavLink to="/schedule" className={({ isActive }) => isActive ? 'text-blue-400' : 'hover:text-blue-400'}>Schedule</NavLink></li>
-          <li><NavLink to="/analytics" className={({ isActive }) => isActive ? 'text-blue-400' : 'hover:text-blue-400'}>Analytics</NavLink></li>
-          {/* Stagnant page removed; stagnant rows are highlighted in Applications view */}
-        </ul>
-        <div className="text-xs text-gray-400 mt-8">© {new Date().getFullYear()}</div>
-      </nav>
-      <main className="flex-1 bg-gray-50 p-8 overflow-auto">{children}</main>
+    <div className="flex flex-col h-screen">
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Job Tracker
+          </Typography>
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <Button color="inherit" component={NavLink} to="/">Dashboard</Button>
+            <Button color="inherit" component={NavLink} to="/applications">Applications</Button>
+            <Button color="inherit" component={NavLink} to="/schedule">Schedule</Button>
+            <Button color="inherit" component={NavLink} to="/analytics">Analytics</Button>
+          </Box>
+        </Toolbar>
+      </AppBar>
+      <main style={{ flex: 1, backgroundColor: '#f8fafc', padding: 16, overflow: 'auto' }}>{children}</main>
     </div>
   );
 }

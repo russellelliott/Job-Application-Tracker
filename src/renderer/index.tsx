@@ -2,12 +2,17 @@
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import { MemoryRouter as Router } from 'react-router-dom';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 
 const container = document.getElementById('root') as HTMLElement;
 const root = createRoot(container);
 root.render(
   <Router>
-    <App />
+    <ThemeProvider theme={createTheme()}>
+      <CssBaseline />
+      <App />
+    </ThemeProvider>
   </Router>
 );
 

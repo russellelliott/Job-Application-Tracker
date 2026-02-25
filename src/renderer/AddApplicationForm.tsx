@@ -1,15 +1,30 @@
 import React from 'react';
 import { JobApplication } from '../types';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Stack from '@mui/material/Stack';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 interface AddApplicationFormProps {
-  onSubmit: (app: Partial<JobApplication>) => void;
+  onSubmit: (app: Partial<JobApplication>) => Promise<void> | void;
 }
 
 const SOURCE_OPTIONS = [
-  { value: 'Cold Application', label: 'Cold Application', tooltip: 'Public job boards (LinkedIn, Otta, Simplify) without a referral.' },
-  { value: 'Direct Connection', label: 'Direct Connection', tooltip: 'Personal contact, referral, or alumni network.' },
-  { value: 'In-Person Event', label: 'In-Person Event', tooltip: 'Career fairs, tech mixers, or campus events.' },
-  { value: 'Inbound Outreach', label: 'Inbound Outreach', tooltip: 'Recruiter/Founder reached out directly.' },
+  'Cold Application',
+  'Direct Connection',
+  'In-Person Event',
+  'Inbound Outreach',
 ];
 
 export default function AddApplicationForm({ onSubmit }: AddApplicationFormProps) {
@@ -19,134 +34,113 @@ export default function AddApplicationForm({ onSubmit }: AddApplicationFormProps
     timeline: [],
     raw_notes: [''],
   });
+  const [status, setStatus] = React.useState<'draft' | 'submitted'>('draft');
+  const [snackOpen, setSnackOpen] = React.useState(false);
 
-  // Handle simple fields
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const handleChange = (name: string, value: any) => setForm((prev) => ({ ...(prev || {}), [name]: value }));
 
-  // Auxiliary URLs
   const handleAuxUrlChange = (idx: number, value: string) => {
-    const urls = [...(form.auxiliary_urls || [])];
-    urls[idx] = value;
-    setForm({ ...form, auxiliary_urls: urls });
+    setForm((prev) => ({ ...(prev || {}), auxiliary_urls: [...(prev?.auxiliary_urls || []).slice(0, idx), value, ...(prev?.auxiliary_urls || []).slice(idx + 1)] }));
   };
-  const addAuxUrl = () => setForm({ ...form, auxiliary_urls: [...(form.auxiliary_urls || []), ''] });
-  const removeAuxUrl = (idx: number) => {
-    const urls = [...(form.auxiliary_urls || [])];
-    urls.splice(idx, 1);
-    setForm({ ...form, auxiliary_urls: urls });
-  };
+  const addAuxUrl = () => setForm((prev) => ({ ...(prev || {}), auxiliary_urls: [...(prev?.auxiliary_urls || []), ''] }));
+  const removeAuxUrl = (idx: number) => setForm((prev) => {
+    const arr = [...(prev?.auxiliary_urls || [])]; arr.splice(idx, 1); return { ...(prev || {}), auxiliary_urls: arr };
+  });
 
-  // Contacts
   const handleContactChange = (idx: number, field: string, value: string) => {
-    const contacts = [...(form.contacts || [])];
-    contacts[idx] = { ...contacts[idx], [field]: value };
-    setForm({ ...form, contacts });
+    setForm((prev) => {
+      const contacts = [...(prev?.contacts || [])];
+      contacts[idx] = { ...(contacts[idx] || {}), [field]: value } as any;
+      return { ...(prev || {}), contacts };
+    });
   };
-  const addContact = () => setForm({ ...form, contacts: [...(form.contacts || []), { name: '', email: '', linkedin_url: '', connection_type: '' }] });
-  const removeContact = (idx: number) => {
-    const contacts = [...(form.contacts || [])];
-    contacts.splice(idx, 1);
-    setForm({ ...form, contacts });
-  };
+  const addContact = () => setForm((prev) => ({ ...(prev || {}), contacts: [...(prev?.contacts || []), { name: '', email: '', linkedin_url: '', connection_type: '' }] }));
+  const removeContact = (idx: number) => setForm((prev) => { const c = [...(prev?.contacts || [])]; c.splice(idx, 1); return { ...(prev || {}), contacts: c }; });
 
-  // Notes
-  const handleNoteChange = (idx: number, value: string) => {
-    const notes = [...(form.raw_notes || [])];
-    notes[idx] = value;
-    setForm({ ...form, raw_notes: notes });
-  };
-  const addNote = () => setForm({ ...form, raw_notes: [...(form.raw_notes || []), ''] });
-  const removeNote = (idx: number) => {
-    const notes = [...(form.raw_notes || [])];
-    notes.splice(idx, 1);
-    setForm({ ...form, raw_notes: notes });
-  };
+  const handleNoteChange = (idx: number, value: string) => setForm((prev) => { const notes = [...(prev?.raw_notes || [])]; notes[idx] = value; return { ...(prev || {}), raw_notes: notes }; });
+  const addNote = () => setForm((prev) => ({ ...(prev || {}), raw_notes: [...(prev?.raw_notes || []), ''] }));
+  const removeNote = (idx: number) => setForm((prev) => { const n = [...(prev?.raw_notes || [])]; n.splice(idx, 1); return { ...(prev || {}), raw_notes: n }; });
 
-  // Timeline logic
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const now = new Date().toISOString();
     let timeline = form.timeline || [];
-    if (form.source) {
-      timeline = [
-        ...timeline,
-        { stage: 'Application Submitted', date: now, notes: null },
-      ];
-    } else {
-      timeline = [
-        ...timeline,
-        { stage: 'Draft', date: now, notes: null },
-      ];
-    }
-    onSubmit({ ...form, timeline });
+    timeline = [
+      ...timeline,
+      { stage: status === 'submitted' ? 'Application Submitted' : 'Draft', date: now, notes: null },
+    ];
+    await onSubmit({ ...form, timeline });
+    setSnackOpen(true);
   };
 
-  const source = form.source as string | undefined;
-  const buttonLabel = source ? 'Submit Application' : 'Save as Draft';
-
   return (
-    <form className="space-y-4 max-w-xl" onSubmit={handleSubmit}>
-      <div>
-        <label className="block font-medium">Company Name</label>
-        <input name="company_name" className="input" onChange={handleChange} />
-      </div>
-      <div>
-        <label className="block font-medium">Role Title</label>
-        <input name="role_title" className="input" onChange={handleChange} />
-      </div>
-      <div>
-        <label className="block font-medium">Location</label>
-        <input name="location" className="input" onChange={handleChange} />
-      </div>
-      <div>
-        <label className="block font-medium">Job URL</label>
-        <input name="job_url" className="input" onChange={handleChange} />
-      </div>
-      <div>
-        <label className="block font-medium">Source</label>
-        <select name="source" className="input" onChange={handleChange}>
-          <option value="">-- Select Source --</option>
-          {SOURCE_OPTIONS.map(opt => (
-            <option key={opt.value} value={opt.value} title={opt.tooltip}>{opt.label}</option>
+    <form onSubmit={handleSubmit}>
+      <Stack spacing={2} sx={{ maxWidth: 720 }}>
+        <TextField label="Company Name" value={form.company_name || ''} onChange={(e) => handleChange('company_name', e.target.value)} />
+        <TextField label="Role Title" value={form.role_title || ''} onChange={(e) => handleChange('role_title', e.target.value)} />
+        <TextField label="Location" value={form.location || ''} onChange={(e) => handleChange('location', e.target.value)} />
+        <TextField label="Job URL" value={form.job_url || ''} onChange={(e) => handleChange('job_url', e.target.value)} />
+
+        <FormControl fullWidth>
+          <InputLabel id="source-label">Source</InputLabel>
+          <Select labelId="source-label" label="Source" value={form.source || ''} onChange={(e) => handleChange('source', e.target.value)}>
+            <MenuItem value="">(None)</MenuItem>
+            {SOURCE_OPTIONS.map((s) => <MenuItem key={s} value={s}>{s}</MenuItem>)}
+          </Select>
+        </FormControl>
+
+        <div>
+          <div style={{ marginBottom: 8, fontWeight: 600 }}>Auxiliary URLs</div>
+          {(form.auxiliary_urls || []).map((u, idx) => (
+            <div key={idx} style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
+              <TextField fullWidth value={u} onChange={(e) => handleAuxUrlChange(idx, e.target.value)} />
+              <IconButton size="small" onClick={() => removeAuxUrl(idx)}><RemoveIcon /></IconButton>
+            </div>
           ))}
-        </select>
-      </div>
-      <div>
-        <label className="block font-medium">Auxiliary URLs</label>
-        {(form.auxiliary_urls || []).map((url, idx) => (
-          <div key={idx} className="flex gap-2 mb-1">
-            <input className="input flex-1" value={url} onChange={e => handleAuxUrlChange(idx, e.target.value)} />
-            <button type="button" className="btn-secondary" onClick={() => removeAuxUrl(idx)}>-</button>
-          </div>
-        ))}
-        <button type="button" className="btn-secondary" onClick={addAuxUrl}>Add URL</button>
-      </div>
-      <div>
-        <label className="block font-medium">Contacts</label>
-        {(form.contacts || []).map((contact, idx) => (
-          <div key={idx} className="flex gap-2 mb-1">
-            <input className="input" placeholder="Name" value={contact.name || ''} onChange={e => handleContactChange(idx, 'name', e.target.value)} />
-            <input className="input" placeholder="Email" value={contact.email || ''} onChange={e => handleContactChange(idx, 'email', e.target.value)} />
-            <input className="input" placeholder="LinkedIn" value={contact.linkedin_url || ''} onChange={e => handleContactChange(idx, 'linkedin_url', e.target.value)} />
-            <input className="input" placeholder="Connection Type" value={contact.connection_type || ''} onChange={e => handleContactChange(idx, 'connection_type', e.target.value)} />
-            <button type="button" className="btn-secondary" onClick={() => removeContact(idx)}>-</button>
-          </div>
-        ))}
-        <button type="button" className="btn-secondary" onClick={addContact}>Add Contact</button>
-      </div>
-      <div>
-        <label className="block font-medium">Notes</label>
-        {(form.raw_notes || []).map((note, idx) => (
-          <div key={idx} className="flex gap-2 mb-1">
-            <input className="input flex-1" value={note} onChange={e => handleNoteChange(idx, e.target.value)} />
-            <button type="button" className="btn-secondary" onClick={() => removeNote(idx)}>-</button>
-          </div>
-        ))}
-        <button type="button" className="btn-secondary" onClick={addNote}>Add Note</button>
-      </div>
-      <button type="submit" className="btn-primary">{buttonLabel}</button>
+          <Button size="small" startIcon={<AddIcon />} onClick={addAuxUrl}>Add URL</Button>
+        </div>
+
+        <div>
+          <div style={{ marginBottom: 8, fontWeight: 600 }}>Contacts</div>
+          {(form.contacts || []).map((c, idx) => (
+            <div key={idx} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr auto', gap: 8, marginBottom: 8 }}>
+              <TextField label="Name" value={c.name || ''} onChange={(e) => handleContactChange(idx, 'name', e.target.value)} />
+              <TextField label="Email" value={c.email || ''} onChange={(e) => handleContactChange(idx, 'email', e.target.value)} />
+              <TextField label="LinkedIn" value={c.linkedin_url || ''} onChange={(e) => handleContactChange(idx, 'linkedin_url', e.target.value)} />
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <IconButton size="small" onClick={() => removeContact(idx)}><RemoveIcon /></IconButton>
+              </div>
+            </div>
+          ))}
+          <Button size="small" startIcon={<AddIcon />} onClick={addContact}>Add Contact</Button>
+        </div>
+
+        <div>
+          <div style={{ marginBottom: 8, fontWeight: 600 }}>Notes</div>
+          {(form.raw_notes || []).map((n, idx) => (
+            <div key={idx} style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
+              <TextField fullWidth value={n} onChange={(e) => handleNoteChange(idx, e.target.value)} />
+              <IconButton size="small" onClick={() => removeNote(idx)}><RemoveIcon /></IconButton>
+            </div>
+          ))}
+          <Button size="small" startIcon={<AddIcon />} onClick={addNote}>Add Note</Button>
+        </div>
+
+        <FormControl>
+          <RadioGroup row value={status} onChange={(e) => setStatus(e.target.value as any)}>
+            <FormControlLabel value="draft" control={<Radio />} label="Save as Draft" />
+            <FormControlLabel value="submitted" control={<Radio />} label="Mark as Application Submitted" />
+          </RadioGroup>
+        </FormControl>
+
+        <div>
+          <Button variant="contained" type="submit">{status === 'submitted' ? 'Submit Application' : 'Save Draft'}</Button>
+        </div>
+      </Stack>
+
+      <Snackbar open={snackOpen} autoHideDuration={3000} onClose={() => setSnackOpen(false)}>
+        <Alert onClose={() => setSnackOpen(false)} severity="success" sx={{ width: '100%' }}>Application saved</Alert>
+      </Snackbar>
     </form>
   );
 }

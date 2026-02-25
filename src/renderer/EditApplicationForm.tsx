@@ -1,14 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getApplication, updateApplication } from './db';
 import { JobApplication } from '../types';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import Stack from '@mui/material/Stack';
+import IconButton from '@mui/material/IconButton';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 export default function EditApplicationForm() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [app, setApp] = useState<Partial<JobApplication> | null>(null);
+  const [originalJson, setOriginalJson] = useState<string>('');
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     if (!id) {
       setLoading(false);
@@ -18,11 +28,21 @@ export default function EditApplicationForm() {
     getApplication(id)
       .then((doc) => {
         setApp(doc || null);
+        setOriginalJson(JSON.stringify(doc || {}));
         setLoading(false);
         return null;
       })
       .catch(() => setLoading(false));
   }, [id]);
+
+  const isChanged = useMemo(() => {
+    if (!app) return false;
+    try {
+      return JSON.stringify(app) !== originalJson;
+    } catch (e) {
+      return false;
+    }
+  }, [app, originalJson]);
 
   if (loading) return <div>Loading application...</div>;
   if (!app) return <div>Application not found.</div>;
@@ -87,86 +107,79 @@ export default function EditApplicationForm() {
   };
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Edit Application</h2>
-      <form className="space-y-4 max-w-xl" onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="company_name" className="block font-medium">Company Name</label>
-          <input id="company_name" name="company_name" className="input" value={app.company_name || ''} onChange={handleChange} />
-        </div>
-        <div>
-          <label htmlFor="role_title" className="block font-medium">Role Title</label>
-          <input id="role_title" name="role_title" className="input" value={app.role_title || ''} onChange={handleChange} />
-        </div>
-        <div>
-          <label htmlFor="location" className="block font-medium">Location</label>
-          <input id="location" name="location" className="input" value={app.location || ''} onChange={handleChange} />
-        </div>
-        <div>
-          <label htmlFor="job_url" className="block font-medium">Job URL</label>
-          <input id="job_url" name="job_url" className="input" value={app.job_url || ''} onChange={handleChange} />
-        </div>
-        <div>
-          <label htmlFor="source" className="block font-medium">Source</label>
-          <select id="source" name="source" className="input" value={app.source || ''} onChange={handleChange}>
-            <option value="">-- Select Source --</option>
-            <option value="Cold Application">Cold Application</option>
-            <option value="Direct Connection">Direct Connection</option>
-            <option value="In-Person Event">In-Person Event</option>
-            <option value="Inbound Outreach">Inbound Outreach</option>
-          </select>
-        </div>
+    <div style={{ padding: 24, height: '100%', boxSizing: 'border-box' }}>
+      <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 12 }}>Edit Application</h2>
+      <form onSubmit={handleSubmit}>
+        <div style={{ maxHeight: 'calc(100vh - 120px)', overflowY: 'auto', paddingRight: 12 }}>
+          <Stack spacing={2} sx={{ maxWidth: 800 }}>
+          <TextField label="Company Name" value={app.company_name || ''} onChange={handleChange} name="company_name" />
+          <TextField label="Role Title" value={app.role_title || ''} onChange={handleChange} name="role_title" />
+          <TextField label="Location" value={app.location || ''} onChange={handleChange} name="location" />
+          <TextField label="Job URL" value={app.job_url || ''} onChange={handleChange} name="job_url" />
 
-        <div>
-          <label className="block font-medium">Auxiliary URLs</label>
-          {(app.auxiliary_urls || []).map((url, idx) => (
-            <div key={idx} className="flex gap-2 mb-1">
-              <input className="input flex-1" value={url} onChange={(e) => setAuxUrl(idx, e.target.value)} />
-              <button type="button" className="btn-secondary" onClick={() => removeAuxUrl(idx)}>-</button>
-            </div>
-          ))}
-          <button type="button" className="btn-secondary" onClick={addAuxUrl}>Add URL</button>
-        </div>
+          <FormControl fullWidth>
+            <InputLabel id="source-edit-label">Source</InputLabel>
+            <Select labelId="source-edit-label" label="Source" name="source" value={app.source || ''} onChange={handleChange}>
+              <MenuItem value="">(None)</MenuItem>
+              <MenuItem value="Cold Application">Cold Application</MenuItem>
+              <MenuItem value="Direct Connection">Direct Connection</MenuItem>
+              <MenuItem value="In-Person Event">In-Person Event</MenuItem>
+              <MenuItem value="Inbound Outreach">Inbound Outreach</MenuItem>
+            </Select>
+          </FormControl>
 
-        <div>
-          <label className="block font-medium">Contacts</label>
-          {(app.contacts || []).map((c, idx) => (
-            <div key={idx} className="grid grid-cols-4 gap-2 mb-1">
-              <input className="input" placeholder="Name" value={c.name || ''} onChange={(e) => setContactField(idx, 'name', e.target.value)} />
-              <input className="input" placeholder="Email" value={c.email || ''} onChange={(e) => setContactField(idx, 'email', e.target.value)} />
-              <input className="input" placeholder="LinkedIn" value={c.linkedin_url || ''} onChange={(e) => setContactField(idx, 'linkedin_url', e.target.value)} />
-              <input className="input" placeholder="Connection Type" value={c.connection_type || ''} onChange={(e) => setContactField(idx, 'connection_type', e.target.value)} />
-              <div className="col-span-4">
-                <button type="button" className="btn-secondary mt-1" onClick={() => removeContact(idx)}>Remove</button>
+          <div>
+            <div style={{ marginBottom: 8, fontWeight: 600 }}>Auxiliary URLs</div>
+            {(app.auxiliary_urls || []).map((url, idx) => (
+              <div key={idx} style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
+                <TextField fullWidth value={url} onChange={(e) => setAuxUrl(idx, e.target.value)} />
+                <IconButton size="small" onClick={() => removeAuxUrl(idx)}><RemoveIcon /></IconButton>
               </div>
-            </div>
-          ))}
-          <button type="button" className="btn-secondary" onClick={addContact}>Add Contact</button>
-        </div>
+            ))}
+            <Button size="small" startIcon={<AddIcon />} onClick={addAuxUrl}>Add URL</Button>
+          </div>
 
-        <div>
-          <label className="block font-medium">Timeline</label>
-          {(app.timeline || []).map((ev, idx) => (
-            <div key={idx} className="border rounded p-2 mb-2">
-              <div className="grid grid-cols-3 gap-2">
-                <input className="input" value={(ev as any).stage || ''} onChange={(e) => setTimelineEvent(idx, 'stage', e.target.value)} placeholder="Stage" />
-                <input className="input" type="date" value={(ev as any).date ? new Date((ev as any).date).toISOString().slice(0,10) : ''} onChange={(e) => setTimelineEvent(idx, 'date', e.target.value)} />
-                <input className="input" type="date" value={(ev as any).due_date ? new Date((ev as any).due_date).toISOString().slice(0,10) : ''} onChange={(e) => setTimelineEvent(idx, 'due_date', e.target.value)} />
+          <div>
+            <div style={{ marginBottom: 8, fontWeight: 600 }}>Contacts</div>
+            {(app.contacts || []).map((c, idx) => (
+              <div key={idx} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr auto', gap: 8, marginBottom: 8 }}>
+                <TextField label="Name" value={c.name || ''} onChange={(e) => setContactField(idx, 'name', e.target.value)} />
+                <TextField label="Email" value={c.email || ''} onChange={(e) => setContactField(idx, 'email', e.target.value)} />
+                <TextField label="LinkedIn" value={c.linkedin_url || ''} onChange={(e) => setContactField(idx, 'linkedin_url', e.target.value)} />
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <IconButton size="small" onClick={() => removeContact(idx)}><RemoveIcon /></IconButton>
+                </div>
               </div>
-              <div className="mt-2">
-                <textarea className="input w-full" value={(ev as any).notes || ''} onChange={(e) => setTimelineEvent(idx, 'notes', e.target.value)} placeholder="Notes" />
-              </div>
-              <div className="mt-2">
-                <button type="button" className="btn-secondary" onClick={() => removeTimelineEvent(idx)}>Remove Event</button>
-              </div>
-            </div>
-          ))}
-          <button type="button" className="btn-secondary" onClick={addTimelineEvent}>Add Event</button>
-        </div>
+            ))}
+            <Button size="small" startIcon={<AddIcon />} onClick={addContact}>Add Contact</Button>
+          </div>
 
-        <div className="flex gap-2">
-          <button type="submit" className="btn-primary">Save</button>
-          <button type="button" className="btn-secondary" onClick={() => navigate('/applications')}>Cancel</button>
+          <div>
+            <div style={{ marginBottom: 8, fontWeight: 600 }}>Timeline</div>
+            {(app.timeline || []).map((ev, idx) => (
+              <div key={idx} style={{ border: '1px solid #e5e7eb', borderRadius: 6, padding: 12, marginBottom: 8 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
+                  <TextField value={(ev as any).stage || ''} onChange={(e) => setTimelineEvent(idx, 'stage', e.target.value)} placeholder="Stage" />
+                  <TextField type="date" value={(ev as any).date ? new Date((ev as any).date).toISOString().slice(0,10) : ''} onChange={(e) => setTimelineEvent(idx, 'date', e.target.value)} />
+                  <TextField type="date" value={(ev as any).due_date ? new Date((ev as any).due_date).toISOString().slice(0,10) : ''} onChange={(e) => setTimelineEvent(idx, 'due_date', e.target.value)} />
+                </div>
+                <div style={{ marginTop: 8 }}>
+                  <TextField multiline fullWidth value={(ev as any).notes || ''} onChange={(e) => setTimelineEvent(idx, 'notes', e.target.value)} placeholder="Notes" />
+                </div>
+                <div style={{ marginTop: 8 }}>
+                  <Button size="small" onClick={() => removeTimelineEvent(idx)}>Remove Event</Button>
+                </div>
+              </div>
+            ))}
+            <Button size="small" startIcon={<AddIcon />} onClick={addTimelineEvent}>Add Event</Button>
+          </div>
+
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <Button variant="text" onClick={() => navigate(-1)}>Back</Button>
+            {isChanged && <Button variant="contained" type="submit">Submit Changes</Button>}
+            <Button variant="outlined" onClick={() => navigate('/applications')}>Exit</Button>
+          </div>
+          </Stack>
         </div>
       </form>
     </div>
