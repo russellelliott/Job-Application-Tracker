@@ -12,6 +12,7 @@ export type TimelineEvent =
   | { stage: 'Assessment'; date: string; due_date: string; completed_at: string | null; notes: string | null }
   | { stage: string; date: string; due_date: string; notes: string | null };
 
+
 export interface JobApplication {
   id: string; // PouchDB _id
   company_name: string | null;
@@ -23,4 +24,14 @@ export interface JobApplication {
   contacts: Contact[];
   timeline: TimelineEvent[];
   raw_notes: string[];
+  // For stagnant badge
+  lastTimelineDate?: string;
+}
+
+// Analytics types
+export interface AnalyticsStats {
+  interviewTransition: number;
+  nextStepRates: Array<{ label: string; rate: number }>;
+  cold: { funnelData: Array<{ stage: string; count: number }> };
+  warm: { funnelData: Array<{ stage: string; count: number }> };
 }
