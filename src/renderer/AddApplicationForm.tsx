@@ -1,4 +1,5 @@
 import React from 'react';
+import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { JobApplication } from '../types';
 import TextField from '@mui/material/TextField';
@@ -8,9 +9,6 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Stack from '@mui/material/Stack';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
@@ -34,8 +32,9 @@ export default function AddApplicationForm({ onSubmit }: AddApplicationFormProps
     contacts: [{ name: '', email: '', linkedin_url: '', connection_type: '' }],
     timeline: [],
     raw_notes: [''],
+    source: 'Cold Application',
   });
-  const [status, setStatus] = React.useState<'draft' | 'submitted'>('draft');
+
   const [snackOpen, setSnackOpen] = React.useState(false);
   const [confirmOpen, setConfirmOpen] = React.useState(false);
   const [createdId, setCreatedId] = React.useState<string | null>(null);
@@ -67,14 +66,27 @@ export default function AddApplicationForm({ onSubmit }: AddApplicationFormProps
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const now = new Date().toISOString();
+    // Keep legacy form submit behaviour: default to draft
+    await submitWithStatus('draft');
+  };
+
+  const [attemptedSubmit, setAttemptedSubmit] = React.useState(false);
+
+  const submitWithStatus = async (finalStatus: 'draft' | 'submitted') => {
+    if (finalStatus === 'submitted') setAttemptedSubmit(true);
+    const nowDateOnly = new Date().toISOString().slice(0, 10); // YYYY-MM-DD (date only)
     let timeline = form.timeline || [];
     timeline = [
       ...timeline,
-      { stage: status === 'submitted' ? 'Application Submitted' : 'Draft', date: now, notes: null },
+      { stage: finalStatus === 'submitted' ? 'Application Submitted' : 'Draft', date: nowDateOnly, notes: null },
     ];
+
+    if (finalStatus === 'submitted' && !isValid) {
+      // don't submit if invalid
+      return;
+    }
+
     const result = await onSubmit({ ...form, timeline });
-    // If caller returned an id, show confirmation dialog
     if (typeof result === 'string') {
       setCreatedId(result);
       setConfirmOpen(true);
@@ -83,96 +95,142 @@ export default function AddApplicationForm({ onSubmit }: AddApplicationFormProps
     }
   };
 
+  const isValid = useMemo(() => {
+    return !!(
+      form.company_name && form.company_name.toString().trim() &&
+      form.role_title && form.role_title.toString().trim() &&
+      form.location && form.location.toString().trim() &&
+      form.job_url && form.job_url.toString().trim() &&
+      (form.source || '').toString().trim()
+    );
+  }, [form]);
+
   return (
-    <form onSubmit={handleSubmit}>
-      <Stack spacing={2} sx={{ maxWidth: 720 }}>
-        <TextField label="Company Name" value={form.company_name || ''} onChange={(e) => handleChange('company_name', e.target.value)} />
-        <TextField label="Role Title" value={form.role_title || ''} onChange={(e) => handleChange('role_title', e.target.value)} />
-        <TextField label="Location" value={form.location || ''} onChange={(e) => handleChange('location', e.target.value)} />
-        <TextField label="Job URL" value={form.job_url || ''} onChange={(e) => handleChange('job_url', e.target.value)} />
+    <div style={{ padding: 24, boxSizing: 'border-box', position: 'relative', display: 'flex', flexDirection: 'column', height: '100vh' }}>
+      <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 12 }}>Add Application</h2>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
+        <div style={{ paddingRight: 12, flex: 1, overflowY: 'auto', paddingBottom: 160 }}>
+          <Stack spacing={2} sx={{ maxWidth: 720 }}>
+            <TextField
+              required
+              label="Company Name"
+              value={form.company_name || ''}
+              onChange={(e) => handleChange('company_name', e.target.value)}
+              error={attemptedSubmit && !(form.company_name && form.company_name.toString().trim())}
+              helperText={attemptedSubmit && !(form.company_name && form.company_name.toString().trim()) ? 'Required' : ''}
+            />
+            <TextField
+              required
+              label="Role Title"
+              value={form.role_title || ''}
+              onChange={(e) => handleChange('role_title', e.target.value)}
+              error={attemptedSubmit && !(form.role_title && form.role_title.toString().trim())}
+              helperText={attemptedSubmit && !(form.role_title && form.role_title.toString().trim()) ? 'Required' : ''}
+            />
+            <TextField
+              required
+              label="Location"
+              value={form.location || ''}
+              onChange={(e) => handleChange('location', e.target.value)}
+              error={attemptedSubmit && !(form.location && form.location.toString().trim())}
+              helperText={attemptedSubmit && !(form.location && form.location.toString().trim()) ? 'Required' : ''}
+            />
+            <TextField
+              required
+              label="Job URL"
+              value={form.job_url || ''}
+              onChange={(e) => handleChange('job_url', e.target.value)}
+              error={attemptedSubmit && !(form.job_url && form.job_url.toString().trim())}
+              helperText={attemptedSubmit && !(form.job_url && form.job_url.toString().trim()) ? 'Required' : ''}
+            />
 
-        <FormControl fullWidth>
-          <InputLabel id="source-label">Source</InputLabel>
-          <Select labelId="source-label" label="Source" value={form.source || ''} onChange={(e) => handleChange('source', e.target.value)}>
-            <MenuItem value="">(None)</MenuItem>
-            {SOURCE_OPTIONS.map((s) => <MenuItem key={s} value={s}>{s}</MenuItem>)}
-          </Select>
-        </FormControl>
+            <FormControl fullWidth>
+              <InputLabel id="source-label">Source</InputLabel>
+              <Select
+                labelId="source-label"
+                label="Source"
+                value={form.source || 'Cold Application'}
+                onChange={(e) => handleChange('source', e.target.value)}
+                required
+              >
+                {SOURCE_OPTIONS.map((s) => <MenuItem key={s} value={s}>{s}</MenuItem>)}
+              </Select>
+            </FormControl>
 
-        <div>
-          <div style={{ marginBottom: 8, fontWeight: 600 }}>Auxiliary URLs</div>
-          {(form.auxiliary_urls || []).map((u, idx) => (
-            <div key={idx} style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
-              <TextField fullWidth value={u} onChange={(e) => handleAuxUrlChange(idx, e.target.value)} />
-              <IconButton size="small" onClick={() => removeAuxUrl(idx)}><RemoveIcon /></IconButton>
+            <div>
+              <div style={{ marginBottom: 8, fontWeight: 600 }}>Auxiliary URLs</div>
+              {(form.auxiliary_urls || []).map((u, idx) => (
+                <div key={idx} style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
+                  <TextField fullWidth value={u} onChange={(e) => handleAuxUrlChange(idx, e.target.value)} />
+                  <IconButton size="small" onClick={() => removeAuxUrl(idx)}><RemoveIcon /></IconButton>
+                </div>
+              ))}
+              <Button size="small" startIcon={<AddIcon />} onClick={addAuxUrl}>Add URL</Button>
             </div>
-          ))}
-          <Button size="small" startIcon={<AddIcon />} onClick={addAuxUrl}>Add URL</Button>
+
+            <div>
+              <div style={{ marginBottom: 8, fontWeight: 600 }}>Contacts</div>
+              {(form.contacts || []).map((c, idx) => (
+                <div key={idx} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr auto', gap: 8, marginBottom: 8 }}>
+                  <TextField label="Name" value={c.name || ''} onChange={(e) => handleContactChange(idx, 'name', e.target.value)} />
+                  <TextField label="Email" value={c.email || ''} onChange={(e) => handleContactChange(idx, 'email', e.target.value)} />
+                  <TextField label="LinkedIn" value={c.linkedin_url || ''} onChange={(e) => handleContactChange(idx, 'linkedin_url', e.target.value)} />
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <IconButton size="small" onClick={() => removeContact(idx)}><RemoveIcon /></IconButton>
+                  </div>
+                </div>
+              ))}
+              <Button size="small" startIcon={<AddIcon />} onClick={addContact}>Add Contact</Button>
+            </div>
+
+            <div>
+              <div style={{ marginBottom: 8, fontWeight: 600 }}>Notes</div>
+              {(form.raw_notes || []).map((n, idx) => (
+                <div key={idx} style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
+                  <TextField fullWidth value={n} onChange={(e) => handleNoteChange(idx, e.target.value)} />
+                  <IconButton size="small" onClick={() => removeNote(idx)}><RemoveIcon /></IconButton>
+                </div>
+              ))}
+              <Button size="small" startIcon={<AddIcon />} onClick={addNote}>Add Note</Button>
+            </div>
+
+            {/* Footer buttons now control draft/submitted state; radio options removed */}
+          </Stack>
         </div>
 
-        <div>
-          <div style={{ marginBottom: 8, fontWeight: 600 }}>Contacts</div>
-          {(form.contacts || []).map((c, idx) => (
-            <div key={idx} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr auto', gap: 8, marginBottom: 8 }}>
-              <TextField label="Name" value={c.name || ''} onChange={(e) => handleContactChange(idx, 'name', e.target.value)} />
-              <TextField label="Email" value={c.email || ''} onChange={(e) => handleContactChange(idx, 'email', e.target.value)} />
-              <TextField label="LinkedIn" value={c.linkedin_url || ''} onChange={(e) => handleContactChange(idx, 'linkedin_url', e.target.value)} />
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <IconButton size="small" onClick={() => removeContact(idx)}><RemoveIcon /></IconButton>
+        <div style={{ position: 'fixed', left: 24, right: 24, bottom: 12, background: '#fff', paddingTop: 12, paddingBottom: 12, marginTop: 12, borderTop: '1px solid #e5e7eb', zIndex: 200 }}>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center', justifyContent: 'flex-start' }}>
+              <Button variant="text" onClick={() => navigate(-1)}>Back</Button>
+              {/* Show Save Draft always; show Submit only when required fields are filled */}
+              <Button variant="contained" color="secondary" onClick={() => submitWithStatus('draft')}>Save Draft</Button>
+              {isValid ? (
+                <Button variant="contained" color="success" onClick={() => submitWithStatus('submitted')}>
+                  Submit Application
+                </Button>
+              ) : null}
+              <Button variant="outlined" onClick={() => navigate('/applications')}>Exit</Button>
+            </div>
+        </div>
+
+        <Snackbar open={snackOpen} autoHideDuration={3000} onClose={() => setSnackOpen(false)}>
+          <Alert onClose={() => setSnackOpen(false)} severity="success" sx={{ width: '100%' }}>Application saved</Alert>
+        </Snackbar>
+
+        {/* Confirmation dialog after create - gives navigation options */}
+        {confirmOpen && createdId && (
+          <div style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 60 }}>
+            <div style={{ background: '#fff', padding: 20, borderRadius: 8, boxShadow: '0 8px 24px rgba(0,0,0,0.2)', width: 420 }}>
+              <h3 style={{ marginTop: 0 }}>Application added</h3>
+              <p>Application was added to the tracker.</p>
+              <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+                <button onClick={() => { setConfirmOpen(false); setCreatedId(null); /* stay on add page */ }} className="btn-secondary">Add another</button>
+                <button onClick={() => { setConfirmOpen(false); navigate(`/applications/${createdId}/edit`); }} className="btn-primary">Edit</button>
+                <button onClick={() => { setConfirmOpen(false); navigate('/applications'); }} className="btn-outline">Go to Applications</button>
               </div>
             </div>
-          ))}
-          <Button size="small" startIcon={<AddIcon />} onClick={addContact}>Add Contact</Button>
-        </div>
-
-        <div>
-          <div style={{ marginBottom: 8, fontWeight: 600 }}>Notes</div>
-          {(form.raw_notes || []).map((n, idx) => (
-            <div key={idx} style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
-              <TextField fullWidth value={n} onChange={(e) => handleNoteChange(idx, e.target.value)} />
-              <IconButton size="small" onClick={() => removeNote(idx)}><RemoveIcon /></IconButton>
-            </div>
-          ))}
-          <Button size="small" startIcon={<AddIcon />} onClick={addNote}>Add Note</Button>
-        </div>
-
-        <FormControl>
-          {/** Disable Draft option if an Application Submitted event exists in timeline */}
-          {(() => {
-            const hasSubmitted = (form.timeline || []).some((t: any) => (t && (t.stage === 'Application Submitted')));
-            return (
-              <RadioGroup row value={status} onChange={(e) => setStatus(e.target.value as any)}>
-                <FormControlLabel value="draft" control={<Radio />} label="Save as Draft" disabled={hasSubmitted} />
-                <FormControlLabel value="submitted" control={<Radio />} label="Mark as Application Submitted" />
-              </RadioGroup>
-            );
-          })()}
-        </FormControl>
-
-        <div>
-          <Button variant="contained" type="submit">{status === 'submitted' ? 'Submit Application' : 'Save Draft'}</Button>
-        </div>
-      </Stack>
-
-      <Snackbar open={snackOpen} autoHideDuration={3000} onClose={() => setSnackOpen(false)}>
-        <Alert onClose={() => setSnackOpen(false)} severity="success" sx={{ width: '100%' }}>Application saved</Alert>
-      </Snackbar>
-      {/* Confirmation dialog after create - gives navigation options */}
-
-      {/* For navigation actions we'll show a simple in-page dialog using the browser confirm alternatives */}
-      {confirmOpen && createdId && (
-        <div style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 60 }}>
-          <div style={{ background: '#fff', padding: 20, borderRadius: 8, boxShadow: '0 8px 24px rgba(0,0,0,0.2)', width: 420 }}>
-            <h3 style={{ marginTop: 0 }}>Application added</h3>
-            <p>Application was added to the tracker.</p>
-            <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
-              <button onClick={() => { setConfirmOpen(false); setCreatedId(null); /* stay on add page */ }} className="btn-secondary">Add another</button>
-              <button onClick={() => { setConfirmOpen(false); (window as any).__navigate__?.(`/applications/${createdId}/edit`); }} className="btn-primary">Edit</button>
-              <button onClick={() => { setConfirmOpen(false); (window as any).__navigate__?.('/applications'); }} className="btn-outline">Go to Applications</button>
-            </div>
           </div>
-        </div>
-      )}
-    </form>
+        )}
+      </form>
+    </div>
   );
 }
