@@ -1,50 +1,63 @@
-import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import icon from '../../assets/icon.svg';
-import './App.css';
+import { Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
 
-function Hello() {
-  return (
-    <div>
-      <div className="Hello">
-        <img width="200" alt="icon" src={icon} />
-      </div>
-      <h1>electron-react-boilerplate</h1>
-      <div className="Hello">
-        <a
-          href="https://electron-react-boilerplate.js.org/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="books">
-              📚
-            </span>
-            Read our docs
-          </button>
-        </a>
-        <a
-          href="https://github.com/sponsors/electron-react-boilerplate"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="folded hands">
-              🙏
-            </span>
-            Donate
-          </button>
-        </a>
-      </div>
-    </div>
-  );
+import Sidebar from './Sidebar';
+import AddApplicationForm from './AddApplicationForm';
+
+import db, { addApplication } from './db';
+import ApplicationsTable from './ApplicationsTable';
+import './App.css';
+import { importInitialDataIfNeeded } from '../main/dataImport';
+import { useNavigate } from 'react-router-dom';
+
+function Dashboard() {
+  return <div className="text-2xl font-semibold">Dashboard (Coming Soon)</div>;
+}
+
+
+
+function Applications() {
+  return <ApplicationsTable />;
+}
+
+
+import ScheduleView from './ScheduleView';
+function Schedule() {
+  return <ScheduleView />;
+}
+
+function Analytics() {
+  return <div className="text-2xl font-semibold">Analytics Dashboard (Coming Soon)</div>;
+}
+
+function Stagnant() {
+  return <div className="text-2xl font-semibold">Stagnant Applications (Coming Soon)</div>;
 }
 
 export default function App() {
+  useEffect(() => {
+    importInitialDataIfNeeded();
+  }, []);
+
+  // Add Application handler
+  const navigate = useNavigate();
+  const handleAddApplication = async (app: any) => {
+    // Generate a unique id
+    const id = `${app.company_name || 'draft'}-${Date.now()}`;
+    await addApplication({ ...app, id });
+    navigate('/applications');
+  };
+
   return (
-    <Router>
+    <Sidebar>
       <Routes>
-        <Route path="/" element={<Hello />} />
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/applications" element={<Applications />} />
+        <Route path="/applications/add" element={<AddApplicationForm onSubmit={handleAddApplication} />} />
+        <Route path="/schedule" element={<Schedule />} />
+        <Route path="/analytics" element={<Analytics />} />
+        <Route path="/stagnant" element={<Stagnant />} />
       </Routes>
-    </Router>
+    </Sidebar>
   );
 }

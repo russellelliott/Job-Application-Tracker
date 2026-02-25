@@ -1,0 +1,6175 @@
+[
+  {
+    "company_name": "Bobyard",
+    "role_title": "Full Stack Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/bobyard/0792852e-bb07-4ce0-a61e-fc1db2de0f6f/application?gh_src=Handshake&iisn=Handshake&iis=Handshake&src=Handshake&source=Handshake&ref=Handshake&utm_medium=Handshake&referral=Handshake&utm_source=Simplify&__jvst=Handshake&__jvsd=Handshake&sourceDetails=Handshake&trid=Handshake&lever-source%5B%5D=Handshake&Source=Handshake&rb=Handshake&jobBoardSource=Handshake&channel=Handshake&rcid=Handshake",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-29",
+        "notes": null
+      },
+      {
+        "stage": "Assessment",
+        "date": "2025-12-29",
+        "notes": null
+      },
+      {
+        "stage": "Interview 1",
+        "date": "2026-01-23",
+        "notes": "30 min technial interview"
+      },
+      {
+        "stage": "Interview 2",
+        "date": "2026-02-12",
+        "notes": "1 hour technical interview"
+      }
+    ],
+    "raw_notes": [],
+    "_id": "1"
+  },
+  {
+    "company_name": "Reacher",
+    "role_title": "Full Stack Software Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://simplify.jobs/p/2a5ee5fc-cfe2-4189-8997-34082d06d04e/Full-Stack-Software-Engineer",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-29",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "2"
+  },
+  {
+    "company_name": "Affirm",
+    "role_title": "Software Engineer",
+    "location": "Remote",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/affirm/jobs/7560426003?gh_src=Simplify&utm_source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-29",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "3"
+  },
+  {
+    "company_name": "Ramp",
+    "role_title": "Frontend Software Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/ramp/4e64ab86-4e30-403b-b1b9-41dc052570ce/application?utm_source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-29",
+        "notes": null
+      },
+      {
+        "stage": "Assessment",
+        "date": null,
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "(seems not really relevant to me. make sure roles are more backend, data, ML)"
+    ],
+    "_id": "4"
+  },
+  {
+    "company_name": "Cisco",
+    "role_title": "SWE/Full Stack",
+    "location": "San Jose",
+    "source": "Cold Application",
+    "job_url": "https://careers.cisco.com/global/en/apply?jobSeqNo=CISCISGLOBAL2000087EXTERNALENGLOBAL&utm_source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-29",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "5"
+  },
+  {
+    "company_name": "AI Fund",
+    "role_title": "AI Engineer",
+    "location": "Palo Alto",
+    "source": "Cold Application",
+    "job_url": "https://jobs.lever.co/AIFund/b9cd61ea-cae1-411a-987f-ea40ea6f7db8?lever-source%5B%5D=careers.aifund.ai&source=LinkedIn",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-29",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "6"
+  },
+  {
+    "company_name": "Hive",
+    "role_title": "Ai Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://simplify.jobs/p/2ffac4b6-ef1a-4776-9261-7d069fa6893b/Machine-Learning-Engineer"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-29",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "7"
+  },
+  {
+    "company_name": "Nuro AI",
+    "role_title": "SWE ML Infra",
+    "location": "Mountain View",
+    "source": "Cold Application",
+    "job_url": "https://www.nuro.ai/careersitem?gh_jid=7407019&gh_src=bcd22a501us",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-29",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "8"
+  },
+  {
+    "company_name": "Monogram",
+    "role_title": "Applied AI Engineer",
+    "location": "San Mateo",
+    "source": "Cold Application",
+    "job_url": "https://www.monogram.ai/hiring?ashby_jid=0170eb26-8cf3-45aa-854c-44df1d790aa1&utm_source=LinkedIn",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-29",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "9"
+  },
+  {
+    "company_name": "AIDA",
+    "role_title": "AI Engineer",
+    "location": "Palo Also",
+    "source": "Cold Application",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4328811296"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-29",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "10"
+  },
+  {
+    "company_name": "BaseTen",
+    "role_title": "Applied AI Inference Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/baseten/90e9ff4e-1225-4b1b-b0b4-2362e36d9cfa",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-29",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "11"
+  },
+  {
+    "company_name": "Applied Intuition",
+    "role_title": "ML Perception SWE",
+    "location": "Sunnyvale",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/appliedintuition/jobs/4373447005?gh_jid=4373447005&source=LinkedIn",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4019926250",
+      "https://www.perplexity.ai/search/given-job-description-about-ap-Xh9aAACLR4CyTcx91cDu9g"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-29",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "A couple of connections here. Recruiter contact info available. Need premium to contact recruiter, but can reach out to connection without premium."
+    ],
+    "_id": "12"
+  },
+  {
+    "company_name": "Sesame",
+    "role_title": "Research Engineer Computer Vision ML",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/sesame/fbe18eab-8c41-4b24-8f26-9509146c7df4?src=linkedin",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-29",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "5 years of experience? Why was it in entry level?"
+    ],
+    "_id": "13"
+  },
+  {
+    "company_name": "OpenAI",
+    "role_title": "ML Framework Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/openai/d8794980-1d3f-4d82-8b48-811449b6c492?utm_source=8lvZy0eqYJ",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-29",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "14"
+  },
+  {
+    "company_name": "Chaos Industries",
+    "role_title": "SWE Applied AI",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/chaosindustries/jobs/4964195007?gh_src=be7dbdf57us",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4319935579"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-29",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "Alumni connection? I clicked it but it immeidatley sent it without message. Not ideal."
+    ],
+    "_id": "15"
+  },
+  {
+    "company_name": "xAI",
+    "role_title": "Full Stack SWE Starfleet",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4213057493"
+    ],
+    "contacts": [
+      {
+        "name": "Arman",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/armandagopian/",
+        "connection_type": "Connection"
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2025-12-29",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "instead of doing that, go to their website and find roles there",
+      "connection (Arman) works there"
+    ],
+    "_id": "16"
+  },
+  {
+    "company_name": "Innovaccer",
+    "role_title": "Ai Researcher",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://apply.workable.com/innovaccer-analytics/j/B175424D9F",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4326528237"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-29",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "hiring team contact info available"
+    ],
+    "_id": "17"
+  },
+  {
+    "company_name": "HockeyStack",
+    "role_title": "Backend Engineer AI",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/hockeystack/5d6437a4-031f-49e1-b4e4-037b6c1ee402?source=linkedin",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4338787325"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2025-12-29",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "connection that works there",
+      "stupid questions I have to answer"
+    ],
+    "_id": "18"
+  },
+  {
+    "company_name": "Brain.co",
+    "role_title": "Ai Product Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/brainco/4866bc74-52fa-4819-a9d0-3a5e73c31951",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4275230704"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-29",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "hiring team contact info available"
+    ],
+    "_id": "19"
+  },
+  {
+    "company_name": "TechTree",
+    "role_title": "Early SWE",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.techtree.dev/job/ed42d67f-6997-4ef9-b8d2-d8d165a8ff54/apply?application_source=linkedin&source=linkedin",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-29",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "20"
+  },
+  {
+    "company_name": "Reevo",
+    "role_title": "AI Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/reevo/2a1f4f7f-86d3-41f4-bda1-3867ff82eb0d/application?utm_source=r98Re8YmoY",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4324648838"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-29",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "21"
+  },
+  {
+    "company_name": "Skild AI",
+    "role_title": "Deep Learning Manipulation Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4120218576"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-29",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "22"
+  },
+  {
+    "company_name": "Salient",
+    "role_title": "Forward Deployed Software Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/salient/a213eea8-ef18-40cb-b693-67ca3900c7fb/application",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4337004844",
+      "https://jobs.ashbyhq.com/salient"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-29",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "23"
+  },
+  {
+    "company_name": "Salient",
+    "role_title": "Applied AI Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/salient/5bef27e7-17b3-4ad0-93e0-9e430409acd4",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-29",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "24"
+  },
+  {
+    "company_name": "Sage Care",
+    "role_title": "AI Orchestration Engineer",
+    "location": "Palo Alto",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/sagecare/d57115db-9b7c-40cc-b9ec-ce7ecfc8ef3",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-29",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "25"
+  },
+  {
+    "company_name": "Docusign",
+    "role_title": "AI Agentic Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://careers.docusign.com/jobs/28171?lang=en-us&iis=Job+board&iisn=LinkedIn",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4322135435"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-29",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "Connection works here"
+    ],
+    "_id": "26"
+  },
+  {
+    "company_name": "Abaka AI",
+    "role_title": "Data Engineer",
+    "location": "Palo Alto",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/abakaai/jobs/4056029009",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4322082657/"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-29",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "UCSC Alumni"
+    ],
+    "_id": "27"
+  },
+  {
+    "company_name": "Moloco",
+    "role_title": "ML Infra SWE",
+    "location": "Redwood City",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/moloco/jobs/6599200003?gh_src=Simplify&utm_source=Simplify",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4341226391"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "Alumni"
+    ],
+    "_id": "28"
+  },
+  {
+    "company_name": "Scale AI",
+    "role_title": "SWE Full Stack",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/scaleai/jobs/4637485005?gh_src=acad35425us",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4342444293"
+    ],
+    "contacts": [
+      {
+        "name": "Bill Zhang",
+        "email": null,
+        "linkedin_url": null,
+        "connection_type": "in network"
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "29"
+  },
+  {
+    "company_name": "MeshyAI",
+    "role_title": "GenAI ML Systems Engineer",
+    "location": "Sunnyvale",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/meshy/jobs/4427898008?gh_src=6c33ccb28us",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4229975772"
+    ],
+    "contacts": [
+      {
+        "name": "Hiring Team",
+        "email": null,
+        "linkedin_url": null,
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "30"
+  },
+  {
+    "company_name": "Simular",
+    "role_title": "Forward Deployed Engineer",
+    "location": "Palo Alto",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/simular/3d2ea58d-3b93-45db-92fd-01a9f2247429/application?utm_source=LinkedInPaid",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "31"
+  },
+  {
+    "company_name": "Cathexis",
+    "role_title": "Junior AI/ML Software Dev",
+    "location": "Redwood City",
+    "source": "Cold Application",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4346130938"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "Alumni"
+    ],
+    "_id": "32"
+  },
+  {
+    "company_name": "xAI",
+    "role_title": "Fullstack Engineer - Product",
+    "location": null,
+    "source": null,
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4190726227"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "33"
+  },
+  {
+    "company_name": "intrinsic",
+    "role_title": "SWE Vision Guided Robotics",
+    "location": "Mountain View",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/intrinsicrobotics/jobs/5742033004?gh_jid=5742033004&src=9bb646264us&gh_src=126bedbc4us",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4345986745"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "Alumni"
+    ],
+    "_id": "34"
+  },
+  {
+    "company_name": "Reval",
+    "role_title": "GenAI Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://www.reval.site/jobs/cf306624-e9e3-4586-9d85-779ce3e3df1e",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-30",
+        "notes": null
+      },
+      {
+        "stage": "Assessment",
+        "date": null,
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "35"
+  },
+  {
+    "company_name": "Turing",
+    "role_title": "Remote Software Developer",
+    "location": "Remote",
+    "source": "Cold Application",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4346539950"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-30",
+        "notes": null
+      },
+      {
+        "stage": "Assessment",
+        "date": null,
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "Alumni"
+    ],
+    "_id": "36"
+  },
+  {
+    "company_name": "Arbor",
+    "role_title": "Founding AI Engineer",
+    "location": "SF Bay Area",
+    "source": "Cold Application",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4329251185"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "Hiring Team"
+    ],
+    "_id": "37"
+  },
+  {
+    "company_name": "Candid Intellegence",
+    "role_title": "Founding AI Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/candidintelligence/1e7c842d-ab90-40e9-bd33-7c9f99edd70e/application",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4329284720"
+    ],
+    "contacts": [
+      {
+        "name": "Hiring Team",
+        "email": null,
+        "linkedin_url": null,
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "38"
+  },
+  {
+    "company_name": "Prophecy",
+    "role_title": "Agentic Workflow MLE",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/prophecysimpledatalabs/jobs/4876131007",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "39"
+  },
+  {
+    "company_name": "Prophecy",
+    "role_title": "Principal AI Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/prophecysimpledatalabs/jobs/4965814007",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "40"
+  },
+  {
+    "company_name": null,
+    "role_title": null,
+    "location": null,
+    "source": null,
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4333157724"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "Connections at NVIDIA"
+    ],
+    "_id": "41"
+  },
+  {
+    "company_name": "Andiamo",
+    "role_title": "AI/Generative AI Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4306632527"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "42"
+  },
+  {
+    "company_name": "HealthCasts",
+    "role_title": "AI Engineer",
+    "location": "N/A",
+    "source": "Cold Application",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4348462056"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "Hiring Team"
+    ],
+    "_id": "43"
+  },
+  {
+    "company_name": "Robert Half",
+    "role_title": null,
+    "location": null,
+    "source": null,
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4326465775"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "44"
+  },
+  {
+    "company_name": "ALOIS Solutions",
+    "role_title": "Ai Ops Engineer",
+    "location": "Stanford",
+    "source": "Cold Application",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4345441511"
+    ],
+    "contacts": [
+      {
+        "name": "Hiring Team",
+        "email": null,
+        "linkedin_url": null,
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "45"
+  },
+  {
+    "company_name": "Cerebro",
+    "role_title": "AI Researcher",
+    "location": "Palo Alto",
+    "source": "Cold Application",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4342960883"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "Hiring Team"
+    ],
+    "_id": "46"
+  },
+  {
+    "company_name": "Fanatics",
+    "role_title": "SWE I",
+    "location": "Remote",
+    "source": "Cold Application",
+    "job_url": "https://fa-exki-saasfaprod1.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/job/25033/?utm_medium=jobboard&utm_source=linkedin",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4307574635"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "Network"
+    ],
+    "_id": "47"
+  },
+  {
+    "company_name": "Jerry",
+    "role_title": "Entry-level SWE",
+    "location": "Palo Alto",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/Jerry.ai/8e26237-b689-40de-a94b-3f79f7d26474?utm_source=6Vdva5VPyD",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4350752622"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "Network"
+    ],
+    "_id": "48"
+  },
+  {
+    "company_name": "Automation Anywhere",
+    "role_title": "SWE",
+    "location": "San Jose",
+    "source": "Cold Application",
+    "job_url": "https://automationanywhere.wd5.myworkdayjobs.com/AutomationAnywhereJobs/job/San-Jose-California/Software-Engineer_JR1151?source=LinkedIn",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4345997476"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "Alumni"
+    ],
+    "_id": "49"
+  },
+  {
+    "company_name": "SproutsAI",
+    "role_title": null,
+    "location": "Palo Alto",
+    "source": "Cold Application",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4329519336"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "Cant connect?",
+      "Hiring Team?"
+    ],
+    "_id": "50"
+  },
+  {
+    "company_name": "Pattern Data",
+    "role_title": "SWE I",
+    "location": "Remote",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/patterndata/jobs/5012589007",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "51"
+  },
+  {
+    "company_name": "Taro",
+    "role_title": "Backend Engineer",
+    "location": "Remote",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/tarro/f6b973b3-2e26-4cd3-95f0-c3200c10f27f?src=LinkedIn",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "52"
+  },
+  {
+    "company_name": "Adobe",
+    "role_title": "2026 University Grad - Software Engineer",
+    "location": "San Jose",
+    "source": "Direct Connection",
+    "job_url": "https://careers.adobe.com/us/en/job/R158684/2026-University-Graduate-Software-Engineer",
+    "auxiliary_urls": [],
+    "contacts": [
+      {
+        "name": null,
+        "email": "dhackel@adobe.com",
+        "linkedin_url": null,
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "53"
+  },
+  {
+    "company_name": "Adobe",
+    "role_title": "2026 University Grad - Machine Learning Engineer",
+    "location": "San Jose",
+    "source": "Direct Connection",
+    "job_url": "https://careers.adobe.com/us/en/job/R158682/2026-University-Graduate-Machine-Learning-Engineer",
+    "auxiliary_urls": [],
+    "contacts": [
+      {
+        "name": null,
+        "email": "dhackel@adobe.com",
+        "linkedin_url": null,
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "54"
+  },
+  {
+    "company_name": "Adobe",
+    "role_title": "2026 University Grad - Software Engineer",
+    "location": "San Jose",
+    "source": "Direct Connection",
+    "job_url": "https://careers.adobe.com/us/en/job/R158638/2026-University-Graduate-Software-Engineer",
+    "auxiliary_urls": [],
+    "contacts": [
+      {
+        "name": null,
+        "email": "dhackel@adobe.com",
+        "linkedin_url": null,
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "55"
+  },
+  {
+    "company_name": "Adobe",
+    "role_title": "Software Development Engineer",
+    "location": "San Jose",
+    "source": "Direct Connection",
+    "job_url": "https://careers.adobe.com/us/en/job/R161750/Software-Development-Engineer",
+    "auxiliary_urls": [],
+    "contacts": [
+      {
+        "name": null,
+        "email": "dhackel@adobe.com",
+        "linkedin_url": null,
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "56"
+  },
+  {
+    "company_name": "Adobe",
+    "role_title": "2026 University Grad - Machine Learning Engineer",
+    "location": "San Jose",
+    "source": "Direct Connection",
+    "job_url": "https://careers.adobe.com/us/en/job/R160652/2026-University-Graduate-Machine-Learning-Engineer",
+    "auxiliary_urls": [],
+    "contacts": [
+      {
+        "name": null,
+        "email": "dhackel@adobe.com",
+        "linkedin_url": null,
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "57"
+  },
+  {
+    "company_name": "Adobe",
+    "role_title": "2026 University Grad - Machine Learning Engineer",
+    "location": "San Jose",
+    "source": "Direct Connection",
+    "job_url": "https://careers.adobe.com/us/en/job/R160648/2026-University-Graduate-Machine-Learning-Engineer",
+    "auxiliary_urls": [],
+    "contacts": [
+      {
+        "name": null,
+        "email": "dhackel@adobe.com",
+        "linkedin_url": null,
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "58"
+  },
+  {
+    "company_name": "Adobe",
+    "role_title": "2026 University Grad - Applied Researcher",
+    "location": "San Jose",
+    "source": "Direct Connection",
+    "job_url": "https://careers.adobe.com/us/en/job/R161169/2026-University-Graduate-Applied-Researcher",
+    "auxiliary_urls": [],
+    "contacts": [
+      {
+        "name": null,
+        "email": "dhackel@adobe.com",
+        "linkedin_url": null,
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "59"
+  },
+  {
+    "company_name": "Adobe",
+    "role_title": "2026 University Grad - Applied Scientist",
+    "location": "San Jose",
+    "source": "Direct Connection",
+    "job_url": "https://careers.adobe.com/us/en/job/R160136/2026-University-Graduate-Applied-Scientist",
+    "auxiliary_urls": [],
+    "contacts": [
+      {
+        "name": null,
+        "email": "dhackel@adobe.com",
+        "linkedin_url": null,
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "60"
+  },
+  {
+    "company_name": "Veeva",
+    "role_title": "New Grad Software Engineer",
+    "location": "Pleasanton",
+    "source": "In-Person Event",
+    "job_url": "https://careers.veeva.com/job/8fe22df0-02b4-453d-919c-c8998cf913f6/associate-software-engineer-seeking-2025-2026-grads-pleasanton-ca/?lever-source=veeva-career-site",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/katie-groth/"
+    ],
+    "contacts": [
+      {
+        "name": "Katie Groth",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/katie-groth/",
+        "connection_type": "Recruiter"
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "Met at event on campus in October",
+      "recruiter left the company in mid-january"
+    ],
+    "_id": "61"
+  },
+  {
+    "company_name": "Google",
+    "role_title": null,
+    "location": null,
+    "source": "Direct Connection",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.google.com/about/careers/applications/jobs/results?target_level=EARLY&degree=BACHELORS&degree=MASTERS&employment_type=FULL_TIME&skills=Software%2C%20AI&location=California%2C%20USA"
+    ],
+    "contacts": [
+      {
+        "name": "Samantha Gorbett",
+        "email": "sgorbett@google.com",
+        "linkedin_url": "https://www.linkedin.com/in/samanthagorbett",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2025-12-30",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "No Software Engineering jobs?"
+    ],
+    "_id": "62"
+  },
+  {
+    "company_name": "Cursor",
+    "role_title": "SWE - Enterprise - Cursor",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://cursor.com/careers/software-engineer-enterprise",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/posts/danielstjules_software-engineer-enterprise-cursor-activity-7412252790066094081-HW5E?utm_source=share&utm_medium=member_desktop&rcm=ACoAADe2zLEBgeNkzcF0O80jz-JtDkFSMC6mUUc",
+      "https://www.perplexity.ai/search/make-linkin-connection-request-BHeOGjKDSiSJWJjmKGp5KA"
+    ],
+    "contacts": [
+      {
+        "name": "danielstjules",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/posts/danielstjules_software-engineer-enterprise-cursor-activity-7412252790066094081-HW5E?utm_source=share&utm_medium=member_desktop&rcm=ACoAADe2zLEBgeNkzcF0O80jz-JtDkFSMC6mUUc",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-01",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "63"
+  },
+  {
+    "company_name": "Q-Centrix",
+    "role_title": "Junior AI Engineer",
+    "location": "Remote",
+    "source": "Cold Application",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://jobright.ai/jobs/info/688262136fcd973d15ad8b7d?utm_source=1115&utm_campaign=DavidChen&_bhlid=67b672dff126028808466f92d592517652fe6"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-01",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "64"
+  },
+  {
+    "company_name": null,
+    "role_title": null,
+    "location": null,
+    "source": null,
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/posts/jforjaiminco_building-an-in-house-web-development-team-activity-7409265162727260160-EiJk?utm_source=share&utm_medium=member_desktop&rcm=ACoAADe2zLEBgeNkzcF0O80jz-JtDkFSMC6mUUc"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-01",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "65"
+  },
+  {
+    "company_name": "Vitalize",
+    "role_title": "Forward Deployed Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/vitalize/fabef30a-92fd-468a-b2c3-bd04ea15a927",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/posts/sanketh-andhavarapu_our-team-at-vitalize-is-growing-fast-our-activity-7408906751326162944-u6OI?utm_source=share&utm_medium=member_desktop&rcm=ACoAADe2zLEBgeNkzcF0O80jz-JtDkFSMC6mUUc"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-01",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "66"
+  },
+  {
+    "company_name": "Neuralink",
+    "role_title": "SWE - BCI Applications",
+    "location": null,
+    "source": null,
+    "job_url": "https://neuralink.com/careers/apply/?gh_jid=6596365003&gh_src=c356a2533us",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4240281588/?eBP=CwEAAAGbeqjC3w6Xq9exZoK6XREJLMYGHzcgKuDVtQT59fCxuIEbhPJmTAL0lj2QdqujLS4KikviEnQggUvTf1ZnMDybyijo86fQ7NsldXp6eiQVOfa1RnX9ofPcPh7qVpbBYcLmoKC8AiODhPJm021WREQmOQwaqRqNmf04V6XMM6bYsiX4MpoUaTIL3YUkPcsB-L0lxlXSplFGgzrOsDEFgBgiFiASjpsw93cW3cRTx033Fh6UEpDXxykeLjywsJx7FtPe2gmFrd_uKPLXMTL75BKjHd9RPeNPRfRwoTdeTtYBKh2uWCKX4mIA27YmAjQDuNREk8VknRPVhQtJvrArX_Qx6vXuV9djjOGvZbq6_pWZKBDKQtB9v8TTt8QgrMPSBZRGbs1_tj-v8t_xiVbtDjVTfoFu7HvKZrVvZWOYE5lFnLcq-khSf3BH9yPAaXBoC7MZ6beyopIlj2hHvaRBP3cXpNL-VvhUiHfcCvcmMKUsD3MDh_ACFWVy-F-NkFswtFcuS_Y&refId=x9poz8zG22SgKOaKedSjhA%3D%3D&trackingId=RnidkZdYvLjhMG3Mm7TWhg%3D%3D&trk=flagship3_search_srp_jobs&lipi=urn%3Ali%3Apage%3Ad_flagship3_search_srp_jobs%3BHzDpy5pzTTus%2F464%2BVpWvA%3D%3D&lici=RnidkZdYvLjhMG3Mm7TWhg%3D%3D",
+      "https://neuralink.com/careers/apply/?gh_jid=5663271003&gh_src=c356a2533us"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-01",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "director of engineering"
+    ],
+    "_id": "69"
+  },
+  {
+    "company_name": "Glean",
+    "role_title": "SWE Grad",
+    "location": "Palo Alto",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/gleanwork/jobs/4592324005",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4295123743"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-01",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "alumni"
+    ],
+    "_id": "70"
+  },
+  {
+    "company_name": "Redblock",
+    "role_title": "AI Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/collections/similar-jobs/?currentJobId=4329611534&referenceJobId=4295123743",
+      "https://www.linkedin.com/in/rajkhaitan/"
+    ],
+    "contacts": [
+      {
+        "name": "Raj Khaitan",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/rajkhaitan/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-01",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "71"
+  },
+  {
+    "company_name": "BlackRock",
+    "role_title": "Full Stack Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://careers.blackrock.com/job/-/-/45831/85990379024?source=LinkedIn",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4343271490"
+    ],
+    "contacts": [
+      {
+        "name": "Kashaf Mujeeb",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/kashafmujeeb/",
+        "connection_type": "connection from CodePath"
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-01",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "72"
+  },
+  {
+    "company_name": "Notion",
+    "role_title": "Full Stack Early Career",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/notion/f7399542-9122-481a-bf64-43bf8093748b?source=LinkedIn",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4334158613"
+    ],
+    "contacts": [
+      {
+        "name": "Sai Sweekruthi Korada",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/sai-sweekruthi-korada/",
+        "connection_type": "connection from school"
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-01",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "connection from school"
+    ],
+    "_id": "73"
+  },
+  {
+    "company_name": "Aircall",
+    "role_title": "Full Stack SWE Ai",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.lever.co/aircall/38f0617f-7a28-4381-9377-cae4827a3cd1/apply?source=LinkedIn",
+    "auxiliary_urls": [],
+    "contacts": [
+      {
+        "name": null,
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/christinahoward/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-01",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "74"
+  },
+  {
+    "company_name": "Benchling",
+    "role_title": "SWE Full Stack Chemistry",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/benchling/jobs/7320672?gh_jid=7320672&gh_src=838b85821us&source=LinkedIn",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4314854242"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-01",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "alumni?"
+    ],
+    "_id": "75"
+  },
+  {
+    "company_name": "Hackerrank",
+    "role_title": "SWE",
+    "location": "Santa Clara",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/hackerrank/jobs/7443715?gh_jid=7443715&gh_src=1836e8621us&source=LinkedIn",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4348581490"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-01",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "alumni?"
+    ],
+    "_id": "76"
+  },
+  {
+    "company_name": "EightFold AI",
+    "role_title": "ML Engineer",
+    "location": "Santa Clara",
+    "source": "Cold Application",
+    "job_url": "https://app.eightfold.ai/careers/job/68749674538?domain=volkscience.com",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4271096792"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-01",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "alumni?"
+    ],
+    "_id": "77"
+  },
+  {
+    "company_name": "CoreWeave",
+    "role_title": "SWE Inference AI/ML",
+    "location": "Sunnyvale",
+    "source": "Cold Application",
+    "job_url": "https://coreweave.com/careers/job?4609928006&board=coreweave&gh_jid=4609928006",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4347121472"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-01",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "alumni?"
+    ],
+    "_id": "78"
+  },
+  {
+    "company_name": "Nuro",
+    "role_title": "SWE AI Sensor",
+    "location": "Mountain View",
+    "source": "Cold Application",
+    "job_url": "https://www.nuro.ai/careersitem?gh_jid=7373740&gh_src=bcd22a501us",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4320456788"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-01",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "alumni?"
+    ],
+    "_id": "79"
+  },
+  {
+    "company_name": "Glean",
+    "role_title": "SWE ML",
+    "location": "Palo Alto",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/gleanwork/jobs/4006735005",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4195257196"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-01",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "alumni?"
+    ],
+    "_id": "80"
+  },
+  {
+    "company_name": "Brain Co.",
+    "role_title": "AI/ML Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/brainco/58cff031-5b0b-4b92-a1ea-2ebf2495d89d",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4275844846"
+    ],
+    "contacts": [
+      {
+        "name": null,
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/ijoo22/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-01",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "81"
+  },
+  {
+    "company_name": "Baseten",
+    "role_title": "AI Solutions Engineer, Forward Deployed Engineering",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/baseten/508b792d-57a0-467e-9a89-76fe72e84433",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-01",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "82"
+  },
+  {
+    "company_name": "ScaleAI",
+    "role_title": "AI Strategy Consultant",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/scaleai/jobs/4472223005?gh_src=acad35425us",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/search/results/people/?origin=JOB_PAGE_CANNED_SEARCH&network=%22F%22&currentCompany=%5B%2217998520%22%5D",
+      "https://www.linkedin.com/search/results/people/?origin=JOB_PAGE_CANNED_SEARCH&currentCompany=%5B%2217998520%22%5D&schoolFilter=%5B%222841%22%5D",
+      "https://www.linkedin.com/jobs/view/4196121775"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-01",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "(contract position?)",
+      "4 connections work there",
+      "several alumni",
+      "job posting on LinkedIn"
+    ],
+    "_id": "85"
+  },
+  {
+    "company_name": "MIntegral",
+    "role_title": "ML Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://www.mintegral.com/en/careers",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4320761926"
+    ],
+    "contacts": [
+      {
+        "name": "Olivia Mei",
+        "email": "olivia.mei@mintegral.com",
+        "linkedin_url": "https://www.linkedin.com/in/olivia-m-9a848b148/",
+        "connection_type": null
+      },
+      {
+        "name": "Jason Zheng",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/jason-zheng-crossroads/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-01",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "86"
+  },
+  {
+    "company_name": "Avenue Code",
+    "role_title": "Data Engineer",
+    "location": "Mountain View",
+    "source": "Cold Application",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4329621213"
+    ],
+    "contacts": [
+      {
+        "name": "Nicoly Oliveira",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/nicoly-oliveira-0831a8177/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-01",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "87"
+  },
+  {
+    "company_name": "Chalk",
+    "role_title": "Full Stack SWE",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/chalkinc/jobs/4032173005",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-02",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "88"
+  },
+  {
+    "company_name": "Supermicro",
+    "role_title": "SWE",
+    "location": "San Jose",
+    "source": "Cold Application",
+    "job_url": "https://jobs.supermicro.com/job/San-Jose-Software-Engineer-Cali/1337650400/?utm_source=LINKEDIN&utm_medium=referrer&LinkedIn%20Job%20Slots=utm_source=linkedinjobpostings",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4331382621",
+      "https://www.linkedin.com/in/dillon-liang/",
+      "https://www.linkedin.com/search/results/people/?origin=JOB_PAGE_CANNED_SEARCH&currentCompany=%5B%2224985%22%5D&schoolFilter=%5B%222841%22%5D"
+    ],
+    "contacts": [
+      {
+        "name": "Dillon Liang",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/dillon-liang/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-02",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "89"
+  },
+  {
+    "company_name": "Recruiting From Scratch",
+    "role_title": "Full Stack Engineer",
+    "location": "Santa Clara",
+    "source": "Cold Application",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4326287532",
+      "https://www.linkedin.com/in/arsen-petrosyan-la/"
+    ],
+    "contacts": [
+      {
+        "name": "Arsen Petrosyan",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/arsen-petrosyan-la/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-02",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "90"
+  },
+  {
+    "company_name": "Granite Construction",
+    "role_title": "Gen AI Intern",
+    "location": "Watsonville",
+    "source": "Cold Application",
+    "job_url": "https://granite.wd1.myworkworkdayjobs.com/careers/job/Watsonville-California/Generative-AI-Intern_R0000006751?source=LinkedIn",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4345863957/",
+      "https://www.linkedin.com/in/jessicasomersgc/",
+      "https://www.linkedin.com/in/nathan-dolor/"
+    ],
+    "contacts": [
+      {
+        "name": "Jessica Somers",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/jessicasomersgc/",
+        "connection_type": null
+      },
+      {
+        "name": "Nathan Dolor",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/nathan-dolor/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-03",
+        "notes": null
+      },
+      {
+        "stage": "Interview 1",
+        "date": null,
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "91"
+  },
+  {
+    "company_name": "Inspira",
+    "role_title": "Software Engineer",
+    "location": "San Jose",
+    "source": null,
+    "job_url": "https://www.inspira.com/career-options-usa/",
+    "auxiliary_urls": [
+      "https://www.indeed.com/rc/clk?jk=e8164a7cb6a834aa&bb=4Ngedo7RkgCWgRJJmNQFkRVe92YBtw-wOs7MRHSBgLbhk7bZntS-rCw_NifSevXFjt7IoNvRRNfsrBdcBmfq0KeqnW7G_wRL-LyceOKlSJz4lHW7KbOOHdJ-nCEIT5uTrxG0KV4Wj3i3gZ8uSRmUsw%3D%3D&xkcb=SoCA67M3oIe5argdUj0PbzkdCdPP&fccid=66d0b60738c7db79&vjs=3"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-03",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "92"
+  },
+  {
+    "company_name": "Second Nature Computing",
+    "role_title": "Founding AI Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/secondnaturecomputing/76b8feba-c746-4c30-9e21-ebe1c813daf4",
+    "auxiliary_urls": [],
+    "contacts": [
+      {
+        "name": "Sai Kambampati",
+        "email": "sai@secondnaturecomputing.com",
+        "linkedin_url": null,
+        "connection_type": "Tech4Good Discord"
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-06",
+        "notes": null
+      },
+      {
+        "stage": "Interview 1",
+        "date": null,
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "‘23"
+    ],
+    "_id": "93"
+  },
+  {
+    "company_name": "Second Nature Computing",
+    "role_title": "Founding iOS Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/secondnaturecomputing/9fa8abb7-45bb-472f-9e1a-712d84fe891b",
+    "auxiliary_urls": [],
+    "contacts": [
+      {
+        "name": "sai",
+        "email": "sai@secondnaturecomputing.com",
+        "linkedin_url": null,
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-06",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "prolly not best for me"
+    ],
+    "_id": "94"
+  },
+  {
+    "company_name": "Koam.ai",
+    "role_title": "AI/ML thing",
+    "location": null,
+    "source": "Inbound Outreach",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/brandon-sok-589480183/"
+    ],
+    "contacts": [
+      {
+        "name": "Brandon Sok",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/brandon-sok-589480183/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-07",
+        "notes": null
+      },
+      {
+        "stage": "Interview 1",
+        "date": null,
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "Google Meet"
+    ],
+    "_id": "95"
+  },
+  {
+    "company_name": "Avance Consulting (on behalf of)",
+    "role_title": "Ai Geolocation Role",
+    "location": null,
+    "source": "Inbound Outreach",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/swapna-renukunta-9ba973258/"
+    ],
+    "contacts": [
+      {
+        "name": "Swapna Renukunta",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/swapna-renukunta-9ba973258/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-08",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "96"
+  },
+  {
+    "company_name": "Poppy AI",
+    "role_title": null,
+    "location": null,
+    "source": "Cold Application",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/katiannabents/"
+    ],
+    "contacts": [
+      {
+        "name": "Katianna Bents",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/katiannabents/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-08",
+        "notes": null
+      },
+      {
+        "stage": "Interview 1",
+        "date": null,
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "97"
+  },
+  {
+    "company_name": "Microsoft",
+    "role_title": "SWE II; Azure Resource Builder",
+    "location": null,
+    "source": null,
+    "job_url": "https://careerhub.microsoft.com/careers/job?domain=microsoft.com&pid=1970393556639315",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/posts/chandrasekarsrinivasan_microsoft-careers-activity-7417018246047887360-Z3EO?utm_source=share&utm_medium=member_desktop&rcm=ACoAADe2zLEBgeNkzcF0O80jz-JtDkFSMC6mUUc",
+      "https://www.linkedin.com/in/edward-maeng/",
+      "https://careerhub.microsoft.com/careers?domain=microsoft.com&start=0&location=Mountain+View%2C++CA%2C++United+States&pid=1970393556657779&sort_by=match&filter_distance=160&filter_include_remote=1&filter_seniority=Entry"
+    ],
+    "contacts": [
+      {
+        "name": "Edward",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/edward-maeng/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-08",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "did resume review with him awhile back",
+      "Career search query for within 100 miles, entry level, resume"
+    ],
+    "_id": "99"
+  },
+  {
+    "company_name": "Friday",
+    "role_title": "Full Stack Founding Engineer",
+    "location": "SF",
+    "source": "In-Person Event",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://cal.com/allennaliath/30min"
+    ],
+    "contacts": [
+      {
+        "name": null,
+        "email": "allen@fridaymail.ai",
+        "linkedin_url": null,
+        "connection_type": null
+      },
+      {
+        "name": null,
+        "email": "founders@friday.so",
+        "linkedin_url": null,
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-08",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "no application; jsut calnedly link; met awhile ago"
+    ],
+    "_id": "100"
+  },
+  {
+    "company_name": "SellScale",
+    "role_title": "Full Stack Engineer (AI/Agentic Product)",
+    "location": "SF",
+    "source": "Inbound Outreach",
+    "job_url": "https://jobs.polymer.co/sellscale/34037",
+    "auxiliary_urls": [],
+    "contacts": [
+      {
+        "name": "Ishan",
+        "email": "ishan@sellscale.com",
+        "linkedin_url": null,
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-14",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "101"
+  },
+  {
+    "company_name": "SellScale",
+    "role_title": "Senior SWE; Backend leaning",
+    "location": "SF",
+    "source": "Inbound Outreach",
+    "job_url": "https://jobs.polymer.co/sellscale/34769",
+    "auxiliary_urls": [],
+    "contacts": [
+      {
+        "name": "ishan",
+        "email": "ishan@sellscale.com",
+        "linkedin_url": null,
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-14",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "2-5 years; too much?"
+    ],
+    "_id": "102"
+  },
+  {
+    "company_name": "Consensus",
+    "role_title": "Full Stack Engineer",
+    "location": "SF",
+    "source": "Direct Connection",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4338428459/"
+    ],
+    "contacts": [
+      {
+        "name": null,
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/aaadesara/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-14",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "all these are 4+ years; a stretch"
+    ],
+    "_id": "103"
+  },
+  {
+    "company_name": "Consensus",
+    "role_title": "Platform Engineer",
+    "location": "SF",
+    "source": "Direct Connection",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4338429071/"
+    ],
+    "contacts": [
+      {
+        "name": null,
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/aaadesara/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-14",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "104"
+  },
+  {
+    "company_name": "Consensus",
+    "role_title": "Growth Engineer",
+    "location": "SF",
+    "source": "Direct Connection",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4338338531/"
+    ],
+    "contacts": [
+      {
+        "name": null,
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/aaadesara/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-14",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "105"
+  },
+  {
+    "company_name": "ZL Tech",
+    "role_title": "New Grad",
+    "location": "Milpitas",
+    "source": "In-Person Event",
+    "job_url": "https://zl-technologies-inc.breezy.hr/p/fbaadf676d08-open-application-new-graduate-scheme?&popup=true",
+    "auxiliary_urls": [],
+    "contacts": [
+      {
+        "name": "melissadejesus1",
+        "email": "mdejesus@zlti.com",
+        "linkedin_url": "https://www.linkedin.com/in/melissadejesus1/",
+        "connection_type": null
+      },
+      {
+        "name": "asubramanianb",
+        "email": "asubramanian@zlti.com",
+        "linkedin_url": "https://www.linkedin.com/in/asubramanianb/",
+        "connection_type": null
+      },
+      {
+        "name": "sumeet-gupta-bb889b77",
+        "email": "sgupta@zlti.com",
+        "linkedin_url": "https://www.linkedin.com/in/sumeet-gupta-bb889b77/",
+        "connection_type": null
+      },
+      {
+        "name": "kaileysilverberg",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/kaileysilverberg/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-14",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "106"
+  },
+  {
+    "company_name": "Pylon",
+    "role_title": "Software Engineer",
+    "location": "SF",
+    "source": "In-Person Event",
+    "job_url": "https://jobs.ashbyhq.com/pylon-labs/edba2728-f620-49f8-b18c-7a4294fe08af",
+    "auxiliary_urls": [],
+    "contacts": [
+      {
+        "name": "Robert Eng",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/robert-eng/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-14",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "107"
+  },
+  {
+    "company_name": "Pylon",
+    "role_title": "Software Engineer (AI Agents)",
+    "location": "SF",
+    "source": "In-Person Event",
+    "job_url": "https://jobs.ashbyhq.com/pylon-labs/f85661bd-0925-44ad-96dc-297e0bce6df3",
+    "auxiliary_urls": [],
+    "contacts": [
+      {
+        "name": "Robert Eng",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/robert-eng/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-14",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "108"
+  },
+  {
+    "company_name": "Pylon",
+    "role_title": "Software Engineer (AI Infra)",
+    "location": "SF",
+    "source": "In-Person Event",
+    "job_url": "https://jobs.ashbyhq.com/pylon-labs/6c61bf0d-41d8-436a-bd3b-ee1561ad40f7",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/robert-eng/"
+    ],
+    "contacts": [
+      {
+        "name": "Robert Eng",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/robert-eng/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-14",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "109"
+  },
+  {
+    "company_name": "Pylon",
+    "role_title": "Software Engineer (Security)",
+    "location": "SF",
+    "source": "In-Person Event",
+    "job_url": "https://jobs.ashbyhq.com/pylon-labs/8763ee7a-3f07-4a88-8b75-76700bf02511",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/robert-eng/"
+    ],
+    "contacts": [
+      {
+        "name": "Robert Eng",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/robert-eng/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-14",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "110"
+  },
+  {
+    "company_name": "Scale AI",
+    "role_title": "SWE New Grad",
+    "location": "SF",
+    "source": "Direct Connection",
+    "job_url": "https://job-boards.greenhouse.io/scaleai/jobs/4605996005?gh_src=acad35425us",
+    "auxiliary_urls": [
+      "https://grnh.se/obic1z8n5us",
+      "https://www.linkedin.com/jobs/view/4297642437/",
+      "https://www.linkedin.com/in/raghav1212/",
+      "https://www.linkedin.com/in/bill-zhang1/",
+      "https://www.linkedin.com/in/kyle-gong-b9519517b/",
+      "https://www.linkedin.com/in/rishabh-shah-47b6955b/"
+    ],
+    "contacts": [
+      {
+        "name": "Bill Zhang",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/bill-zhang1/",
+        "connection_type": "Referral"
+      },
+      {
+        "name": "Raghav",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/raghav1212/",
+        "connection_type": null
+      },
+      {
+        "name": "Kyle Gong",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/kyle-gong-b9519517b/",
+        "connection_type": null
+      },
+      {
+        "name": "Rishabh Shah",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/rishabh-shah-47b6955b/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-14",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "Given referal link from Bill Zhang"
+    ],
+    "_id": "111"
+  },
+  {
+    "company_name": "CodeFlash",
+    "role_title": "Core Tech AI Engineer",
+    "location": "SF",
+    "source": "Inbound Outreach",
+    "job_url": "https://codeflash.notion.site/Codeflash-is-hiring-17d3ac0ebb8880269af5f71ca358cba6",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/caoimhe-a-byrne/",
+      "https://www.linkedin.com/in/taylorito/"
+    ],
+    "contacts": [
+      {
+        "name": null,
+        "email": "careers@codeflash.ai",
+        "linkedin_url": null,
+        "connection_type": "Application Email"
+      },
+      {
+        "name": "Caoimhe A. Byrne",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/caoimhe-a-byrne/",
+        "connection_type": "LinkedIn Profile"
+      },
+      {
+        "name": "Taylorito",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/taylorito/",
+        "connection_type": "LinkedIn Profile"
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-15",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "112"
+  },
+  {
+    "company_name": "Adsgency AI",
+    "role_title": "ML Engineer",
+    "location": "SF",
+    "source": "Inbound Outreach",
+    "job_url": "https://adsgency.ai/careers",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4325216141",
+      "https://www.linkedin.com/company/adsgency-ai/"
+    ],
+    "contacts": [
+      {
+        "name": "Soumya Trivedi",
+        "email": "soumyatrivedi1312@gmail.com",
+        "linkedin_url": null,
+        "connection_type": "Email"
+      },
+      {
+        "name": "Tor / Xingzhuo Chen",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/xingzhuo-chen-3932aa217/",
+        "connection_type": "LinkedIn"
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-15",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "LinkedIn says job match is poor? Also check notes for matches if you do decide to apply.",
+      "Soumya Trivedi (Phone): +1 (216) 551-3701",
+      "Reach out to Soumya directly regarding the ML Engineer posting."
+    ],
+    "_id": "113"
+  },
+  {
+    "company_name": "Majorly?",
+    "role_title": null,
+    "location": "SF",
+    "source": "In-Person Event",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/axaysd/"
+    ],
+    "contacts": [
+      {
+        "name": "Akshay Danthi",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/axaysd/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-15",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "Oct 30 Career Fair",
+      "no application; met at event"
+    ],
+    "_id": "114"
+  },
+  {
+    "company_name": "GalenAI",
+    "role_title": null,
+    "location": "SF",
+    "source": "In-Person Event",
+    "job_url": "https://www.workatastartup.com/jobs/83898",
+    "auxiliary_urls": [],
+    "contacts": [
+      {
+        "name": "priyanka shrestha",
+        "email": "priyanka@galenai.com",
+        "linkedin_url": "https://www.linkedin.com/in/priyanka-shrestha-",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-15",
+        "notes": "Oct 24 resume submission"
+      }
+    ],
+    "raw_notes": [],
+    "_id": "115"
+  },
+  {
+    "company_name": "Baselayer",
+    "role_title": null,
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4362462698"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-14",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "116"
+  },
+  {
+    "company_name": "Skybeyo",
+    "role_title": null,
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4359061692"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-14",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "117"
+  },
+  {
+    "company_name": "Recuiter Post",
+    "role_title": null,
+    "location": "Menlo Park",
+    "source": "Cold Application",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/dreaves/"
+    ],
+    "contacts": [
+      {
+        "name": null,
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/dreaves/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "Recruiter post on LinkedIn"
+    ],
+    "_id": "118"
+  },
+  {
+    "company_name": "Apple",
+    "role_title": "Software Engineer",
+    "location": "Sunnyvale",
+    "source": "Cold Application",
+    "job_url": "https://jobs.apple.com/en-us/details/200620185/software-engineer-information-systems-technology?utm_source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "119"
+  },
+  {
+    "company_name": "Microsoft",
+    "role_title": "Software Engineer",
+    "location": "Remote?",
+    "source": "Cold Application",
+    "job_url": "https://apply.careers.microsoft.com/careers/job/1970393556658017?utm_source=Simplify&ref=Simplify&src=Simplify",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/edward-maeng/"
+    ],
+    "contacts": [
+      {
+        "name": "Edward Maeng",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/edward-maeng/",
+        "connection_type": "SWE at Microsoft"
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "Connected to a SWE at Microsoft. figure out more positions and let him know."
+    ],
+    "_id": "120"
+  },
+  {
+    "company_name": "Hive",
+    "role_title": "SWE- Frontend",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.lever.co/hive/e49f6b1d-1c84-4956-8b86-d6d36aead905/apply?lever-source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "121"
+  },
+  {
+    "company_name": "Google",
+    "role_title": "SWE - Typescript and Javascript",
+    "location": "Sunnyvale",
+    "source": "Cold Application",
+    "job_url": "https://www.google.com/about/careers/applications/jobs/results/140172010498990790?utm_source=Simplify&ref=Simplify&src=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [
+      {
+        "name": "Sammy",
+        "email": null,
+        "linkedin_url": null,
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "Reach out to Sammy again"
+    ],
+    "_id": "122"
+  },
+  {
+    "company_name": "The Trade Deck",
+    "role_title": "SWE II",
+    "location": "San Jose",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/thetradedesk/jobs/5021705007?gh_src=Simplify&utm_source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "123"
+  },
+  {
+    "company_name": "Sierra",
+    "role_title": "SWE - Agent New Grad",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/Sierra/6a75b530-b7bb-4439-bb67-37b4f2b75b96",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "124"
+  },
+  {
+    "company_name": "ByteDance",
+    "role_title": "ML Graduate",
+    "location": "San Jose",
+    "source": null,
+    "job_url": "https://joinbytedance.com/search/7536346859938892040?utm_source=Simplify&ref=Simplify&src=Simplify",
+    "auxiliary_urls": [
+      "https://jobs.bytedance.com/en/login?redirect_path=%2Fresume%2F7536346859938892040%2Fapply"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "125"
+  },
+  {
+    "company_name": "Samsara",
+    "role_title": "New Grad SWE",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://www.samsara.com/company/careers/roles/7172579?gh_jid=7172579&gh_src=Simplify&utm_source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "126"
+  },
+  {
+    "company_name": "Solace",
+    "role_title": "Associate SWE",
+    "location": "Redwood City, CA",
+    "source": null,
+    "job_url": "https://jobs.ashbyhq.com/solace/d7906c8c-395f-4d6b-8e64-e2c7be52b929/application?utm_source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "127"
+  },
+  {
+    "company_name": "Replit",
+    "role_title": "SWE New Grad",
+    "location": "Foster City",
+    "source": null,
+    "job_url": "https://jobs.ashbyhq.com/replit/b5e81eae-06f9-4798-8988-2d06ca936dbc/application?utm_source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "128"
+  },
+  {
+    "company_name": "TRM Labs",
+    "role_title": "Product Engineer New Grad",
+    "location": "SF",
+    "source": null,
+    "job_url": "https://job-boards.greenhouse.io/trmlabs/jobs/5662998004?gh_src=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "129"
+  },
+  {
+    "company_name": "Oracle",
+    "role_title": "SWE - Fusion",
+    "location": "Santa Clara",
+    "source": "Cold Application",
+    "job_url": "https://eeho.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_45001/job/311889?utm_source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "130"
+  },
+  {
+    "company_name": "Meshy",
+    "role_title": "SWE - New Grad",
+    "location": "Sunnyvale",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/meshy/jobs/4932258008?gh_src=Simplify&utm_source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "131"
+  },
+  {
+    "company_name": "Doordash",
+    "role_title": "SWE New Grad",
+    "location": "Sunnyvale",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/doordashusa/jobs/7263610?gh_src=Simplify&utm_source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "132"
+  },
+  {
+    "company_name": "Zip",
+    "role_title": "SWE",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/zip/ec19389b-6943-4ba8-8060-ac6bdfa23987/application?utm_source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "133"
+  },
+  {
+    "company_name": "ElevenLabs",
+    "role_title": "Full Stack - Backend",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/elevenlabs/c7d59014-b918-4c15-ae33-79f5c9f2cf9f?departmentId=d8319477-230e-490b-beb9-ca32234f587d&employmentType=FullTime&locationId=42639f3c-c983-400d-8673-1e32388b5e99&utm_source=89glwgnZvz",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "134"
+  },
+  {
+    "company_name": "ElevenLabs",
+    "role_title": "Full Stack - General",
+    "location": null,
+    "source": null,
+    "job_url": "https://jobs.ashbyhq.com/elevenlabs/6a530871-b6c6-4783-ac6b-69cc3b084192?departmentId=d8319477-230e-490b-beb9-ca32234f587d&employmentType=FullTime&locationId=42639f3c-c983-400d-8673-1e32388b5e99&utm_source=89glwgnZvz",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "limited to \"give everyone a chance\""
+    ],
+    "_id": "135"
+  },
+  {
+    "company_name": "Magical",
+    "role_title": "Junior SWE",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/Magical/2c4734af-1ca2-423a-bb4e-29a7da894249?utm_source=Otta",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "136"
+  },
+  {
+    "company_name": "Whatnot",
+    "role_title": "SWE New Grad",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/whatnot/bc8f8c7f-2c4c-4f43-a238-953568c101b8?utm_source=Otta",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "137"
+  },
+  {
+    "company_name": "Exa",
+    "role_title": "SWE Agentic Search",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/exa/913d2b71-39d5-4d3a-ab8d-ffffa34cd069?utm_source=Otta",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "138"
+  },
+  {
+    "company_name": "PlanHat",
+    "role_title": "SWE",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://emp.jobylon.com/jobs/328545-planhat-fullstack-engineer-to-solve-the-hardest-challenge-in-enterprise-software/?utm_source=Otta",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "139"
+  },
+  {
+    "company_name": "Mesa",
+    "role_title": "SWE",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/mesamember/jobs/4967098008?utm_source=Otta",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "140"
+  },
+  {
+    "company_name": "PermitFlow",
+    "role_title": "Full Stack",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/permitflow/731b87cc-b51b-4f1f-8e1f-2d4c57aa28db?utm_source=Otta",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "141"
+  },
+  {
+    "company_name": "EnergyHub",
+    "role_title": "Frontend Engineer",
+    "location": "Remote",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/energyhub/jobs/8170382002?utm_source=Otta",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "142"
+  },
+  {
+    "company_name": "Notion",
+    "role_title": "Full Stack",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/notion/f7399542-9122-481a-bf64-43bf8093748b?utm_source=Otta",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "143"
+  },
+  {
+    "company_name": "Affirm",
+    "role_title": "SWE",
+    "location": "Remote",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/affirm/jobs/7560426003?gh_src=bkt3hqaw3us",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "144"
+  },
+  {
+    "company_name": "Tamnoon",
+    "role_title": "Full Stack",
+    "location": "Remote",
+    "source": "Cold Application",
+    "job_url": "https://apply.workable.com/tamnoon-dot-i-o/j/A080241837/?utm_source=Otta",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "145"
+  },
+  {
+    "company_name": "Clerkie",
+    "role_title": "Full Stack",
+    "location": "Remote",
+    "source": "Cold Application",
+    "job_url": "https://www.getfiber.ai/careers?gh_jid=4930040007&utm_source=Otta",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "146"
+  },
+  {
+    "company_name": "Carepool",
+    "role_title": "LLM Chatbot Developer",
+    "location": "Remote",
+    "source": "Cold Application",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.indeed.com/viewjob?jk=6c78cf10b16d66da&tk=1jfbonicjia9f801&from=jobi2a&advn=8433833965263312&adid=420251535&ad=-6NYlbfkN0BTcbXOvZ6ukqIaVQjxXVlAbDsl0auzHuMwYtw7s0CZIMXBxY4_0h7fX39PLhuXCP_flvfl52TYYnRObNvbsGzJTRRpi9gnQ50d5x257VNH4S4NRUZWIpIHfGjsflsuOx0QBk0HJu3kY6oMFN_jtC4c-na5_ymdsI8PNRRC1gtATrsedKNtbZxF1smCsS_0gak4VPQZJuPs0gxY-uEb3ronf3wXC96SHm5K02--qpQcBeebAV-8qxpwkRw9EZ4we9UyYys_ApDiPky-0E20JxbjlOKMDC4Pq6MCYqei60tN_YTiYZOWJrcID7nkS3ArXwjXFHMZgclyxSa-H5h1wKd-2qgjJjwUnKRWG0VOIxYphhHSYLObWP4iUVFULocBJXO58RaR6FMcBiDa5gdeHl9X4Cyo49PNk62t3dOinZsL34G1JtiHg8CatS_kYboYEgPr7ImiJNybwqkEuzMBh7vRH4mmk6w92BYg_hbiLoBJLkxR8E31DkPsEunvNHAW4F5qMlijGmyWtXCZcgQnrnoo9oBU5OP_19mQ4JTZeWtAKR_GBPReRRF_IzaBp2fNJuwcWd_n64SYPuL0enUTXl1Pw3rfNQYFFZ9piOnU0oMTsA%3D%3D&pub=21d85ca573e478f5e659e48885c828920cace3277f6b99df&i2af=jobi2a_multijob-en-US_email&camk=4HOcmqOLYrCSt0eNiiazOw%3D%3D&jrtk=5-cmh1-1-1jfbonh6pn6no800-6c78cf10b16d66da&xkcb=SoCO6_M3or5RjwXwUx0LbzkdCdPP&xpse=SoBk6_I3or-oMFRSzx0PbzkCddPP&xfps=4166e222-62eb-4676-bff2-a9060afe3c58"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "147"
+  },
+  {
+    "company_name": "Liteon Tech",
+    "role_title": "SWE",
+    "location": "Milpitas",
+    "source": "Cold Application",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://app.joinhandshake.com/job-collections/eyJ0aXRsZSI6IkJhY2tlbmQgU29mdHdhcmUgRW5naW5lZXIgKyAyMCBtb3JlIGludGVyZXN0cyIsInNlYXJjaEZpbHRlciI6eyJqb2JUeXBlSWRzIjpbIjkiLCI5IiwiMyJdLCJlbXBsb3ltZW50VHlwZUlkeSI6WyIxIiwiMiJdLCJqb2JSb2xlR3JvdXBJZHMiOlsiNjQiLCI2NSIsIjczIl0sImxvY2F0aW9uUmVxdWlyZW1lbnRzIjpbeyJkaXN0YW5jZSI6IjUwbWkiLCJwb2ludCI6IjM2Ljk3NDYsLTEyMi4wMjk0IiwibGFiZWwiOiJTYW50YSBDcnV6LCBDQSIsInRleHQiOiJTYW50YSBDcnV6In0seyJkaXN0YW5jZSI6IjUwbWkiLCJwb2ludCI6IjM3LjMzNjE5MSwtMTIxLjg5MDU4MyIsImxhYmVsIjoiU2FuIEpvc2UsIENBIiwidGV4dCI6IlNhbiBKb3NlIn0seyJkaXN0YW5jZSI6IjUwbWkiLCJwb2ludCI6IjM3Ljc3NDkyOTUsLTEyMi40MTk0MTU1IiwibGFiZWwiOiJTYW4gRnJhbmNpc2NvLCBDQSIsInRleHQiOiJTYW4gRnJhbmNpc2NvIn0seyJkaXN0YW5jZSI6IjUwbWkiLCJwb2ludCI6IjM3Ljk3MjIsLTEyMi4wMDE2IiwibGFiZWwiOiJDb25jb3JkLCBDQSIsInRleHQiOiJDb25jb3JkIn0seyJkaXN0YW5jZSI6IjUwbWkiLCJwb2ludCI6IjM3LjM5MzgxNiwtMTIyLjA3ODk2MSIsImxhYmVsIjoiTW91bnRhaW4gVmlldywgQ0EiLCJ0ZXh0IjoiTW91bnRhaW4gVmlldyJ9LHsiZGlzdGFuY2UiOiI1MG1pIiwicG9pbnQiOiIzNy40MzI4OTIsLTEyMS44OTkwNjEiLCJsYWJlbCI6Ik1pbHBpdGFzLCBDQSIsInRleHQiOiJNaWxwYXMiIn0seyJkaXN0YW5jZSI6IjUwbWkiLCJwb2ludCI6IjM3Ljc5NTIsLTEyMi4zOTM5IiwibGFiZWwiOiJTYW4gRnJhbmNpc2NvIEJheSBBcmVhLCBDQSIsInRleHQiOiJTYW4gRnJhbmNpc2NvIEJheSBBcmVhIn1dfSwiZXhwbG9yZUpvYk1vZHVsZVRyYWNraW5nSWQiOiJORVdfTUFUQ0hFU19GT1JfWU9VUl9TRUFSQ0gifX0=/10657338?page=1&per_page=25"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "148"
+  },
+  {
+    "company_name": "Monogram",
+    "role_title": "SWE",
+    "location": "San Mateo",
+    "source": "Cold Application",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://app.joinhandshake.com/job-collections/eyJ0aXRsZSI6IkJhY2tlbmQgU29mdHdhcmUgRW5naW5lZXIgKyAyMCBtb3JlIGludGVyZXN0cyIsInNlYXJjaEZpbHRlciI6eyJqb2JUeXBlSWRzIjpbIjkiLCI5IiwiMyJdLCJlbXBsb3ltZW50VHlwZ….."
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "149"
+  },
+  {
+    "company_name": "Commons",
+    "role_title": "Data/AI Engineer",
+    "location": "Oakland",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/Commons/81295aed-9e0f-41ae-b3fc-8e533c1eadc0?gh_src=Handshake&iisn=Handshake&iis=Handshake&src=Handshake&source=Handshake&ref=Handshake&utm_medium=Handshake&referral=Handshake&utm_source=Handshake&__jvst=Handshake&__jvsd=Handshake&sourceDetails=Handshake&trid=Handshake&lever-source%5B%5D=Handshake&Source=Handshake&rb=Handshake&jobBoardSource=Handshake&channel=Handshake&rcid=Handshake",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "150"
+  },
+  {
+    "company_name": "Reinforce Labs",
+    "role_title": "SWE",
+    "location": "Palo Alto",
+    "source": "Cold Application",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://app.joinhandshake.com/job-collections/eyJ0aXRsZSI6IkJhY2tlbmQgU29mdHdhcmUgRW5naW5lZXIgKyAyMCBtb3JlIGludGVyZXN0cyIsInNlYXJjaEZpbHRlciI6eyJqb2JUeXBlSWRzIjpbIjkiLCI5IiwiMyJdLCJlbXBsb3ltZW50VHlwZUlkcyI6WyIxIiwiMiJdLCJqb2JSb2xlR3JvdXJvcElkcyI6WyI2NCIsIjY1IiwiNzMiXSwibG9jYXRpb25SZXF1aXJlbWVudHMiOlt7ImRpc3RhbmNlIjoiNTBtaSIsInBvaW50IjoiMzYuOTc0NiwtMTIyLjAyOTQiLCJsYWJlbCI6IlNhbnRhIENydXosIENBIiwidGV4dCI6IlNhbnRhIENydXoifSx7ImRpc3RhbmNlIjoiNTBtaSIsInBvaW50IjoiMzcuMzM2MTkxLC0xMjEuODkwNTgzIiwibGFiZWwiOiJTYW4gSm9zZSwgQ0EiLCJ0ZXh0IjoiU2FuIEpvc2UifSx7ImRpc3RhbmNlIjoiNTBtaSIsInBvaW50IjoiMzcuNzc0OTI5NSwtMTIyLjQxOTQxNTUiLCJsYWJlbCI6IlNhbiBGcmFuY2lzY28sIENBIiwidGV4dCI6IlNhbiBGcmFuY2lzY28ifSx7ImRpc3RhbmNlIjoiNTBtaSIsInBvaW50IjoiMzcuOTcyMiwtMTIyLjAwMTYiLCJsYWJlbCI6IkNvbmNvcmQsIENBIiwidGV4dCI6IkNvbmNvcmQifSx7ImRpc3RhbmNlIjoiNTBtaSIsInBvaW50IjoiMzcuMzkzODE2LC0xMjIuMDc4OTYxIiwibGFiZWwiOiJNb3VudGFpbiBWaWV3LCBDQSIsInRleHQiOiJNb3VudGFpbiBWaWV3In0seyJkaXN0YW5jZSI6IjUwbWkiLCJwb2ludCI6IjM3LjQzMjg5MiwtMTIxLjg5OTA2MSIsImxhYmVsIjoiTWlscGl0YXMsIENBIiwidGV4dCI6Ik1pbHBpdGFzIn0seyJkaXN0YW5jZSI6IjUwbWkiLCJwb2ludCI6IjM3Ljc5NTIsLTEyMi4zOTM5IiwibGFiZWwiOiJTYW4gRnJhbmNpc2NvIEJheSBBcmVhLCBDQSIsInRleHQiOiJTYW4gRnJhbmNpc2NvIEJheSBBcmVhIn1dXSwiZXhwbG9yZUpvYk1vZHVsZVRyYWNraW5nSWQiOiJORVdfTUFUQ0hFU19GT1JfWU9VUl9TRUFSQ0gifX0=/10605715?page=1&per_page=25"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "151"
+  },
+  {
+    "company_name": "NextHop AI",
+    "role_title": "SWE New Grad",
+    "location": "Santa Clara",
+    "source": "Cold Application",
+    "job_url": "https://nexthopai.bamboohr.com/careers/24?source=aWQ9MjU%3D",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "152"
+  },
+  {
+    "company_name": "Zams",
+    "role_title": "SWE",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://app.joinhandshake.com/job-collections/eyJ0aXRsZSI6IkJhY2tlbmQgU29mdHdhcmUgRW5naW5lZXIgKyAyMCBtb3JlIGludGVyZXN0cyIsInNlYXJjaEZpbHRlciI6eyJqb2JUeXBlSWRzIjpbIjkiLCI5IiwiMyJdLCJlbXBsb3ltZW50VHlwZElkcyI6WyIxIiwiMiJdLCJqb2JSb2xlR3JvdXBJZHMiOlsiNjQiLCI2NSIsIjczIl0sImxvY2F0aW9uUmVxdWlyZW1lbnRzIjpbeyJkaXN0YW5jZSI6IjUwbWkiLCJwb2ludCI6IjM2Ljk3NDYsLTEyMi4wMjk0IiwibGFiZWwiOiJTYW50YSBDcnV6LCBDQSIsInRleHQiOiJTYW50YSBDcnV6In0seyJkaXN0YW5jZSI6IjUwbWkiLCJwb2ludCI6IjM3LjMzNjE5MSwtMTIxLjg5MDU4MyIsImxhYmVsIjoiU2FuIEpvc2UsIENBIiwidGV4dCI6IlNhbiBKb3NlIn0seyJkaXN0YW5jZSI6IjUwbWkiLCJwb2ludCI6IjM3Ljc3NDkyOTUsLTEyMi40MTk0MTU1IiwibGFiZWwiOiJTYW4gRnJhbmNpc2NvLCBDQSIsInRleHQiOiJTYW4gRnJhbmNpc2NvIn0seyJkaXN0YW5jZSI6IjUwbWkiLCJwb2ludCI6IjM3Ljk3MjIsLTEyMi4wMDE2IiwibGFiZWwiOiJDb25jb3JkLCBDQSIsInRleHQiOiJDb25jb3JkIn0seyJkaXN0YW5jZSI6IjUwbWkiLCJwb2ludCI6IjM3LjM5MzgxNiwtMTIyLjA3ODk2MSIsImxhYmVsIjoiTW91bnRhaW4gVmlldywgQ0EiLCJ0ZXh0IjoiTW91bnRhaW4gVmlldyJ9LHsiZGlzdGFuY2UiOiI1MG1pIiwicG9pbnQiOiIzNy40MzI4OTIsLTEyMS44OTkwNjEiLCJsYWJlbCI6Ik1pbHBpdGFzLCBDQSIsInRleHQiOiJNaWxwaXRhcyJ9LHsiZGlzdGFuY2UiOiI1MG1pIiwicG9pbnQiOiIzNy43OTUyLC0xMjIuMzkzOSIsImxhYmVsIjoiU2FuIEZyYW5jaXNjbyBCYXkgQXJlYSwgQ0EiLCJ0ZXh0IjoiU2FuIEZyYW5jaXNjbyBCYXkgQXJlYSJ9XX0sImV4cGxvcmVKb2JNb2R1bGVUcmFja2luZ0lkIjoiTkVXX01BVENIRVNfRk9SX1lPVVJfU0VBUkNIIn0=/10116493?page=1&per_page=25"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "153"
+  },
+  {
+    "company_name": "Anything",
+    "role_title": "Backend Engineer - AI",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/anything/f4123aa5-855a-4b82-b762-66fb4a77f493?gh_src=Handshake&iisn=Handshake&iis=Handshake&src=Handshake&source=Handshake&ref=Handshake&utm_medium=Handshake&referral=Handshake&utm_source=Handshake&__jvst=Handshake&__jvsd=Handshake&sourceDetails=Handshake&trid=Handshake&lever-source%5B%5D=Handshake&Source=Handshake&rb=Handshake&jobBoardSource=Handshake&channel=Handshake&rcid=Handshake",
+    "auxiliary_urls": [
+      "https://jobs.ashbyhq.com/anything"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "154"
+  },
+  {
+    "company_name": "Intuit",
+    "role_title": "SWE 1",
+    "location": "Mountain View",
+    "source": null,
+    "job_url": "https://jobs.intuit.com/job/mountain-view/software-engineer-1/27595/87369448720?cid=referredJobs_linkedin",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/posts/ijaiswal_software-engineer-1-activity-7417812832374870017-chhd?utm_source=share&utm_medium=member_desktop&rcm=ACoAADe2zLEBgeNkzcF0O80jz-JtDkFSMC6mUUc"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "155"
+  },
+  {
+    "company_name": "Hinge Health",
+    "role_title": "SWE II - Backend",
+    "location": "SF",
+    "source": null,
+    "job_url": "https://careers.hingehealth.com/jobs/2239?lang=en-us&previousLocale=en-US",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/posts/sarthakchokshi_hiring-staffengineer-backendengineering-activity-7418094576965656577-zYge?utm_source=share&utm_medium=member_desktop&rcm=ACoAADe2zLEBgeNkzcF0O80jz-JtDkFSMC6mUUc"
+    ],
+    "contacts": [
+      {
+        "name": "sarthakchokshi",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/posts/sarthakchokshi_hiring-staffengineer-backendengineering-activity-7418094576965656577-zYge?utm_source=share&utm_medium=member_desktop&rcm=ACoAADe2zLEBgeNkzcF0O80jz-JtDkFSMC6mUUc",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "156"
+  },
+  {
+    "company_name": "Visa",
+    "role_title": "SWE New Grad",
+    "location": "Foster City",
+    "source": null,
+    "job_url": "https://corporate.visa.com/en/jobs/REF96742T",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/chahel-nerusu/"
+    ],
+    "contacts": [
+      {
+        "name": "Chahel Nerusu",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/chahel-nerusu/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-19",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "school alumni, tech4good, etc"
+    ],
+    "_id": "157"
+  },
+  {
+    "company_name": "Black Diamond Networks",
+    "role_title": "Senior Software Engineer Contract",
+    "location": "Santa Cruz",
+    "source": "Inbound Outreach",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/joe-zito-23a417252/"
+    ],
+    "contacts": [
+      {
+        "name": "Joe Zito",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/joe-zito-23a417252/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-20",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "recruiter reached out"
+    ],
+    "_id": "158"
+  },
+  {
+    "company_name": "Deloitte",
+    "role_title": "AI & Data Analyst",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobsus.deloitte.com/san-francisco-ca/ai-data-analyst/F487849464A74A29ACF94D4E56280D3D/job/",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-22",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "159"
+  },
+  {
+    "company_name": "ServiceNow",
+    "role_title": "Software Engineer",
+    "location": "Santa Clara",
+    "source": "Cold Application",
+    "job_url": "https://jobs.smartrecruiters.com/ServiceNow/744000105233448?utm_source=Simplify&ref=Simplify&src=Simplify",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/shirin-rokni/"
+    ],
+    "contacts": [
+      {
+        "name": "Shirin Rokni",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/shirin-rokni/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-26",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "160"
+  },
+  {
+    "company_name": "Greptile",
+    "role_title": "SWE - Generalist",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/greptile/92e061a8-4fc3-4f4c-a8fe-38eec706ba79?utm_source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-26",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "161"
+  },
+  {
+    "company_name": "Greptile",
+    "role_title": "SWE - Forward Deployed",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/greptile/ea8d637e-1f2d-4347-9630-d8c949d7a201?utm_source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-26",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "162"
+  },
+  {
+    "company_name": "Greptile",
+    "role_title": "SWE - Frontend",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/greptile/356e27fa-972d-498a-bae8-dbf2aa44882b/application?utm_source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-26",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "163"
+  },
+  {
+    "company_name": "Quantcast",
+    "role_title": "Software Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.lever.co/quantcast/fb62370c-e6a6-418e-b116-09de79ad50cf/apply?lever-source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-26",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "164"
+  },
+  {
+    "company_name": "IXL",
+    "role_title": "SWE- New Grad",
+    "location": "San Mateo",
+    "source": "Cold Application",
+    "job_url": "https://www.ixl.com/company/careers?gh_jid=8364765002&gh_src=Simplify&utm_source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-26",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "165"
+  },
+  {
+    "company_name": "TikTok",
+    "role_title": "ML Engineer",
+    "location": "San Jose",
+    "source": "Cold Application",
+    "job_url": "https://lifeattiktok.com/search/7259832170339567929?utm_source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-26",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "166"
+  },
+  {
+    "company_name": "Zoox",
+    "role_title": "ML Engineer",
+    "location": "Foster City",
+    "source": "Cold Application",
+    "job_url": "https://jobs.lever.co/zoox/55e51bf3-68ee-40d4-a1c5-5196e0e2d100/apply?lever-source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-26",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "167"
+  },
+  {
+    "company_name": "NVIDIA",
+    "role_title": "SWE Deep Learning Libraries New Grad",
+    "location": "Santa Clara",
+    "source": "Cold Application",
+    "job_url": "https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite/job/US-CA-Santa-Clara/Software-Engineer--DL-Libraries-Infrastructure---New-College-Grad-2026_JR2011998-1?utm_source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-26",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "168"
+  },
+  {
+    "company_name": "Microsoft",
+    "role_title": "SWE II",
+    "location": "Remote?",
+    "source": "Cold Application",
+    "job_url": "https://apply.careers.microsoft.com/careers/job/1970393556639468?utm_source=Simplify&ref=Simplify&src=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-26",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "169"
+  },
+  {
+    "company_name": "Google",
+    "role_title": "SWE III AI/ML",
+    "location": "San Bruno",
+    "source": "Cold Application",
+    "job_url": "https://www.google.com/about/careers/applications/jobs/results/129057438295827142?utm_source=Simplify&ref=Simplify&src=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-26",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "170"
+  },
+  {
+    "company_name": "Intuit",
+    "role_title": "SWE I",
+    "location": "Mountain View",
+    "source": "Cold Application",
+    "job_url": "https://jobs.intuit.com/job/mountain-view/software-engineer-1/27595/90290660624?utm_source=Simplify&ref=Simplify&src=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-26",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "stupid application hard to fill experience"
+    ],
+    "_id": "171"
+  },
+  {
+    "company_name": "Roe",
+    "role_title": "SWE - AI Agent",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4329857888"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-28",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "172"
+  },
+  {
+    "company_name": "Anritsu",
+    "role_title": null,
+    "location": "Morgan Hill",
+    "source": "In-Person Event",
+    "job_url": "https://recruiting.ultipro.com/ANR1000/JobBoard/dde9d29f-8779-9c0f-5a64-1a23aaa827cb/?q=&o=postedDateDesc",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/miguelatorresjr/",
+      "https://www.anritsu.com/en-us/about-anritsu/employment"
+    ],
+    "contacts": [
+      {
+        "name": null,
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/miguelatorresjr/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-28",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "They have a tech team, but no hiring at the moment"
+    ],
+    "_id": "173"
+  },
+  {
+    "company_name": "DiCon Fiberoptics",
+    "role_title": null,
+    "location": null,
+    "source": "In-Person Event",
+    "job_url": "https://diconfiberoptics.com/about/career.php",
+    "auxiliary_urls": [],
+    "contacts": [
+      {
+        "name": "Human Resources",
+        "email": "careers@diconfiberoptics.com",
+        "linkedin_url": null,
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-28",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "For inquiries of current openings please contact Human Resources by email careers@diconfiberoptics.com"
+    ],
+    "_id": "174"
+  },
+  {
+    "company_name": "Driscoll's",
+    "role_title": "Information Services - Software Engineering Intern - Application Development",
+    "location": "Watsonville",
+    "source": "In-Person Event",
+    "job_url": "https://www.driscolls.com/about/Careers/Job?id=R0008652",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/cassandra-carvajal-6756974/",
+      "https://www.linkedin.com/in/angie-martinez-8b23a925/",
+      "https://www.driscolls.com/about/Careers#openpositions"
+    ],
+    "contacts": [
+      {
+        "name": "Cassandra Carvajal",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/cassandra-carvajal-6756974/",
+        "connection_type": null
+      },
+      {
+        "name": "Angie Martinez",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/angie-martinez-8b23a925/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-28",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "175"
+  },
+  {
+    "company_name": "iDTech",
+    "role_title": null,
+    "location": null,
+    "source": "In-Person Event",
+    "job_url": null,
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-28",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "176"
+  },
+  {
+    "company_name": "Lawrence Livermore National Laboratory",
+    "role_title": "Cybersecurity Internships",
+    "location": "Livermore",
+    "source": "In-Person Event",
+    "job_url": "https://cyber-internship.llnl.gov/",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/adam-alfred-hunt-8b5982122/"
+    ],
+    "contacts": [
+      {
+        "name": "Adam Alfred Hunt",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/adam-alfred-hunt-8b5982122/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-28",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "177"
+  },
+  {
+    "company_name": "Lawrence Livermore National Laboratory",
+    "role_title": "Critical Infrastructure Analysis Intern",
+    "location": "Livermore",
+    "source": "In-Person Event",
+    "job_url": "https://jobs.smartrecruiters.com/LLNL/3743990009622716-critical-infrastructure-analysis-graduate-intern-cyber-and-critical-infrastructure-summer-institute-summer-2026",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/adam-alfred-hunt-8b5982122/"
+    ],
+    "contacts": [
+      {
+        "name": "Adam Alfred Hunt",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/adam-alfred-hunt-8b5982122/",
+        "connection_type": "LinkedIn"
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-28",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "178"
+  },
+  {
+    "company_name": "Lawrence Livermore National Laboratory",
+    "role_title": "Cybersecurity Intern",
+    "location": "Livermore",
+    "source": "In-Person Event",
+    "job_url": "https://jobs.smartrecruiters.com/LLNL/3743990009622506-cybersecurity-graduate-intern-cyber-and-critical-infrastructure-summer-institute-summer-2026",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/adam-alfred-hunt-8b5982122/"
+    ],
+    "contacts": [
+      {
+        "name": "Adam Alfred Hunt",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/adam-alfred-hunt-8b5982122/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-28",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "179"
+  },
+  {
+    "company_name": "Lawrence Livermore National Laboratory",
+    "role_title": "Power Systems Intern",
+    "location": "Livermore",
+    "source": "In-Person Event",
+    "job_url": "https://jobs.smartrecruiters.com/LLNL/3743990009622516-power-systems-graduate-intern-cyber-and-critical-infrastructure-summer-2026",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/adam-alfred-hunt-8b5982122/"
+    ],
+    "contacts": [
+      {
+        "name": "Adam Alfred Hunt",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/adam-alfred-hunt-8b5982122/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-28",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "180"
+  },
+  {
+    "company_name": "Lawrence Livermore National Laboratory",
+    "role_title": "Data Science Internships (close 1/30)",
+    "location": "Livermore",
+    "source": "In-Person Event",
+    "job_url": "https://data-science.llnl.gov/",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/adam-alfred-hunt-8b5982122/"
+    ],
+    "contacts": [
+      {
+        "name": "Adam Alfred Hunt",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/adam-alfred-hunt-8b5982122/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-28",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "181"
+  },
+  {
+    "company_name": "Lawrence Livermore National Laboratory",
+    "role_title": "Data Science Institute Graduate Student Intern",
+    "location": "Livermore",
+    "source": "In-Person Event",
+    "job_url": "https://jobs.smartrecruiters.com/LLNL/3743990010156886-data-science-institute-graduate-student-intern-summer-2026",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/adam-alfred-hunt-8b5982122/"
+    ],
+    "contacts": [
+      {
+        "name": "Adam Alfred Hunt",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/adam-alfred-hunt-8b5982122/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-28",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "182"
+  },
+  {
+    "company_name": "Paystand",
+    "role_title": null,
+    "location": "Santa Cruz",
+    "source": "In-Person Event",
+    "job_url": "https://app3.greenhouse.io/e/ybmqqs",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/tiennnguyen/",
+      "https://www.linkedin.com/in/phoebe-royer"
+    ],
+    "contacts": [
+      {
+        "name": "Tien Nguyen",
+        "email": "tnguyen@paystand.com",
+        "linkedin_url": "https://www.linkedin.com/in/tiennnguyen/",
+        "connection_type": null
+      },
+      {
+        "name": "Phoebe Royer",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/phoebe-royer",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-01-28",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "183"
+  },
+  {
+    "company_name": "SPKAA",
+    "role_title": null,
+    "location": "Scotts Valley",
+    "source": "In-Person Event",
+    "job_url": "https://www.spkaa.com/about/careers",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/company/spk-and-associates-llc/jobs/"
+    ],
+    "contacts": [
+      {
+        "name": "Annika Hatcher",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/annika-hatcher-83a222263/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_sent_invitations%3BS9teMOwrTW2xTK3EgGmw6Q%3D%3D",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-01-28",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "184"
+  },
+  {
+    "company_name": "Fermat",
+    "role_title": "SWE New Grad",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/fermat/jobs/4092230009?utm_source=Otta",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-04",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "185"
+  },
+  {
+    "company_name": "Quantifind",
+    "role_title": "Frontend SWE React",
+    "location": "Palo Alto",
+    "source": "Cold Application",
+    "job_url": "https://www.quantifind.com/open-positions/?gh_jid=7559144&utm_source=Otta",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-04",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "186"
+  },
+  {
+    "company_name": "Quantifind",
+    "role_title": "Data Scientist",
+    "location": "Palo Alto",
+    "source": "Cold Application",
+    "job_url": "https://www.quantifind.com/open-positions/?gh_jid=7463020",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-04",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "187"
+  },
+  {
+    "company_name": "Flex",
+    "role_title": "Full Stack New Grad Risk Engineering",
+    "location": "Remote",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/flex/jobs/4649208005?utm_source=Otta",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-04",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "188"
+  },
+  {
+    "company_name": "Vultron",
+    "role_title": "Full Stack Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/vultronai/jobs/4107283009?utm_source=Otta",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-04",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "189"
+  },
+  {
+    "company_name": "Robinhood",
+    "role_title": "Web Engineer",
+    "location": "Menlo Park",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/robinhood/jobs/7543003?t=gh_src%3D%3Fgh_jid%3D7543003&utm_source=Otta",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-04",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "190"
+  },
+  {
+    "company_name": "Articulate",
+    "role_title": "SWE",
+    "location": "Remote",
+    "source": "Cold Application",
+    "job_url": "https://jobs.lever.co/articulate/b242a22f-e152-47e8-810a-f2c5a4df8e6d?lever-source=Otta",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-02-04",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "191"
+  },
+  {
+    "company_name": "Candid Health",
+    "role_title": "SWE",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/candidhealth/f0e529c1-b8d8-4add-aaef-23b174053b8b?utm_source=Otta",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-04",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "192"
+  },
+  {
+    "company_name": "Matroid",
+    "role_title": "SWE - Product",
+    "location": "Palo Alto",
+    "source": "Cold Application",
+    "job_url": "https://matroid.breezy.hr/p/71c4780af089-software-engineer-product?source=Otta",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-04",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "193"
+  },
+  {
+    "company_name": "Snowflake",
+    "role_title": "Frontend SWE",
+    "location": "Menlo Park",
+    "source": "Cold Application",
+    "job_url": "https://careers.snowflake.com/us/en/job/SNCOUSE680FC7B0CFE474791A52FC2B9657B36EXTERNALENUSE5CCF06DF52C4E4EBF4EB2FDB1D076AD/Frontend-Software-Engineer-Marketplace?utm_source=Otta",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-04",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "194"
+  },
+  {
+    "company_name": "Navan",
+    "role_title": "SWE - Frontend",
+    "location": "Palo Alto",
+    "source": "Cold Application",
+    "job_url": "https://navan.com/careers/openings/6879150?gh_jid=6879150",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-04",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "195"
+  },
+  {
+    "company_name": "Skiffra",
+    "role_title": "LLM Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/skiffra-ai/48474948-37cf-46e4-bb1c-eb512176a3c3",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-02-04",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "196"
+  },
+  {
+    "company_name": "PG&E",
+    "role_title": "AI and Automation Programmer",
+    "location": "Oakland",
+    "source": "Cold Application",
+    "job_url": "https://careers.pge.com/job/Oakland-AI-and-Automation-Programmer-Analyst,-Associate-SAP-S4HANA-Implementation-CA-94612/1342276100/?ats=successfactors&utm_source=Simplify&ref=Simplify&src=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-02-04",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "why the fuck do they need last 4 digits?"
+    ],
+    "_id": "197"
+  },
+  {
+    "company_name": "Salesforce",
+    "role_title": "Lead Software Engineer - Agentforce",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://salesforce.wd12.myworkdayjobs.com/external_career_site/job/California---San-Francisco/LMTS-Software-Engineer---Agentforce_JR321269",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-04",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "198"
+  },
+  {
+    "company_name": "Google DeepMind",
+    "role_title": "SWE",
+    "location": "Mountain View",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/deepmind/jobs/7543647",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-04",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "199"
+  },
+  {
+    "company_name": "Flow",
+    "role_title": "SWE AI/ML",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/flowengineering/6ed592d7-0314-455c-856c-20876910d74e",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-04",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "200"
+  },
+  {
+    "company_name": "Pairwise",
+    "role_title": "SWE",
+    "location": "Sunnyvale",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/pairwiseviadelart/jobs/4632267005",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-04",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "201"
+  },
+  {
+    "company_name": "Cadence",
+    "role_title": "SWE",
+    "location": "San Jose",
+    "source": "Cold Application",
+    "job_url": "https://cadence.wd1.myworkdayjobs.com/univ_careers/job/SAN-JOSE/Software-Engineer-II_R52487",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-04",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "202"
+  },
+  {
+    "company_name": "Loop",
+    "role_title": "SWE Full Stack",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/loop/jobs/5780582004",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-04",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "203"
+  },
+  {
+    "company_name": "GenBio",
+    "role_title": "AI Engineer",
+    "location": "San Mateo",
+    "source": "Cold Application",
+    "job_url": "https://jobs.lever.co/genbio/e3fc43de-c136-4fa8-9236-7baa58352f2c/apply",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-04",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "204"
+  },
+  {
+    "company_name": "Vultron",
+    "role_title": "Frontend",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/vultronai/jobs/4108647009",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-04",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "205"
+  },
+  {
+    "company_name": "Capitol One",
+    "role_title": "AI Engineer",
+    "location": "SF/SJ",
+    "source": "Cold Application",
+    "job_url": "https://capitalone.wd12.myworkdayjobs.com/capital_one/job/New-York-NY/Senior-AI-Engineer--AI-Foundations--LLM-Core-and-Agentic-AI-_R229420-1",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-04",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "206"
+  },
+  {
+    "company_name": "FurtherAI",
+    "role_title": "Software/AI Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/furtherai/282de7b6-0117-4e7a-b1f6-c2d256af4a47",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-06",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "207"
+  },
+  {
+    "company_name": "Nectar Social",
+    "role_title": "SWE Early Career",
+    "location": "Palo Alto",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/nectar-social/606df770-4167-4066-bbfd-d7464b28d9b2",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-06",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "208"
+  },
+  {
+    "company_name": "Archer",
+    "role_title": "SWE",
+    "location": "San Jose",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/archer56/jobs/7539670003",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-06",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "209"
+  },
+  {
+    "company_name": "Strada",
+    "role_title": "SWE",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/stradahq/626411c6-808e-4eb2-b28d-76f5d88e0af6",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-06",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "210"
+  },
+  {
+    "company_name": "ServiceNow",
+    "role_title": "SWE",
+    "location": "Mountain View",
+    "source": "Cold Application",
+    "job_url": "https://jobs.smartrecruiters.com/ServiceNow/744000107369741-associate-software-engineer-core-infrastructure-moveworks",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/shirin-rokni/"
+    ],
+    "contacts": [
+      {
+        "name": "Shirin Rokni",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/shirin-rokni/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-06",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "211"
+  },
+  {
+    "company_name": "f5",
+    "role_title": "SWE",
+    "location": "San Jose",
+    "source": "Cold Application",
+    "job_url": "https://ffive.wd5.myworkdayjobs.com/f5jobs/job/San-Jose/Engineer-I--Software_RP1036380",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-06",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "212"
+  },
+  {
+    "company_name": "Verkada",
+    "role_title": "Computer Vision SWE",
+    "location": "San Mateo",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/verkada/jobs/5040765007",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-06",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "213"
+  },
+  {
+    "company_name": "Rubrik",
+    "role_title": "SWE - Cloud",
+    "location": "Palo Alto",
+    "source": "Cold Application",
+    "job_url": "https://www.rubrik.com/company/careers/departments/job.7576661?gh_jid=7576661",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-06",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "214"
+  },
+  {
+    "company_name": "Zip",
+    "role_title": "SWE - New Grad",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/zip/19f459ee-4907-4883-9d70-35eb96f62082",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-06",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "215"
+  },
+  {
+    "company_name": "Tubi",
+    "role_title": "SWE",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/tubitv/jobs/7572988",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-06",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "216"
+  },
+  {
+    "company_name": "Tubi",
+    "role_title": "ML Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://job-boards.greenhouse.io/tubibuildersprogram/jobs/7574692",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-06",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "217"
+  },
+  {
+    "company_name": "Cisco",
+    "role_title": "SWE",
+    "location": "San Jose",
+    "source": "Cold Application",
+    "job_url": "https://cisco.wd5.myworkdayjobs.com/cisco_careers/job/San-Jose-California-US/Software-Engineer-II--Full-Time----United-States_2007168",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-06",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "218"
+  },
+  {
+    "company_name": "Qualitest",
+    "role_title": "Ai Developer",
+    "location": "SJ",
+    "source": "Cold Application",
+    "job_url": "https://careers.qualitestgroup.com/job/Santa-Clara-21284-AI-Developer-CA-95054/51922644/",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-06",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "219"
+  },
+  {
+    "company_name": "SimpleAI",
+    "role_title": "SWE",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/simple-ai/c44cf5f1-ec0-4e69-b219-6d02eb36376c",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-06",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "220"
+  },
+  {
+    "company_name": "Western Digital",
+    "role_title": "Programming Developer",
+    "location": "SJ",
+    "source": "Cold Application",
+    "job_url": "https://jobs.smartrecruiters.com/WesternDigital/744000106176635-developer-2-programming",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-06",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "221"
+  },
+  {
+    "company_name": "PTC",
+    "role_title": "Junior SWE",
+    "location": "San Mateo",
+    "source": "Cold Application",
+    "job_url": "https://ptc.wd1.myworkdayjobs.com/ptc/job/USA-San-Mateo-CA/Junior-Software-Engineer_JR111500-1",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-06",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "222"
+  },
+  {
+    "company_name": "Super Micro",
+    "role_title": "SWE",
+    "location": "SJ",
+    "source": "Cold Application",
+    "job_url": "https://jobs.supermicro.com/job/San-Jose-Software-Engineer-Production-Cali/1359094600/",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-06",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "223"
+  },
+  {
+    "company_name": "LinkedIn",
+    "role_title": "SWE",
+    "location": "Mountain View",
+    "source": "Cold Application",
+    "job_url": "https://jobs.smartrecruiters.com/LinkedIn3/744000104827317-software-engineer-frontend",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-06",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "224"
+  },
+  {
+    "company_name": "Ramp",
+    "role_title": "Ai Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/ramp/d204e136-2749-42de-82b4-88a0dd352090",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-02-06",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "225"
+  },
+  {
+    "company_name": "Embedding VC",
+    "role_title": "Founding AI Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/embedding-vc/171a7130-65fd-4d21-bf09-47047dc1aca2",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-06",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "226"
+  },
+  {
+    "company_name": "Pylon (not the SF one)",
+    "role_title": "Generalist Engineer",
+    "location": "Palo Alto",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/pylon/b32c8de1-a8bf-4435-99d4-8d42e12a7e0a",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-02-06",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "227"
+  },
+  {
+    "company_name": "Cartesia",
+    "role_title": "Forward Deployed Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/cartesia/84231d95-3bf2-480a-ab2b-fd958f97cf0b",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-02-06",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "228"
+  },
+  {
+    "company_name": "FieldGuide",
+    "role_title": "AI Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/fieldguide/6d0ceade-cbbe-4cd7-9af9-caf3cfed7ec3",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-06",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "229"
+  },
+  {
+    "company_name": "CCF",
+    "role_title": "AI Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://apply.workable.com/cooperidge-consulting-firm/j/6385B4B7AD",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-06",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "230"
+  },
+  {
+    "company_name": "Microsoft",
+    "role_title": "Software Engineer",
+    "location": "Remote",
+    "source": "Cold Application",
+    "job_url": "https://apply.careers.microsoft.com/careers/job/1970393556640236?utm_source=Simplify&ref=Simplify&src=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-13",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "231"
+  },
+  {
+    "company_name": "Google",
+    "role_title": "SWE III On-Device ML",
+    "location": "San Jose",
+    "source": "Cold Application",
+    "job_url": "https://www.google.com/about/careers/applications/jobs/results/106312711788208838?utm_source=Simplify&ref=Simplify&src=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-02-13",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "232"
+  },
+  {
+    "company_name": "Adobe",
+    "role_title": "Software Development Engineer",
+    "location": "San Jose",
+    "source": "Cold Application",
+    "job_url": "https://adobe.wd5.myworkdayjobs.com/external_experienced/job/San-Jose/Software-Development-Engineer_R161061?utm_source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-02-13",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "233"
+  },
+  {
+    "company_name": "BRM",
+    "role_title": "Entry-Level SWE",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/brm.ai/05cad7f7-2194-480d-8e70-7338cfd2a189/application?utm_source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-13",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "234"
+  },
+  {
+    "company_name": "Stripe",
+    "role_title": "SWE - New Grad",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://stripe.com/jobs/listing/software-engineer-new-grad/7210112?gh_src=Simplify&ref=Simplify&src=Simplify&utm_source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-13",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "235"
+  },
+  {
+    "company_name": "Cisco",
+    "role_title": "SWE I",
+    "location": "San Jose",
+    "source": "Cold Application",
+    "job_url": "https://careers.cisco.com/global/en/job/2007003?utm_source=Simplify&ref=Simplify&src=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-13",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "236"
+  },
+  {
+    "company_name": "Oracle",
+    "role_title": "SWE",
+    "location": "Santa Clara",
+    "source": "Cold Application",
+    "job_url": "https://eeho.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_45001/job/311345?utm_source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-13",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "237"
+  },
+  {
+    "company_name": "Netic",
+    "role_title": "ML Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/netic/f645d611-ae5f-40cc-bfa8-613286060a76/application?utm_source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-02-13",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "238"
+  },
+  {
+    "company_name": "Expedia",
+    "role_title": "Mobile Engineer",
+    "location": "San Jose",
+    "source": "Cold Application",
+    "job_url": "https://expedia.wd108.myworkdayjobs.com/private/job/USA---California---San-Jose/Mobile-Engineering-Graduate---2026---Austin--San-Jose--Seattle_R-98642-1?utm_source=Simplify",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/ryan-sullivan-johnson-742471204/"
+    ],
+    "contacts": [
+      {
+        "name": "Ryan Sullivan Johnson",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/ryan-sullivan-johnson-742471204/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-13",
+        "notes": null
+      },
+      {
+        "stage": "Assessment",
+        "date": null,
+        "notes": "Strength-based assessment, whatever that entails"
+      }
+    ],
+    "raw_notes": [],
+    "_id": "239"
+  },
+  {
+    "company_name": "Expedia",
+    "role_title": "Software Engineer",
+    "location": "San Jose",
+    "source": "Cold Application",
+    "job_url": "https://expedia.wd108.myworkdayjobs.com/en-US/private/job/Austin-Domain-11---HomeAway/Software-Development-Engineering-Graduate---2026---Austin--Seattle_R-98559?utm_source=Simplify",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/ryan-sullivan-johnson-742471204/"
+    ],
+    "contacts": [
+      {
+        "name": "Ryan Sullivan Johnson",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/ryan-sullivan-johnson-742471204/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-13",
+        "notes": null
+      },
+      {
+        "stage": "Assessment",
+        "date": null,
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "Strength-based assessment, whatever that entails"
+    ],
+    "_id": "240"
+  },
+  {
+    "company_name": "Expedia",
+    "role_title": "Machine Learning Engineer",
+    "location": "San Jose",
+    "source": "Cold Application",
+    "job_url": "https://expedia.wd108.myworkdayjobs.com/en-US/private/job/Washington---Seattle-Campus/Machine-Learning-Science-Graduate---Masters---2026---San-Jose--Seattle_R-98586?utm_source=Simplify",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/ryan-sullivan-johnson-742471204/"
+    ],
+    "contacts": [
+      {
+        "name": "Ryan Sullivan Johnson",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/ryan-sullivan-johnson-742471204/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-13",
+        "notes": null
+      },
+      {
+        "stage": "Assessment",
+        "date": null,
+        "notes": "Strength-based assessment, whatever that entails"
+      }
+    ],
+    "raw_notes": [],
+    "_id": "241"
+  },
+  {
+    "company_name": "Google",
+    "role_title": "SWE, GenAI",
+    "location": "Sunnyvale",
+    "source": "Cold Application",
+    "job_url": "https://www.google.com/about/careers/applications/jobs/results/134376020852515526?utm_source=Simplify&ref=Simplify&src=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-02-13",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "242"
+  },
+  {
+    "company_name": "WeRide",
+    "role_title": "SWE",
+    "location": "San Jose",
+    "source": "Cold Application",
+    "job_url": "https://jobs.lever.co/weride/94562b95-f574-4a60-bfbf-0cafb5c8ea3d/apply?lever-source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-13",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "243"
+  },
+  {
+    "company_name": "Walmart",
+    "role_title": "SWE III",
+    "location": "Sunnyvale",
+    "source": "Cold Application",
+    "job_url": "https://walmart.wd5.myworkdayjobs.com/WalmartExternal/job/USA-Crossman-Respect-Building-CA-SUNNYVALE-Home-Office/Software-Engineer-III_R-2398001-1?utm_source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-13",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "244"
+  },
+  {
+    "company_name": "Final Round AI",
+    "role_title": "Ai Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/finalroundai/c0cb1a96-be45-4e3c-99e0-8783178ad59a/application?utm_source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-02-13",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "245"
+  },
+  {
+    "company_name": "Promise",
+    "role_title": "Forward Deployed AI",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/Promise/f0a30718-faf0-4a34-8759-0d6335fa365a/application?utm_source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-13",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "246"
+  },
+  {
+    "company_name": "Tiktok",
+    "role_title": "SWE Data Architecture and ML",
+    "location": "San Jose",
+    "source": "Cold Application",
+    "job_url": "https://lifeattiktok.com/search/7535215880842791176?utm_source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-02-13",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "have to fill experience manually? nope"
+    ],
+    "_id": "247"
+  },
+  {
+    "company_name": "SoFi",
+    "role_title": "SWE",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://www.sofi.com/careers/job/?gh_jid=7581360003&gh_src=Simplify&utm_source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-13",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "248"
+  },
+  {
+    "company_name": "Saviynt",
+    "role_title": "SWE",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://jobs.lever.co/saviynt/341f7de9-3cec-4917-aec6-9ac9c5f2b7d9/apply?lever-source=Simplify",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-13",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "249"
+  },
+  {
+    "company_name": "Loop",
+    "role_title": "Ai Engineer",
+    "location": "SF",
+    "source": "Cold Application",
+    "job_url": "https://app.dover.com/apply/loop/356dc7b1-c084-46b3-b7db-20db3266ecc?rs=42706078",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-13",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "250"
+  },
+  {
+    "company_name": "Roku",
+    "role_title": "SWE ML",
+    "location": "San Jose",
+    "source": "Cold Application",
+    "job_url": "https://www.weareroku.com/jobs/software-engineer-machine-learning-san-jose-california-united-states-41cf8bbb-1d53-4bb6-8826-be4c2ec7775d?gh_jid=7555263&gh_src=7c8c68a71us&source=LinkedIn",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-13",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "251"
+  },
+  {
+    "company_name": "Stanford",
+    "role_title": "Junior AI Applications Engineer",
+    "location": "Redwood City",
+    "source": "Cold Application",
+    "job_url": "https://careersearch.stanford.edu/jobs/junior-ai-applications-engineer-29943",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-02-13",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "252"
+  },
+  {
+    "company_name": "PayPal",
+    "role_title": "SWE",
+    "location": "San Jose",
+    "source": "Cold Application",
+    "job_url": "https://paypal.eightfold.ai/careers?domain=paypal.com&Codes=W-LINKEDIN&query=R0134154&start=0&location=Santa+Cruz%2C+California%2C+US&pid=274917532720&sort_by=relevance&filter_distance=80&filter_include_remote=1",
+    "auxiliary_urls": [],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-13",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "253"
+  },
+  {
+    "company_name": "Veeva",
+    "role_title": "Associate Sofware Engineer (2025/2026 Grads)",
+    "location": "Pleasanton",
+    "source": "In-Person Event",
+    "job_url": "https://careers.veeva.com/job/8fe22df0-02b4-453d-919c-c8998cf913f6/associate-software-engineer-seeking-2025-2026-grads-pleasanton-ca/?lever-source=veeva-career-site",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/james-miller-6367501a2/"
+    ],
+    "contacts": [
+      {
+        "name": "James Miller",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/james-miller-6367501a2/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-15",
+        "notes": null
+      },
+      {
+        "stage": "Assessment",
+        "date": "2026-02-17",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "applied 2/15, recieved assessment 2/17."
+    ],
+    "_id": "254"
+  },
+  {
+    "company_name": "Veeva",
+    "role_title": "SWE Intern Summer 2026",
+    "location": "Pleasanton",
+    "source": "In-Person Event",
+    "job_url": "https://careers.veeva.com/job/8fe22df0-02b4-453d-919c-c8998cf9136/associate-software-engineer-seeking-2025-2026-grads-pleasanton-ca/?lever-source=veeva-career-site",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/james-miller-6367501a2/"
+    ],
+    "contacts": [
+      {
+        "name": "James Miller",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/james-miller-6367501a2/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-15",
+        "notes": null
+      },
+      {
+        "stage": "Assessment",
+        "date": "2026-02-17",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "only need to do one assessment if i applied to two jobs"
+    ],
+    "_id": "255"
+  },
+  {
+    "company_name": "Infisical",
+    "role_title": "Full Stack Engineer",
+    "location": "San Francisco",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/infisical/71237975-dd45-4ee1-8e3f-3372c2b17b3f",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/vmatsiiako/"
+    ],
+    "contacts": [
+      {
+        "name": null,
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/vmatsiiako/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-17",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "256"
+  },
+  {
+    "company_name": "Infisical",
+    "role_title": "Full Stack Engineer",
+    "location": "Remote (Americas)",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/infisical/782b9da8-20e1-48b2-919e-6c5430c58628",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/vmatsiiako/"
+    ],
+    "contacts": [
+      {
+        "name": null,
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/vmatsiiako/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-17",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "257"
+  },
+  {
+    "company_name": "Charta Health",
+    "role_title": "Forward Deployed AI Engineer",
+    "location": "San Francisco",
+    "source": "Cold Application",
+    "job_url": "https://jobs.gem.com/chartahealth/am9icG9zdDoYnbeNjtVrY59o-VYHgrOT",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/selimonal/"
+    ],
+    "contacts": [
+      {
+        "name": null,
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/selimonal/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-17",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "258"
+  },
+  {
+    "company_name": "Rightway",
+    "role_title": "SWE Full Stack",
+    "location": "Remote",
+    "source": "Cold Application",
+    "job_url": "https://www.rightwayhealthcare.com/jobs?gh_jid=7565138003&gh_src=KWaeGd",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4344328427"
+    ],
+    "contacts": [
+      {
+        "name": "Anna Miller",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/annamiller/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-17",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "259"
+  },
+  {
+    "company_name": "OnePay",
+    "role_title": "Frontend Engineer",
+    "location": "Remote",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/oneapp/1b1defcb-7cd6-45ee-9419-fd005baa1675?utm_source=LinkedInPaid",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4367283742",
+      "https://www.linkedin.com/in/niamaria/"
+    ],
+    "contacts": [
+      {
+        "name": "niamaria",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/niamaria/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-17",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "260"
+  },
+  {
+    "company_name": "OnePay",
+    "role_title": "Full Stack Engineer (Lending)",
+    "location": "Remote",
+    "source": "Cold Application",
+    "job_url": "https://jobs.ashbyhq.com/oneapp/b0d1f783-72a8-43e9-a383-03ab3f8e5d61?utm_source=LinkedInPaid",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/jobs/view/4299829818",
+      "https://www.linkedin.com/in/niamaria/"
+    ],
+    "contacts": [
+      {
+        "name": "Nia Maria",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/niamaria/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-17",
+        "notes": null
+      }
+    ],
+    "raw_notes": [],
+    "_id": "261"
+  },
+  {
+    "company_name": "Educosys",
+    "role_title": "Software Engineer (0-3 YOE)",
+    "location": "Remote",
+    "source": "Cold Application",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/posts/keertipurswani_we-are-hiring-software-engineer-at-educosys-activity-7429377810055725056-gaGJ/?utm_source=share&utm_medium=member_desktop&rcm=ACoAADe2zLEBgeNkzcF0O80jz-JtDkFSMC6mUUc",
+      "https://www.linkedin.com/in/keertipurswani/"
+    ],
+    "contacts": [
+      {
+        "name": null,
+        "email": "team@educosys.com",
+        "linkedin_url": null,
+        "connection_type": null
+      },
+      {
+        "name": null,
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/keertipurswani/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-17",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "(Email)"
+    ],
+    "_id": "262"
+  },
+  {
+    "company_name": "Trillboards",
+    "role_title": "Forward Deployed Engineers",
+    "location": "SF",
+    "source": "In-Person Event",
+    "job_url": "https://trillboards.com/about",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/snehdhruv/"
+    ],
+    "contacts": [
+      {
+        "name": "Sneh",
+        "email": "sneh@trillboards.com",
+        "linkedin_url": "https://www.linkedin.com/in/snehdhruv/",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-20",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "Interactive real-world ads connecting physical spaces with digital engagement. CEO previously met at a career fair."
+    ],
+    "_id": "263"
+  },
+  {
+    "company_name": "SUN (SunAI)",
+    "role_title": "AI/App Development",
+    "location": "SF",
+    "source": "In-Person Event",
+    "job_url": "https://sunapp.ai",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/artinbogdanov"
+    ],
+    "contacts": [
+      {
+        "name": null,
+        "email": "jobs@sunapp.ai",
+        "linkedin_url": null,
+        "connection_type": null
+      },
+      {
+        "name": null,
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/artinbogdanov",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-20",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "AI audio learning app (a16z Speedrun). Generates podcasts/summaries. Tech stack: Flutter, Dart, Python, AWS."
+    ],
+    "_id": "264"
+  },
+  {
+    "company_name": "JigsawStack",
+    "role_title": "Founding Full-Stack Engineer",
+    "location": "SF",
+    "source": "In-Person Event",
+    "job_url": "https://yoeven.notion.site/Careers-at-JigsawStack-17595f7334d3809b8007c63dbc1ee2ce",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/yoeven",
+      "https://arxiv.org/abs/2602.04101"
+    ],
+    "contacts": [
+      {
+        "name": "yoeven",
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/yoeven",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-02-20",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "AI developer platform using DNN + Transformers to reduce hallucinations. Custom models for dev hardware."
+    ],
+    "_id": "265"
+  },
+  {
+    "company_name": "Azentic",
+    "role_title": "AI Agents / Product",
+    "location": "SF",
+    "source": "In-Person Event",
+    "job_url": "https://azentic.ai/",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/company/azenticai/"
+    ],
+    "contacts": [
+      {
+        "name": "Aashish",
+        "email": "aashish@azentic.com",
+        "linkedin_url": null,
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-20",
+        "notes": null
+      },
+      {
+        "stage": "Interview 1",
+        "date": null,
+        "notes": "Interview involves a 1-hr product build."
+      }
+    ],
+    "raw_notes": [
+      "AI agents for sales automation (CRM, meetings, GTM workflows)."
+    ],
+    "_id": "266"
+  },
+  {
+    "company_name": "FuseHealth",
+    "role_title": "Momentum Drivers (Founding Team)",
+    "location": "SF",
+    "source": "In-Person Event",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://www.linkedin.com/company/fusehealth-inc/"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-02-20",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "Modernizing care coordination and telehealth, specifically for peptides. Looking for independent drivers."
+    ],
+    "_id": "267"
+  },
+  {
+    "company_name": "Mentra",
+    "role_title": "Data Center / Critical Data Tech",
+    "location": "SF",
+    "source": "In-Person Event",
+    "job_url": "https://apply.careers.microsoft.com/careers/job/1970393556754161",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/stephtminaya",
+      "https://www.mentra.com",
+      "https://www.linkedin.com/in/krishnagovindoza"
+    ],
+    "contacts": [
+      {
+        "name": null,
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/stephtminaya",
+        "connection_type": null
+      },
+      {
+        "name": null,
+        "email": null,
+        "linkedin_url": "https://www.linkedin.com/in/krishnagovindoza",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-02-20",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "Neurodivergent hiring platform. Sourcing for Microsoft roles and other tech startups."
+    ],
+    "_id": "268"
+  },
+  {
+    "company_name": "GitHired",
+    "role_title": "Interface / Binsr Inspect Roles",
+    "location": "SF",
+    "source": "In-Person Event",
+    "job_url": "https://www.githired.tech/apply/foundersocialclub",
+    "auxiliary_urls": [
+      "https://www.githired.tech/",
+      "https://www.linkedin.com/company/githirednow/"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-20",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "Sourcing platform for AI startups using GitHub signals. Hiring for external partners."
+    ],
+    "_id": "269"
+  },
+  {
+    "company_name": "Roam",
+    "role_title": "Research Eng / Platform Eng",
+    "location": "SF",
+    "source": "In-Person Event",
+    "job_url": "https://jobs.ashbyhq.com/tryroam/78a3a103-1695-4d0b-a59b-4b2c46e2e18c",
+    "auxiliary_urls": [
+      "https://www.roam.lol/careers",
+      "https://www.roam.lol/"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-02-20",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "Applied AI lab building world models for real-time 3D environments."
+    ],
+    "_id": "270"
+  },
+  {
+    "company_name": "The Token Company",
+    "role_title": "Pre-seed ML Engineer",
+    "location": "SF",
+    "source": "In-Person Event",
+    "job_url": "https://thetokencompany.com/careers",
+    "auxiliary_urls": [
+      "https://thetokencompany.com/"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-02-20",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "YC W26 Pre-seed ML lab. Focused on state-of-the-art LLM input optimization."
+    ],
+    "_id": "271"
+  },
+  {
+    "company_name": "Trainsit",
+    "role_title": "AI Logistics Engineer",
+    "location": "SF",
+    "source": "In-Person Event",
+    "job_url": "https://trainsit.ai/",
+    "auxiliary_urls": [
+      "https://linkedin.com/in/masupinski"
+    ],
+    "contacts": [
+      {
+        "name": "mark",
+        "email": "mark@trainsit.com",
+        "linkedin_url": null,
+        "connection_type": null
+      },
+      {
+        "name": "masupinski",
+        "email": null,
+        "linkedin_url": "https://linkedin.com/in/masupinski",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-20",
+        "notes": null
+      },
+      {
+        "stage": "Follow-up",
+        "date": "2026-02-24",
+        "notes": "Initial meeting and emai; Mark mentioned contacting CTO. Followup; emailed Mark to reiterate interest. Already responded. They are looking at resumes and will get back to you in next few days. Great sign!"
+      }
+    ],
+    "raw_notes": [
+      "AI-first logistics for rail supply chains. Focus on carbon reduction and automation. Stack: Next.js, GCP."
+    ],
+    "_id": "272"
+  },
+  {
+    "company_name": "SigIQ.AI",
+    "role_title": "Full Stack / ML Engineer",
+    "location": "Berkeley",
+    "source": "In-Person Event",
+    "job_url": "https://app.dover.com/apply/SigIQ.ai/a5b10cf8-0c7b-4066-96d0-344b3f51fb02/",
+    "auxiliary_urls": [
+      "https://app.dover.com/jobs/sigiq",
+      "https://www.sigiq.ai/"
+    ],
+    "contacts": [],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-02-20",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "Personalized 1:1 learning platform. Looking for high-seniority engineers and designers."
+    ],
+    "_id": "273"
+  },
+  {
+    "company_name": "NexDiscovery",
+    "role_title": "AI Implementation",
+    "location": "SF",
+    "source": "In-Person Event",
+    "job_url": null,
+    "auxiliary_urls": [
+      "https://linkedin.com/in/jeremyvince"
+    ],
+    "contacts": [
+      {
+        "name": "Jeremy Vince",
+        "email": null,
+        "linkedin_url": "https://linkedin.com/in/jeremyvince",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-02-20",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "Genetic reasoning platform connecting AI to data environments and schemas. Implementation focus."
+    ],
+    "_id": "274"
+  },
+  {
+    "company_name": "RegulasAI",
+    "role_title": "AI Logistics Agents",
+    "location": "SF",
+    "source": "In-Person Event",
+    "job_url": null,
+    "auxiliary_urls": [],
+    "contacts": [
+      {
+        "name": "Ahmad",
+        "email": "ahmad@regulis.ai",
+        "linkedin_url": null,
+        "connection_type": null
+      },
+      {
+        "name": "Will",
+        "email": "wak@regulis.ai",
+        "linkedin_url": null,
+        "connection_type": "CTO"
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-20",
+        "notes": null
+      },
+      {
+        "stage": "Follow-up",
+        "date": "2026-02-24",
+        "notes": "Regulas; mentioned interviews on Wednesday and Thursday, and specific formatting. Inquired. Connected with CTO. Virtual interview"
+      },
+      {
+        "stage": "Interview 1",
+        "date": "2026-02-24",
+        "due_date": "2026-02-27",
+        "notes": "Online interview with Will, the CTO. Specific format TBH. Confirmation TBD."
+      }
+    ],
+    "raw_notes": [
+      "AI agents for the trucking industry. Focus on port-to-distribution catalogs. Mission district office."
+    ],
+    "_id": "275"
+  },
+  {
+    "company_name": "Bubbl.co",
+    "role_title": "AI Agent Developer",
+    "location": "SF",
+    "source": "In-Person Event",
+    "job_url": "https://bubbl.co",
+    "auxiliary_urls": [
+      "https://www.linkedin.com/in/hayleymelidonis"
+    ],
+    "contacts": [
+      {
+        "name": "Hayley Melidonis",
+        "email": "hayley.melidonis@gmail.com",
+        "linkedin_url": "https://www.linkedin.com/in/hayleymelidonis",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Application Submitted",
+        "date": "2026-02-20",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "AI agents for festival-goers to find housing and community."
+    ],
+    "_id": "276"
+  },
+  {
+    "company_name": null,
+    "role_title": null,
+    "location": "SF",
+    "source": "Direct Connection",
+    "job_url": null,
+    "auxiliary_urls": [
+      "lu.ma/user/usr-Or3G0s9Pl9gxsm3",
+      "https://linkedin.com/in/colton-kaplan"
+    ],
+    "contacts": [
+      {
+        "name": "Colton Kaplan",
+        "email": null,
+        "linkedin_url": "https://linkedin.com/in/colton-kaplan",
+        "connection_type": null
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Draft",
+        "date": "2026-02-20",
+        "notes": null
+      }
+    ],
+    "raw_notes": [
+      "see mutual connections and such. he could help you out potentially"
+    ],
+    "_id": "277"
+  }
+]
