@@ -18,14 +18,33 @@ export default function ApplicationsTable() {
   }, []);
 
 
-  // Sort jobs by _id descending (higher ids first)
+  // Sort jobs by the date shown in the table (most-recent first)
+  const getDisplayDate = (app: any) => {
+    const timeline = app.timeline || [];
+    if (timeline.length === 0) return -Infinity;
+    const lastEvent = timeline[timeline.length - 1] || null;
+    if (!lastEvent) return -Infinity;
+    const stage = lastEvent.stage || '';
+    const dateStr = (typeof stage === 'string' && stage.toLowerCase().includes('interview'))
+      ? (lastEvent.due_date || lastEvent.date)
+      : lastEvent.date;
+    if (!dateStr) return -Infinity;
+    const t = new Date(dateStr).getTime();
+    return Number.isNaN(t) ? -Infinity : t;
+  };
+
   const sortedJobs = [...jobs].sort((a, b) => {
-    const idA = Number(a._id);
-    const idB = Number(b._id);
-    if (!isNaN(idA) && !isNaN(idB)) {
-      return idB - idA;
+    const aDate = getDisplayDate(a);
+    const bDate = getDisplayDate(b);
+    // Sort descending (newest first)
+    if (aDate === bDate) {
+      // fallback to id based sort to keep deterministic order
+      const idA = Number(a._id);
+      const idB = Number(b._id);
+      if (!isNaN(idA) && !isNaN(idB)) return idB - idA;
+      return String(b._id).localeCompare(String(a._id));
     }
-    return String(b._id).localeCompare(String(a._id));
+    return bDate - aDate;
   });
 
   const filtered = sortedJobs.filter(app =>
