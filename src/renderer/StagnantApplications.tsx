@@ -10,7 +10,12 @@ function StagnantApplications() {
   useEffect(() => {
     getStagnantApplications()
       .then((data) => {
-        setApps(data);
+        const sorted = (data || []).slice().sort((a, b) => {
+          const ta = a.lastTimelineDate ? new Date(a.lastTimelineDate).getTime() : 0;
+          const tb = b.lastTimelineDate ? new Date(b.lastTimelineDate).getTime() : 0;
+          return tb - ta; // most recent first
+        });
+        setApps(sorted);
         setLoading(false);
         return null;
       })
@@ -20,7 +25,7 @@ function StagnantApplications() {
   if (loading) return <div>Loading stagnant applications...</div>;
 
   return (
-    <div className="p-6">
+    <div className="p-6" style={{ maxHeight: 'calc(100vh - 120px)', overflowY: 'auto' }}>
       <h2 className="text-2xl font-bold mb-4">Stagnant Applications</h2>
       {apps.length === 0 ? (
         <div className="text-gray-500">No stagnant applications! 🎉</div>

@@ -73,7 +73,7 @@ function AnalyticsDashboard() {
   if (!stats) return <div>No analytics data available.</div>;
 
   return (
-    <div className="p-6">
+    <div className="p-6" style={{ maxHeight: 'calc(100vh - 120px)', overflowY: 'auto' }}>
       <h2 className="text-2xl font-bold mb-4">Analytics</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
