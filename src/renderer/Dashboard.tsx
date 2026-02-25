@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BarChart, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Bar } from 'recharts';
-import { getDashboardStats, getStagnantApplications } from './db';
+import { getDashboardStats, getAllApplications } from './db';
 
 
 function Dashboard() {
@@ -9,14 +9,32 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([getDashboardStats(), getStagnantApplications()])
-      .then(([statsData, stagnantApps]) => {
+    let mounted = true;
+    getDashboardStats()
+      .then((statsData) => {
+        if (!mounted) return null;
         setStats(statsData);
-        setStagnantCount(stagnantApps.length);
-        setLoading(false);
         return null;
       })
-      .catch(() => setLoading(false));
+      .catch(() => null)
+      .finally(() => {
+        // compute stagnant count locally from all applications
+        getAllApplications()
+          .then((all) => {
+            if (!mounted) return;
+            const now = Date.now();
+            const fourteenDays = 14 * 24 * 60 * 60 * 1000;
+            const count = (all || []).filter((app) => {
+              const last = (app.timeline || []).slice().reverse().find((ev: any) => ev?.date && !isNaN(new Date(ev.date).getTime()));
+              if (!last) return false;
+              return now - new Date(last.date).getTime() > fourteenDays;
+            }).length;
+            setStagnantCount(count);
+            setLoading(false);
+          })
+          .catch(() => setLoading(false));
+      });
+    return () => { mounted = false; };
   }, []);
 
   if (loading) return <div>Loading dashboard...</div>;
@@ -57,7 +75,5 @@ function Dashboard() {
     </div>
   );
 }
-
-export default Dashboard;
 
 export default Dashboard;

@@ -51,19 +51,7 @@ function getLastTimelineDate(app: JobApplication): string | undefined {
   return app.timeline[app.timeline.length - 1].date;
 }
 
-// Helper: get stagnant applications (no activity in 14+ days)
-export const getStagnantApplications = async (): Promise<JobApplication[]> => {
-  const all = await getAllApplications();
-  const now = new Date();
-  return all
-    .filter((app) => {
-      const last = getLastTimelineDate(app);
-      if (!last) return false;
-      const diff = (now.getTime() - new Date(last).getTime()) / (1000 * 60 * 60 * 24);
-      return diff > 14;
-    })
-    .map((app) => ({ ...app, lastTimelineDate: getLastTimelineDate(app) }));
-};
+// Note: `getStagnantApplications` helper removed — compute stagnant state in UI when needed.
 
 // Helper: dashboard stats
 export const getDashboardStats = async () => {
