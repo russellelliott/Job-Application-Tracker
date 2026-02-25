@@ -142,10 +142,11 @@ export default function EditApplicationForm() {
           <div>
             <div style={{ marginBottom: 8, fontWeight: 600 }}>Contacts</div>
             {(app.contacts || []).map((c, idx) => (
-              <div key={idx} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr auto', gap: 8, marginBottom: 8 }}>
+              <div key={idx} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr auto', gap: 8, marginBottom: 8 }}>
                 <TextField label="Name" value={c.name || ''} onChange={(e) => setContactField(idx, 'name', e.target.value)} />
                 <TextField label="Email" value={c.email || ''} onChange={(e) => setContactField(idx, 'email', e.target.value)} />
                 <TextField label="LinkedIn" value={c.linkedin_url || ''} onChange={(e) => setContactField(idx, 'linkedin_url', e.target.value)} />
+                <TextField label="Connection Type" value={(c as any).connection_type || ''} onChange={(e) => setContactField(idx, 'connection_type', e.target.value)} />
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <IconButton size="small" onClick={() => removeContact(idx)}><RemoveIcon /></IconButton>
                 </div>
