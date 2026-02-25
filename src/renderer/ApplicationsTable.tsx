@@ -1,18 +1,16 @@
 
 import React, { useEffect, useState } from 'react';
-import PouchDB from 'pouchdb-browser';
-// Load processed_applications.json from public directory
-
-const db = new PouchDB('job-applications');
+import { useNavigate } from 'react-router-dom';
+import { getAllApplications } from './db';
 
 export default function ApplicationsTable() {
-  const [jobs, setJobs] = useState([]);
+  const [jobs, setJobs] = useState<any[]>([]);
   const [search, setSearch] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Only load from PouchDB, do not reimport JSON
-    db.allDocs({ include_docs: true })
-      .then(({ rows }) => setJobs(rows.map(r => r.doc)))
+    getAllApplications()
+      .then((all) => setJobs(all))
       .catch(console.error);
   }, []);
 
@@ -55,15 +53,21 @@ export default function ApplicationsTable() {
             </tr>
           </thead>
           <tbody>
-            {filtered.map(app => (
-              <tr key={app._id}>
+            {filtered.map((app) => (
+              <tr key={app.id || app._id}>
                 <td className="border px-2 py-1">{app.company_name}</td>
                 <td className="border px-2 py-1">{app.role_title}</td>
                 <td className="border px-2 py-1">{app.location}</td>
                 <td className="border px-2 py-1">{app.source}</td>
                 <td className="border px-2 py-1">{app.timeline?.[app.timeline.length-1]?.stage}</td>
                 <td className="border px-2 py-1">
-                  <button className="btn-secondary">Edit</button>
+                  <button
+                    type="button"
+                    className="btn-secondary"
+                    onClick={() => navigate(`/applications/${app.id || app._id}/edit`)}
+                  >
+                    Edit
+                  </button>
                 </td>
               </tr>
             ))}

@@ -6,19 +6,30 @@ const db = new PouchDB<JobApplication>('job-applications');
 
 // CRUD utility functions
 export const addApplication = async (app: JobApplication) => {
-  return db.put({ ...app, _id: app.id });
+  // store both _id and id to make retrieval consistent
+  const doc = { ...app, _id: app.id, id: app.id } as any;
+  return db.put(doc);
 };
 
 export const getAllApplications = async (): Promise<JobApplication[]> => {
   const result = await db.allDocs<JobApplication>({ include_docs: true });
-  return result.rows.map((row) => row.doc!).filter(Boolean);
+  return result.rows
+    .map((row) => {
+      const d = row.doc!;
+      if (d && !(d as any).id) (d as any).id = (d as any)._id;
+      return d;
+    })
+    .filter(Boolean);
 };
 
 export const getApplication = async (id: string): Promise<JobApplication | null> => {
   try {
     return await db.get(id);
   } catch (e) {
-    return null;
+    // fallback: scan all docs for matching id or _id
+    const all = await getAllApplications();
+    const found = all.find((d) => (d.id === id) || ((d as any)._id === id));
+    return found || null;
   }
 };
 

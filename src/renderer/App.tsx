@@ -13,6 +13,7 @@ import ScheduleView from './ScheduleView';
 import Dashboard from './Dashboard';
 import AnalyticsDashboard from './AnalyticsDashboard';
 import StagnantApplications from './StagnantApplications';
+import EditApplicationForm from './EditApplicationForm';
 
 function Applications() {
   return <ApplicationsTable />;
@@ -42,6 +43,7 @@ export default function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/applications" element={<Applications />} />
         <Route path="/applications/add" element={<AddApplicationForm onSubmit={handleAddApplication} />} />
+        <Route path="/applications/:id/edit" element={<EditApplicationForm />} />
         <Route path="/schedule" element={<Schedule />} />
         <Route path="/analytics" element={<AnalyticsDashboard />} />
         <Route path="/stagnant" element={<StagnantApplications />} />
