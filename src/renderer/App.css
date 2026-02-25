@@ -2,16 +2,18 @@
  * @NOTE: Prepend a `~` to css file paths that are in your node_modules
  *        See https://github.com/webpack-contrib/sass-loader#imports
  */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
 body {
   position: relative;
   color: #111;
-  height: 100vh;
   background: #fff;
   font-family: sans-serif;
-  overflow-y: auto;
   display: block;
-  justify-content: unset;
-  align-items: unset;
 }
 
 button {
