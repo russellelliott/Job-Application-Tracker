@@ -10,16 +10,23 @@ export default function ApplicationsTable() {
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-      // Use Electron IPC to load data from the main process
-      window.electron.readInitialData()
-        .then(jobsData => {
-          db.bulkDocs(jobsData).then(() => {
+    // Use Electron IPC to load data from the main process
+    window.electron.readInitialData()
+      .then(jobsData => {
+        // Clear the database before importing
+        db.allDocs()
+          .then(result => {
+            const docsToDelete = result.rows.map(row => ({ _id: row.id, _rev: row.value.rev, _deleted: true }));
+            return docsToDelete.length ? db.bulkDocs(docsToDelete) : Promise.resolve();
+          })
+          .then(() => db.bulkDocs(jobsData))
+          .then(() => {
             console.log(`${jobsData.length} jobs imported!`);
             db.allDocs({ include_docs: true }).then(({ rows }) => setJobs(rows.map(r => r.doc)));
           });
-        })
-        .catch(console.error);
-    }, []);
+      })
+      .catch(console.error);
+  }, []);
 
 
   // Sort jobs by _id (as number if possible)
