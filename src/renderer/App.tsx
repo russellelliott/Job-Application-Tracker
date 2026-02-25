@@ -12,7 +12,6 @@ import { useNavigate } from 'react-router-dom';
 import ScheduleView from './ScheduleView';
 import Dashboard from './Dashboard';
 import AnalyticsDashboard from './AnalyticsDashboard';
-import StagnantApplications from './StagnantApplications';
 import EditApplicationForm from './EditApplicationForm';
 
 function Applications() {
@@ -46,7 +45,6 @@ export default function App() {
         <Route path="/applications/:id/edit" element={<EditApplicationForm />} />
         <Route path="/schedule" element={<Schedule />} />
         <Route path="/analytics" element={<AnalyticsDashboard />} />
-        <Route path="/stagnant" element={<StagnantApplications />} />
       </Routes>
     </Sidebar>
   );

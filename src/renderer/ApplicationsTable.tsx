@@ -30,6 +30,20 @@ export default function ApplicationsTable() {
     (app.role_title || '').toLowerCase().includes(search.toLowerCase())
   );
 
+  const isStagnant = (app: any) => {
+    const timeline = app.timeline || [];
+    // find most recent timeline date (ignore nulls)
+    const dates = timeline
+      .map((ev: any) => ev?.date)
+      .filter((d: any) => d)
+      .map((d: any) => new Date(d).getTime())
+      .filter((t: number) => !Number.isNaN(t));
+    if (dates.length === 0) return false;
+    const latest = Math.max(...dates);
+    const fourteenDays = 14 * 24 * 60 * 60 * 1000;
+    return Date.now() - latest > fourteenDays;
+  };
+
   return (
     <div>
       <div className="flex mb-4">
@@ -53,24 +67,27 @@ export default function ApplicationsTable() {
             </tr>
           </thead>
           <tbody>
-            {filtered.map((app) => (
-              <tr key={app.id || app._id}>
-                <td className="border px-2 py-1">{app.company_name}</td>
-                <td className="border px-2 py-1">{app.role_title}</td>
-                <td className="border px-2 py-1">{app.location}</td>
-                <td className="border px-2 py-1">{app.source}</td>
-                <td className="border px-2 py-1">{app.timeline?.[app.timeline.length-1]?.stage}</td>
-                <td className="border px-2 py-1">
-                  <button
-                    type="button"
-                    className="btn-secondary"
-                    onClick={() => navigate(`/applications/${app.id || app._id}/edit`)}
-                  >
-                    Edit
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {filtered.map((app) => {
+              const stagnant = isStagnant(app);
+              return (
+                <tr key={app.id || app._id} style={stagnant ? { backgroundColor: '#fff8e1' } : undefined}>
+                  <td className="border px-2 py-1">{app.company_name}</td>
+                  <td className="border px-2 py-1">{app.role_title}</td>
+                  <td className="border px-2 py-1">{app.location}</td>
+                  <td className="border px-2 py-1">{app.source}</td>
+                  <td className="border px-2 py-1">{app.timeline?.[app.timeline.length-1]?.stage}</td>
+                  <td className="border px-2 py-1">
+                    <button
+                      type="button"
+                      className="btn-secondary"
+                      onClick={() => navigate(`/applications/${app.id || app._id}/edit`)}
+                    >
+                      Edit
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
