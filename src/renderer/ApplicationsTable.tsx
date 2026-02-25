@@ -17,14 +17,14 @@ export default function ApplicationsTable() {
   }, []);
 
 
-  // Sort jobs by _id (as number if possible)
+  // Sort jobs by _id descending (higher ids first)
   const sortedJobs = [...jobs].sort((a, b) => {
     const idA = Number(a._id);
     const idB = Number(b._id);
     if (!isNaN(idA) && !isNaN(idB)) {
-      return idA - idB;
+      return idB - idA;
     }
-    return String(a._id).localeCompare(String(b._id));
+    return String(b._id).localeCompare(String(a._id));
   });
 
   const filtered = sortedJobs.filter(app =>
