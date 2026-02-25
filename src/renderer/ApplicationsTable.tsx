@@ -1,5 +1,8 @@
 
 import React, { useEffect, useState } from 'react';
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router-dom';
 import { getAllApplications } from './db';
 
@@ -47,11 +50,20 @@ export default function ApplicationsTable() {
   return (
     <div>
       <div className="flex mb-4">
-        <input
-          className="input flex-1"
+        <TextField
+          fullWidth
+          size="small"
+          variant="outlined"
           placeholder="Search by company or role..."
           value={search}
           onChange={e => setSearch(e.target.value)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
         />
       </div>
       <div style={{ maxHeight: '500px', overflowY: 'auto', border: '1px solid #ddd' }}>
