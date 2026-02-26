@@ -74,7 +74,9 @@ export default function AddApplicationForm({ onSubmit }: AddApplicationFormProps
 
   const submitWithStatus = async (finalStatus: 'draft' | 'submitted') => {
     if (finalStatus === 'submitted') setAttemptedSubmit(true);
-    const nowDateOnly = new Date().toISOString().slice(0, 10); // YYYY-MM-DD (date only)
+    // create local YYYY-MM-DD at local-midnight and append T00:00:00
+    const today = new Date();
+    const nowDateOnly = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}T00:00:00`;
     let timeline = form.timeline || [];
     timeline = [
       ...timeline,

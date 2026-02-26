@@ -4,10 +4,53 @@ import { JobApplication } from '../types';
 // Create or open the PouchDB database
 const db = new PouchDB<JobApplication>('job-applications');
 
+// Normalize a date-only string (YYYY-MM-DD) to local-midnight form
+const normalizeDateString = (s?: string | null) => {
+  if (!s) return s;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return `${s}T00:00:00`;
+  return s;
+};
+
+const normalizeTimeline = (timeline?: JobApplication['timeline']) => {
+  if (!timeline) return timeline;
+  return timeline.map((ev: any) => {
+    const out = { ...ev } as any;
+    if (out.date) out.date = normalizeDateString(out.date);
+    if (out.due_date) out.due_date = normalizeDateString(out.due_date);
+    return out;
+  });
+};
+
+// Run a one-time migration to update existing docs that have date-only strings
+(async () => {
+  try {
+    const all = await db.allDocs<JobApplication>({ include_docs: true });
+    for (const row of all.rows) {
+      const doc = row.doc as any;
+      if (!doc) continue;
+      const oldTimeline = doc.timeline || [];
+      const newTimeline = normalizeTimeline(oldTimeline);
+      const changed = JSON.stringify(oldTimeline) !== JSON.stringify(newTimeline);
+      if (changed) {
+        const updated = { ...doc, timeline: newTimeline };
+        try {
+          await db.put(updated);
+        } catch (e) {
+          // ignore individual put errors
+          // console.error('migration put failed', e);
+        }
+      }
+    }
+  } catch (e) {
+    // migration failed; continue without blocking app
+  }
+})();
+
 // CRUD utility functions
 export const addApplication = async (app: JobApplication) => {
   // store both _id and id to make retrieval consistent
   const doc = { ...app, _id: app.id, id: app.id } as any;
+  if (doc.timeline) doc.timeline = normalizeTimeline(doc.timeline as any);
   return db.put(doc);
 };
 
@@ -35,7 +78,9 @@ export const getApplication = async (id: string): Promise<JobApplication | null>
 
 export const updateApplication = async (app: JobApplication) => {
   const existing = await db.get(app.id);
-  return db.put({ ...existing, ...app });
+  const merged = { ...existing, ...app } as any;
+  if (merged.timeline) merged.timeline = normalizeTimeline(merged.timeline as any);
+  return db.put(merged);
 };
 
 export const deleteApplication = async (id: string) => {

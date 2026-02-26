@@ -14,23 +14,35 @@ const EVENT_TYPES = [
 ];
 
 const TimelineEventForm: React.FC<TimelineEventFormProps> = ({ onSubmit, existingEvent }) => {
+  const inputFromStored = (s?: string | null) => {
+    if (!s) return '';
+    if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+    if (typeof s === 'string' && s.length >= 10) return s.slice(0, 10);
+    try {
+      return new Date(s).toISOString().slice(0, 10);
+    } catch (e) {
+      return '';
+    }
+  };
+
   const [type, setType] = useState(existingEvent?.stage || 'Assessment');
-  const [date, setDate] = useState(existingEvent?.date || '');
-  const [dueDate, setDueDate] = useState((existingEvent as any)?.due_date || '');
-  const [completedAt, setCompletedAt] = useState((existingEvent as any)?.completed_at || '');
+  const [date, setDate] = useState(inputFromStored(existingEvent?.date || ''));
+  const [dueDate, setDueDate] = useState(inputFromStored((existingEvent as any)?.due_date || ''));
+  const [completedAt, setCompletedAt] = useState(inputFromStored((existingEvent as any)?.completed_at || ''));
   const [notes, setNotes] = useState(existingEvent?.notes || '');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     let event: TimelineEvent;
+    const store = (s: string) => (s ? `${s}T00:00:00` : '');
     if (type === 'Assessment') {
-      event = { stage: type, date, due_date: dueDate, completed_at: completedAt, notes };
+      event = { stage: type, date: store(date), due_date: store(dueDate), completed_at: store(completedAt), notes };
     } else if (type === 'Follow-up') {
-      event = { stage: type, date, notes };
+      event = { stage: type, date: store(date), notes };
     } else if (type.startsWith('Interview')) {
-      event = { stage: type, date, due_date: dueDate, notes };
+      event = { stage: type, date: store(date), due_date: store(dueDate), notes };
     } else {
-      event = { stage: type, date, notes };
+      event = { stage: type, date: store(date), notes };
     }
     onSubmit(event);
   };

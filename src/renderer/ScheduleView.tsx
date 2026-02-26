@@ -15,6 +15,13 @@ export default function ScheduleView() {
   const [apps, setApps] = useState<JobApplication[]>([]);
   const [events, setEvents] = useState<Array<{app: JobApplication, event: TimelineEvent}>>([]);
 
+  const displayDate = (s?: string | null) => {
+    if (!s) return '';
+    const d = new Date(s);
+    if (Number.isNaN(d.getTime())) return '';
+    return d.toLocaleDateString();
+  };
+
   useEffect(() => {
     getAllApplications().then(apps => {
       setApps(apps);
@@ -53,7 +60,7 @@ export default function ScheduleView() {
               <td className="px-2 py-1">{app.company_name}</td>
               <td className="px-2 py-1">{app.role_title}</td>
               <td className="px-2 py-1">{event.stage}</td>
-              <td className="px-2 py-1">{(event as any).due_date || event.date}</td>
+              <td className="px-2 py-1">{displayDate((event as any).due_date || event.date)}</td>
               <td className="px-2 py-1">{event.notes}</td>
               <td className="px-2 py-1">
                 <button

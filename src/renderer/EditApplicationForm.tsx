@@ -35,6 +35,34 @@ export default function EditApplicationForm() {
       .catch(() => setLoading(false));
   }, [id]);
 
+  // Convert stored date strings to `YYYY-MM-DD` for <input type="date">.
+  // Parse the value into a JS Date and format using local date components
+  // so it matches how the table displays dates (which uses `new Date(...)`).
+  const dateToInput = (s?: string | null) => {
+    if (!s) return '';
+    // Already YYYY-MM-DD — parse as local midnight to avoid UTC shift
+    if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
+      const d = new Date(`${s}T00:00:00`);
+      if (Number.isNaN(d.getTime())) return s;
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    }
+    try {
+      const d = new Date(s);
+      if (Number.isNaN(d.getTime())) return '';
+      // Use UTC getters if the string is a UTC ISO string to avoid double-shifting
+      const isUtc = s.endsWith('Z') || s.endsWith('z');
+      const y = isUtc ? d.getUTCFullYear() : d.getFullYear();
+      const m = String((isUtc ? d.getUTCMonth() : d.getMonth()) + 1).padStart(2, '0');
+      const day = String(isUtc ? d.getUTCDate() : d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    } catch {
+      return '';
+    }
+  };
+
   const isChanged = useMemo(() => {
     if (!app) return false;
     try {
@@ -90,7 +118,11 @@ export default function EditApplicationForm() {
       return { ...(prev || {}), timeline };
     });
   };
-  const addTimelineEvent = () => setApp((prev) => ({ ...(prev || {}), timeline: [...(prev?.timeline || []), { stage: 'Follow-up', date: new Date().toISOString(), notes: '' }] }));
+  const addTimelineEvent = () => {
+    const today = new Date();
+    const dateLocalMidnight = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}T00:00:00`;
+    return setApp((prev) => ({ ...(prev || {}), timeline: [...(prev?.timeline || []), { stage: 'Follow-up', date: dateLocalMidnight, notes: '' }] }));
+  };
   const removeTimelineEvent = (idx: number) => setApp((prev) => {
     const timeline = [...(prev?.timeline || [])];
     timeline.splice(idx, 1);
@@ -186,17 +218,17 @@ export default function EditApplicationForm() {
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
                       <div>
                         <div style={{ fontSize: 12, color: '#374151', marginBottom: 4 }}>Received</div>
-                        <TextField fullWidth type="date" value={(ev as any).date ? new Date((ev as any).date).toISOString().slice(0,10) : ''} onChange={(e) => setTimelineEvent(idx, 'date', e.target.value)} />
+                        <TextField fullWidth type="date" value={dateToInput((ev as any).date)} onChange={(e) => setTimelineEvent(idx, 'date', e.target.value)} />
                       </div>
                       <div>
                         <div style={{ fontSize: 12, color: '#374151', marginBottom: 4 }}>Interview Date</div>
-                        <TextField fullWidth type="date" value={(ev as any).due_date ? new Date((ev as any).due_date).toISOString().slice(0,10) : ''} onChange={(e) => setTimelineEvent(idx, 'due_date', e.target.value)} />
+                        <TextField fullWidth type="date" value={dateToInput((ev as any).due_date)} onChange={(e) => setTimelineEvent(idx, 'due_date', e.target.value)} />
                       </div>
                     </div>
                   ) : (
                     <div>
                       <div style={{ fontSize: 12, color: '#374151', marginBottom: 4 }}>Date</div>
-                      <TextField fullWidth type="date" value={(ev as any).date ? new Date((ev as any).date).toISOString().slice(0,10) : ''} onChange={(e) => setTimelineEvent(idx, 'date', e.target.value)} />
+                      <TextField fullWidth type="date" value={dateToInput((ev as any).date)} onChange={(e) => setTimelineEvent(idx, 'date', e.target.value)} />
                     </div>
                   )}
 
