@@ -11,23 +11,38 @@ import { getAllApplications } from './db';
 import Box from '@mui/material/Box';
 
 export default function Sidebar({ children }: { children: React.ReactNode }) {
-  const [upcomingCount, setUpcomingCount] = useState(0);
+  const [counts, setCounts] = useState({ today: 0, upcoming: 0 });
 
   useEffect(() => {
     let mounted = true;
     getAllApplications().then(apps => {
       if (!mounted) return;
-      let count = 0;
+      let todayC = 0;
+      let upcomingC = 0;
+      const now = new Date();
+      const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+
       apps.forEach(app => {
         (app.timeline || []).forEach((ev: any) => {
           const stage = ev.stage || '';
           if (ev && (stage === 'Assessment' || (typeof stage === 'string' && stage.startsWith('Interview')))) {
-            const due = ev.due_date || ev.date;
-            if (due && new Date(due) > new Date()) count++;
+            const dueStr = ev.due_date || ev.date;
+            if (dueStr) {
+               const d = new Date(dueStr);
+               // Compare dates ignoring time
+               const dTime = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+
+               if (dTime === todayStart) {
+                 todayC++;
+               }
+               if (dTime >= todayStart) {
+                 upcomingC++;
+               }
+            }
           }
         });
       });
-      setUpcomingCount(count);
+      setCounts({ today: todayC, upcoming: upcomingC });
     }).catch(() => {});
     return () => { mounted = false; };
   }, []);
@@ -42,8 +57,10 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
           <Box sx={{ display: 'flex', gap: 1 }}>
             <Button color="inherit" component={NavLink} to="/">Dashboard</Button>
             <Button color="inherit" component={NavLink} to="/applications">Applications</Button>
-            <Badge badgeContent={upcomingCount} color="error">
-              <Button color="inherit" component={NavLink} to="/schedule">Schedule</Button>
+            <Badge badgeContent={counts.upcoming} color="warning" anchorOrigin={{ vertical: 'top', horizontal: 'left' }}>
+              <Badge badgeContent={counts.today} color="error">
+                <Button color="inherit" component={NavLink} to="/schedule">Schedule</Button>
+              </Badge>
             </Badge>
             <Button color="inherit" component={NavLink} to="/analytics">Analytics</Button>
           </Box>

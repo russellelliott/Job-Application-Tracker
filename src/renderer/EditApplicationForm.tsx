@@ -103,7 +103,7 @@ export default function EditApplicationForm() {
       return { ...(prev || {}), contacts };
     });
   };
-  const addContact = () => setApp((prev) => ({ ...(prev || {}), contacts: [...(prev?.contacts || []), { name: '', email: '', linkedin_url: '', connection_type: '' }] }));
+  const addContact = () => setApp((prev) => ({ ...(prev || {}), contacts: [...(prev?.contacts || []), { name: '', email: '', phone: '', linkedin_url: '', connection_type: '' }] }));
   const removeContact = (idx: number) => setApp((prev) => {
     const contacts = [...(prev?.contacts || [])];
     contacts.splice(idx, 1);
@@ -174,9 +174,10 @@ export default function EditApplicationForm() {
           <div>
             <div style={{ marginBottom: 8, fontWeight: 600 }}>Contacts</div>
             {(app.contacts || []).map((c, idx) => (
-              <div key={idx} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr auto', gap: 8, marginBottom: 8 }}>
+              <div key={idx} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr auto', gap: 8, marginBottom: 8 }}>
                 <TextField label="Name" value={c.name || ''} onChange={(e) => setContactField(idx, 'name', e.target.value)} />
                 <TextField label="Email" value={c.email || ''} onChange={(e) => setContactField(idx, 'email', e.target.value)} />
+                <TextField label="Phone" value={c.phone || ''} onChange={(e) => setContactField(idx, 'phone', e.target.value)} />
                 <TextField label="LinkedIn" value={c.linkedin_url || ''} onChange={(e) => setContactField(idx, 'linkedin_url', e.target.value)} />
                 <TextField label="Connection Type" value={(c as any).connection_type || ''} onChange={(e) => setContactField(idx, 'connection_type', e.target.value)} />
                 <div style={{ display: 'flex', alignItems: 'center' }}>

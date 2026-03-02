@@ -3,6 +3,7 @@
 export interface Contact {
   name: string | null;
   email: string | null;
+  phone: string | null;
   linkedin_url: string | null;
   connection_type: string | null;
 }

@@ -29,7 +29,7 @@ const SOURCE_OPTIONS = [
 export default function AddApplicationForm({ onSubmit }: AddApplicationFormProps) {
   const [form, setForm] = React.useState<Partial<JobApplication>>({
     auxiliary_urls: [''],
-    contacts: [{ name: '', email: '', linkedin_url: '', connection_type: '' }],
+    contacts: [{ name: '', email: '', phone: '', linkedin_url: '', connection_type: '' }],
     timeline: [],
     raw_notes: [''],
     source: 'Cold Application',
@@ -57,7 +57,7 @@ export default function AddApplicationForm({ onSubmit }: AddApplicationFormProps
       return { ...(prev || {}), contacts };
     });
   };
-  const addContact = () => setForm((prev) => ({ ...(prev || {}), contacts: [...(prev?.contacts || []), { name: '', email: '', linkedin_url: '', connection_type: '' }] }));
+  const addContact = () => setForm((prev) => ({ ...(prev || {}), contacts: [...(prev?.contacts || []), { name: '', email: '', phone: '', linkedin_url: '', connection_type: '' }] }));
   const removeContact = (idx: number) => setForm((prev) => { const c = [...(prev?.contacts || [])]; c.splice(idx, 1); return { ...(prev || {}), contacts: c }; });
 
   const handleNoteChange = (idx: number, value: string) => setForm((prev) => { const notes = [...(prev?.raw_notes || [])]; notes[idx] = value; return { ...(prev || {}), raw_notes: notes }; });
@@ -173,9 +173,10 @@ export default function AddApplicationForm({ onSubmit }: AddApplicationFormProps
             <div>
               <div style={{ marginBottom: 8, fontWeight: 600 }}>Contacts</div>
               {(form.contacts || []).map((c, idx) => (
-                <div key={idx} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr auto', gap: 8, marginBottom: 8 }}>
+                <div key={idx} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr auto', gap: 8, marginBottom: 8 }}>
                   <TextField label="Name" value={c.name || ''} onChange={(e) => handleContactChange(idx, 'name', e.target.value)} />
                   <TextField label="Email" value={c.email || ''} onChange={(e) => handleContactChange(idx, 'email', e.target.value)} />
+                  <TextField label="Phone" value={c.phone || ''} onChange={(e) => handleContactChange(idx, 'phone', e.target.value)} />
                   <TextField label="LinkedIn" value={c.linkedin_url || ''} onChange={(e) => handleContactChange(idx, 'linkedin_url', e.target.value)} />
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <IconButton size="small" onClick={() => removeContact(idx)}><RemoveIcon /></IconButton>
