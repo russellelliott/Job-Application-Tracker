@@ -22,25 +22,25 @@ function computeStats(apps: JobApplication[]) {
   function funnel(appsList: JobApplication[]) {
     return stages.map((stage) => ({
       stage,
-      count: appsList.filter((app) => app.timeline?.some((ev) => ev.stage === stage)).length,
+      count: appsList.filter((app) => (app.timeline || []).some((ev) => (ev.stage || '').toLowerCase() === stage.toLowerCase())).length,
     }));
   }
   // Interview transition rate
   const interview1 =
-    cold.filter((app) => app.timeline?.some((ev) => ev.stage === 'Interview 1')).length +
-    warm.filter((app) => app.timeline?.some((ev) => ev.stage === 'Interview 1')).length;
+    cold.filter((app) => (app.timeline || []).some((ev) => (ev.stage || '').toLowerCase() === 'interview 1')).length +
+    warm.filter((app) => (app.timeline || []).some((ev) => (ev.stage || '').toLowerCase() === 'interview 1')).length;
   const sent =
-    cold.filter((app) => app.timeline?.some((ev) => ev.stage === 'Application Submitted')).length +
-    warm.filter((app) => app.timeline?.some((ev) => ev.stage === 'Application Submitted')).length;
+    cold.filter((app) => (app.timeline || []).some((ev) => (ev.stage || '').toLowerCase() === 'application submitted')).length +
+    warm.filter((app) => (app.timeline || []).some((ev) => (ev.stage || '').toLowerCase() === 'application submitted')).length;
   const assessment =
-    cold.filter((app) => app.timeline?.some((ev) => ev.stage === 'Assessment')).length +
-    warm.filter((app) => app.timeline?.some((ev) => ev.stage === 'Assessment')).length;
+    cold.filter((app) => (app.timeline || []).some((ev) => (ev.stage || '').toLowerCase() === 'assessment')).length +
+    warm.filter((app) => (app.timeline || []).some((ev) => (ev.stage || '').toLowerCase() === 'assessment')).length;
   const interviewTransition = interview1 / ((interview1 + sent + assessment) || 1);
   // Next step rates
   const nextStepRates = [];
   for (let i = 1; i < stages.length - 1; i++) {
-    const prev = apps.filter((app) => app.timeline?.some((ev) => ev.stage === stages[i])).length;
-    const next = apps.filter((app) => app.timeline?.some((ev) => ev.stage === stages[i + 1])).length;
+    const prev = apps.filter((app) => (app.timeline || []).some((ev) => (ev.stage || '').toLowerCase() === stages[i].toLowerCase())).length;
+    const next = apps.filter((app) => (app.timeline || []).some((ev) => (ev.stage || '').toLowerCase() === stages[i + 1].toLowerCase())).length;
     nextStepRates.push({
       label: `${stages[i]} → ${stages[i + 1]}`,
       rate: prev ? next / prev : 0,
@@ -68,8 +68,8 @@ function computeTrends(apps: JobApplication[]) {
       const weekStr = week.toISOString().slice(0, 10);
 
       if (!weeks[weekStr]) weeks[weekStr] = { applications: 0, interviews: 0 };
-      if (ev.stage === 'Application Submitted') weeks[weekStr].applications++;
-      if (typeof ev.stage === 'string' && ev.stage.startsWith('Interview')) weeks[weekStr].interviews++;
+      if ((ev.stage || '').toLowerCase() === 'application submitted') weeks[weekStr].applications++;
+      if (typeof ev.stage === 'string' && ev.stage.toLowerCase().startsWith('interview')) weeks[weekStr].interviews++;
     });
   });
   Object.entries(weeks).forEach(([date, vals]) => trends.push({ date, ...vals }));
@@ -112,32 +112,39 @@ function AnalyticsDashboard() {
           <Bar dataKey="interviews" fill="#fbbf24" name="Interviews" />
         </BarChart>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div>
-          <h3 className="text-lg font-semibold mb-2 text-blue-700">
-            Cold Leads Funnel
-          </h3>
-          <BarChart width={350} height={250} data={stats.cold.funnelData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="stage" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="count" fill={coldColors[0]} />
-          </BarChart>
-        </div>
-        <div>
-          <h3 className="text-lg font-semibold mb-2 text-yellow-700">
-            Warm Leads Funnel
-          </h3>
-          <BarChart width={350} height={250} data={stats.warm.funnelData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="stage" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="count" fill={warmColors[0]} />
-          </BarChart>
+      <div className="mb-8">
+        <h3 className="text-lg font-semibold mb-4 text-gray-800">Funnel Breakdown</h3>
+        <div className="overflow-x-auto border border-gray-200 rounded-lg shadow-sm bg-white">
+          <table className="w-full text-left text-sm">
+            <thead className="bg-gray-50 border-b border-gray-200">
+              <tr>
+                <th className="px-6 py-3 font-semibold text-gray-700">Lead Type</th>
+                {stats.cold.funnelData.map((d: any) => (
+                  <th key={d.stage} className="px-6 py-3 font-semibold text-gray-700 whitespace-nowrap">
+                    {d.stage}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              <tr className="hover:bg-gray-50">
+                <td className="px-6 py-4 font-medium text-indigo-600">Cold Leads</td>
+                {stats.cold.funnelData.map((d: any) => (
+                  <td key={d.stage} className="px-6 py-4 text-gray-900">
+                    {d.count}
+                  </td>
+                ))}
+              </tr>
+              <tr className="hover:bg-gray-50">
+                <td className="px-6 py-4 font-medium text-amber-600">Warm Leads</td>
+                {stats.warm.funnelData.map((d: any) => (
+                  <td key={d.stage} className="px-6 py-4 text-gray-900">
+                    {d.count}
+                  </td>
+                ))}
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
       <div className="mt-8">

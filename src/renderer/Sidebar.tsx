@@ -28,7 +28,14 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
           if (ev && (stage === 'Assessment' || (typeof stage === 'string' && stage.startsWith('Interview')))) {
             const dueStr = ev.due_date || ev.date;
             if (dueStr) {
-               const d = new Date(dueStr);
+               // Handle YYYY-MM-DD vs ISO
+               let d: Date;
+               if (/^\d{4}-\d{2}-\d{2}$/.test(dueStr)) {
+                 d = new Date(dueStr + 'T00:00:00');
+               } else {
+                 d = new Date(dueStr);
+               }
+
                // Compare dates ignoring time
                const dTime = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
 
