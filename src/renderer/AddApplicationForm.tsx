@@ -38,6 +38,7 @@ export default function AddApplicationForm({ onSubmit }: AddApplicationFormProps
   const [snackOpen, setSnackOpen] = React.useState(false);
   const [confirmOpen, setConfirmOpen] = React.useState(false);
   const [createdId, setCreatedId] = React.useState<string | null>(null);
+  const [submittedType, setSubmittedType] = React.useState<'draft' | 'submitted' | null>(null);
   const navigate = useNavigate();
 
   const handleChange = (name: string, value: any) => setForm((prev) => ({ ...(prev || {}), [name]: value }));
@@ -88,6 +89,7 @@ export default function AddApplicationForm({ onSubmit }: AddApplicationFormProps
       return;
     }
 
+    setSubmittedType(finalStatus);
     const result = await onSubmit({ ...form, timeline });
     if (typeof result === 'string') {
       setCreatedId(result);
@@ -222,17 +224,82 @@ export default function AddApplicationForm({ onSubmit }: AddApplicationFormProps
         {/* Confirmation dialog after create - gives navigation options */}
         {confirmOpen && createdId && (
           <div style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 60 }}>
-            <div style={{ background: '#fff', padding: 20, borderRadius: 8, boxShadow: '0 8px 24px rgba(0,0,0,0.2)', width: 420 }}>
-              <h3 style={{ marginTop: 0 }}>Application added</h3>
-              <p>Application was added to the tracker.</p>
+            <div style={{
+              background: submittedType === 'draft' ? '#f3e8ff' : '#dcfce7',
+              padding: 24,
+              borderRadius: 12,
+              boxShadow: '0 8px 24px rgba(0,0,0,0.2)',
+              width: 420,
+              border: submittedType === 'draft' ? '1px solid #d8b4fe' : '1px solid #86efac'
+            }}>
+              <h3 style={{
+                marginTop: 0,
+                color: submittedType === 'draft' ? '#6b21a8' : '#166534',
+                fontSize: 20,
+                fontWeight: 600
+              }}>
+                {submittedType === 'draft' ? 'Draft Saved' : 'Application Submitted'}
+              </h3>
+              <p style={{ color: submittedType === 'draft' ? '#581c87' : '#14532d', marginBottom: 24 }}>
+                {submittedType === 'draft'
+                  ? 'Application has been saved as a draft.'
+                  : 'Application was successfully submitted to the tracker.'}
+              </p>
               <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
-                <button onClick={() => { setConfirmOpen(false); setCreatedId(null); /* stay on add page */ }} className="btn-secondary">Add another</button>
-                <button onClick={() => { setConfirmOpen(false); navigate(`/applications/${createdId}/edit`); }} className="btn-primary">Edit</button>
-                <button onClick={() => { setConfirmOpen(false); navigate('/applications'); }} className="btn-outline">Go to Applications</button>
+                <button onClick={() => {
+                  setConfirmOpen(false);
+                  setCreatedId(null);
+                  setForm({
+                    auxiliary_urls: [''],
+                    contacts: [{ name: '', email: '', phone: '', linkedin_url: '', connection_type: '' }],
+                    timeline: [],
+                    raw_notes: [''],
+                    source: 'Cold Application',
+                    company_name: '',
+                    role_title: '',
+                    location: '',
+                    job_url: ''
+                  });
+                  setAttemptedSubmit(false);
+                  setSubmittedType(null);
+                }}
+                style={{
+                  background: 'white',
+                  border: '1px solid rgba(0,0,0,0.1)',
+                  padding: '8px 16px',
+                  borderRadius: 6,
+                  cursor: 'pointer',
+                  color: '#374151',
+                  fontWeight: 500
+                }}
+                >Add another</button>
+                <button onClick={() => { setConfirmOpen(false); navigate(`/applications/${createdId}/edit`); }}
+                  style={{
+                    background: submittedType === 'draft' ? '#9333ea' : '#16a34a',
+                    border: 'none',
+                    padding: '8px 16px',
+                    borderRadius: 6,
+                    cursor: 'pointer',
+                    color: 'white',
+                    fontWeight: 500
+                  }}
+                >Edit</button>
+                <button onClick={() => { setConfirmOpen(false); navigate('/applications'); }}
+                  style={{
+                    background: 'transparent',
+                    border: `1px solid ${submittedType === 'draft' ? '#9333ea' : '#16a34a'}`,
+                    padding: '8px 16px',
+                    borderRadius: 6,
+                    cursor: 'pointer',
+                    color: submittedType === 'draft' ? '#9333ea' : '#16a34a',
+                    fontWeight: 500
+                  }}
+                >Applications</button>
               </div>
             </div>
           </div>
         )}
+
       </form>
     </div>
   );
