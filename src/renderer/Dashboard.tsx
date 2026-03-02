@@ -105,14 +105,18 @@ function Dashboard() {
 
       <div style={{ display: 'flex', gap: 24, marginBottom: 32 }}>
         {/* Applications Box */}
-        <div style={{
-          flex: 1,
-          padding: 24,
-          backgroundColor: '#cfe8fc', // Bolder blue
-          borderRadius: 12,
-          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-          border: '1px solid #90caf9'
-        }}>
+        <div
+          onClick={() => navigate('/applications')}
+          style={{
+            flex: 1,
+            padding: 24,
+            backgroundColor: '#cfe8fc', // Bolder blue
+            borderRadius: 12,
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+            border: '1px solid #90caf9',
+            cursor: 'pointer'
+          }}
+        >
           <div style={{ fontSize: 18, fontWeight: 600, color: '#1e3a8a', marginBottom: 8 }}>Applications</div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
             <span style={{ fontSize: 36, fontWeight: 700, color: '#1e40af' }}>{counts.submitted}</span>
@@ -126,14 +130,18 @@ function Dashboard() {
         </div>
 
         {/* Interviews Box */}
-        <div style={{
-          flex: 1,
-          padding: 24,
-          backgroundColor: '#fef3c7', // Bolder yellow
-          borderRadius: 12,
-          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-          border: '1px solid #fcd34d'
-        }}>
+        <div
+          onClick={() => navigate('/schedule')}
+          style={{
+            flex: 1,
+            padding: 24,
+            backgroundColor: '#fef3c7', // Bolder yellow
+            borderRadius: 12,
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+            border: '1px solid #fcd34d',
+            cursor: 'pointer'
+          }}
+        >
           <div style={{ fontSize: 18, fontWeight: 600, color: '#713f12', marginBottom: 8 }}>Upcoming Interviews</div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
             <span style={{ fontSize: 36, fontWeight: 700, color: '#854d0e' }}>{counts.interviewsUpcoming}</span>
