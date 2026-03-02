@@ -54,15 +54,40 @@ function computeStats(apps: JobApplication[]) {
   };
 }
 
+function computeTrends(apps: JobApplication[]) {
+  const trends: Array<{ date: string; applications: number; interviews: number }> = [];
+  const weeks: Record<string, { applications: number; interviews: number }> = {};
+  apps.forEach((app) => {
+    (app.timeline || []).forEach((ev) => {
+      if (!ev.date) return;
+      const d = new Date(ev.date);
+      if (isNaN(d.getTime())) return;
+      // get start of week (Sunday)
+      const week = new Date(d);
+      week.setDate(week.getDate() - week.getDay());
+      const weekStr = week.toISOString().slice(0, 10);
+
+      if (!weeks[weekStr]) weeks[weekStr] = { applications: 0, interviews: 0 };
+      if (ev.stage === 'Application Submitted') weeks[weekStr].applications++;
+      if (typeof ev.stage === 'string' && ev.stage.startsWith('Interview')) weeks[weekStr].interviews++;
+    });
+  });
+  Object.entries(weeks).forEach(([date, vals]) => trends.push({ date, ...vals }));
+  trends.sort((a, b) => a.date.localeCompare(b.date));
+  return trends;
+}
+
 
 function AnalyticsDashboard() {
   const [stats, setStats] = useState<any>(null);
+  const [trends, setTrends] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getAnalyticsData()
       .then((apps) => {
         setStats(computeStats(apps));
+        setTrends(computeTrends(apps));
         setLoading(false);
         return null;
       })
@@ -75,6 +100,18 @@ function AnalyticsDashboard() {
   return (
     <div className="p-6" style={{ maxHeight: 'calc(100vh - 120px)', overflowY: 'auto' }}>
       <h2 className="text-2xl font-bold mb-4">Analytics</h2>
+      <div className="mb-8">
+        <h3 className="text-lg font-semibold mb-2">Recent Trends (Weekly)</h3>
+        <BarChart width={700} height={250} data={trends}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="date" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="applications" fill="#6366f1" name="Applications" />
+          <Bar dataKey="interviews" fill="#fbbf24" name="Interviews" />
+        </BarChart>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
           <h3 className="text-lg font-semibold mb-2 text-blue-700">
