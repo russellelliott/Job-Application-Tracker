@@ -4,7 +4,7 @@ import { getAnalyticsData } from './db';
 import { JobApplication } from '../types';
 
 function computeStats(apps: JobApplication[]) {
-  // CRITICAL: Exclude drafts immediately
+  // 1. MUST exclude drafts
   const activeApps = apps.filter(app => app.status !== 'Draft');
 
   const cold = activeApps.filter((app) => app.source === 'Cold Application');
@@ -14,32 +14,46 @@ function computeStats(apps: JobApplication[]) {
     const getStages = (app: JobApplication) =>
       (app.timeline || []).map(ev => (ev.stage || '').toLowerCase().trim());
 
-    // 1. Total Applications (Events where "Application Submitted" was logged)
-    const totalSubmitted = appsList.filter(app =>
-      getStages(app).includes('application submitted')
-    ).length;
+    // --- INTERVIEW 1 BREAKDOWN ---
 
-    // 2. Count Interview 1s
-    const reachedInt1 = appsList.filter(app =>
-      getStages(app).includes('interview 1')
-    ).length;
+    // Filter apps that reached Interview 1
+    const appsWithInt1 = appsList.filter(app => getStages(app).includes('interview 1'));
 
-    // 3. Count Interview 2s
-    const reachedInt2 = appsList.filter(app =>
-      getStages(app).includes('interview 2')
-    ).length;
+    // Path A: App -> Assessment -> Interview 1
+    const pathAssess = appsWithInt1.filter(app => {
+      const s = getStages(app);
+      return s.includes('application submitted') && s.includes('assessment');
+    }).length;
 
-    // 4. Calculate Transition (Int 1 -> Int 2)
-    // We use Math.round to keep the table clean
-    const transitionRate = reachedInt1 > 0
-      ? Math.round((reachedInt2 / reachedInt1) * 100)
+    // Path B: App -> Interview 1 (Directly, skipping assessment)
+    const pathDirect = appsWithInt1.filter(app => {
+      const s = getStages(app);
+      return s.includes('application submitted') && !s.includes('assessment');
+    }).length;
+
+    // Path C: The "Missing" Data Catch-all
+    // (Reached Int 1, but no 'Application Submitted' event was ever logged)
+    const pathOther = appsWithInt1.filter(app => {
+      const s = getStages(app);
+      return !s.includes('application submitted');
+    }).length;
+
+    // --- INTERVIEW 2 & BEYOND ---
+
+    const reachedInt2 = appsList.filter(app => getStages(app).includes('interview 2')).length;
+
+    const int1ToInt2Rate = appsWithInt1.length > 0
+      ? Math.round((reachedInt2 / appsWithInt1.length) * 100)
       : 0;
 
     return [
-      { label: 'Applications', count: totalSubmitted },
-      { label: 'Interview 1', count: reachedInt1 },
-      { label: 'Interview 2', count: reachedInt2 },
-      { label: 'Conversion', count: `${transitionRate}%` },
+      { label: 'Total Apps', count: appsList.length },
+      { label: 'App → Assess → Int 1', count: pathAssess },
+      { label: 'App → Int 1 (Direct)', count: pathDirect },
+      { label: 'Int 1 (No App Event)', count: pathOther },
+      { label: 'TOTAL Int 1', count: appsWithInt1.length }, // Sum of the 3 above
+      { label: 'Int 2', count: reachedInt2 },
+      { label: 'Int 1 → 2 (%)', count: `${int1ToInt2Rate}%` },
     ];
   };
 
