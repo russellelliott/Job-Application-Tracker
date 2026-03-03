@@ -1,7 +1,86 @@
 import React, { useEffect, useState } from 'react';
-import { BarChart, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Bar, ResponsiveContainer } from 'recharts';
+import {
+  BarChart, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Bar,
+  ResponsiveContainer, Sankey, Layer, Rectangle
+} from 'recharts';
 import { getAnalyticsData } from './db';
 import { JobApplication } from '../types';
+
+// --- CONSTANTS FOR SANKEY STYLING ---
+const COLOR_APPLICATIONS = '#6366f1';
+const COLOR_ASSESSMENTS = '#818cf8';
+const COLOR_INTERVIEW_1 = '#fbbf24';
+const COLOR_INTERVIEW_2 = '#f59e0b';
+const COLOR_REJECTED = '#ef4444';
+
+const TINT_INDIGO = '#c7d2fe';
+const TINT_YELLOW = '#fde68a';
+const TINT_RED = '#fca5a5';
+
+const ASSESSMENTS_Y_OFFSET = 70;
+const NODE_Y_OFFSETS: Record<number, number> = {
+  1: ASSESSMENTS_Y_OFFSET,
+};
+
+// --- DATA PROCESSING HELPERS ---
+
+function computeSankeyData(apps: JobApplication[]) {
+  const activeApps = apps.filter(app => app.status !== 'Draft');
+
+  const getStages = (app: JobApplication) =>
+    (app.timeline || []).map(ev => (ev.stage || '').toLowerCase().trim());
+
+  // 1. App -> Assessment
+  const appsWithAssessment = activeApps.filter(app => getStages(app).includes('assessment'));
+  const valAppToAssessment = appsWithAssessment.length;
+
+  // 2. App -> Interview 1 (Direct, skipping assessment)
+  const appsDirectToInt1 = activeApps.filter(app => {
+    const s = getStages(app);
+    return s.includes('interview 1') && !s.includes('assessment');
+  });
+  const valAppToInterview1 = appsDirectToInt1.length;
+
+  // 3. Assessment -> Interview 1
+  const valAssessmentToInterview1 = appsWithAssessment.filter(app =>
+    getStages(app).includes('interview 1')
+  ).length;
+
+  // 4. Interview 1 -> Interview 2
+  const appsWithInt1 = activeApps.filter(app => getStages(app).includes('interview 1'));
+  const appsWithInt2 = activeApps.filter(app => getStages(app).includes('interview 2'));
+  const valInt1ToInt2 = appsWithInt2.length;
+
+  // --- REJECTION CALCULATIONS (Sinks) ---
+  // To keep the Sankey balanced: Output must equal Input for each node.
+  const valAppToRejected = activeApps.length - valAppToAssessment - valAppToInterview1;
+  const valAssessmentToRejected = valAppToAssessment - valAssessmentToInterview1;
+  const valInt1ToRejected = appsWithInt1.length - valInt1ToInt2;
+  const valInt2ToRejected = appsWithInt2.length; // Everything currently in Int 2 that hasn't moved to "Offer"
+
+  return {
+    nodes: [
+      { name: 'Applications', color: COLOR_APPLICATIONS },     // 0
+      { name: 'Assessments', color: COLOR_ASSESSMENTS },      // 1
+      { name: 'Interview 1', color: COLOR_INTERVIEW_1 },      // 2
+      { name: 'Interview 2', color: COLOR_INTERVIEW_2 },      // 3
+      { name: 'Rejected / No Response', color: COLOR_REJECTED }, // 4
+    ],
+    links: [
+      // Forward Progress
+      { source: 0, target: 1, value: valAppToAssessment, color: TINT_INDIGO },
+      { source: 0, target: 2, value: valAppToInterview1, color: TINT_YELLOW },
+      { source: 1, target: 2, value: valAssessmentToInterview1, color: TINT_YELLOW },
+      { source: 2, target: 3, value: valInt1ToInt2, color: TINT_YELLOW },
+
+      // Rejections (Ordered to flow to the bottom)
+      { source: 3, target: 4, value: valInt2ToRejected, color: TINT_RED },
+      { source: 2, target: 4, value: valInt1ToRejected, color: TINT_RED },
+      { source: 1, target: 4, value: valAssessmentToRejected, color: TINT_RED },
+      { source: 0, target: 4, value: valAppToRejected, color: TINT_RED },
+    ].filter(link => link.value > 0) // Hide empty links
+  };
+}
 
 function computeStats(apps: JobApplication[]) {
   // 1. MUST exclude drafts
@@ -64,14 +143,15 @@ function computeStats(apps: JobApplication[]) {
 }
 
 function computeTrends(apps: JobApplication[]) {
-  const trends: Array<{ date: string; applications: number; interviews: number }> = [];
   const weeks: Record<string, { applications: number; interviews: number }> = {};
 
-  apps.forEach((app) => {
+  // Filter for active apps (no drafts) to match other metrics
+  apps.filter(a => a.status !== 'Draft').forEach((app) => {
     (app.timeline || []).forEach((ev) => {
       if (!ev.date) return;
       const d = new Date(ev.date);
       if (isNaN(d.getTime())) return;
+
       const week = new Date(d);
       week.setDate(week.getDate() - week.getDay());
       const weekStr = week.toISOString().slice(0, 10);
@@ -83,11 +163,47 @@ function computeTrends(apps: JobApplication[]) {
     });
   });
 
-  Object.entries(weeks).forEach(([date, vals]) => trends.push({ date, ...vals }));
-  return trends.sort((a, b) => a.date.localeCompare(b.date));
+  return Object.entries(weeks)
+    .map(([date, vals]) => ({ date, ...vals }))
+    .sort((a, b) => a.date.localeCompare(b.date));
 }
 
+// --- SANKEY SUB-COMPONENTS ---
+const CustomNode = ({ x, y, width, height, index, payload, containerWidth }: any) => {
+  const yOffset = NODE_Y_OFFSETS[index] ?? 0;
+  const adjustedY = y + yOffset;
+  const isOut = x + width + 80 > (containerWidth || 1000);
+  return (
+    <Layer key={`node-${index}`}>
+      <Rectangle x={x} y={adjustedY} width={width} height={height} fill={payload.color} rx={2} />
+      <text x={isOut ? x - 10 : x + width + 10} y={adjustedY + height / 2 - 2} textAnchor={isOut ? 'end' : 'start'} fontSize="12" fontWeight="bold" fill="#333">
+        {payload.value}
+      </text>
+      <text x={isOut ? x - 10 : x + width + 10} y={adjustedY + height / 2 + 12} textAnchor={isOut ? 'end' : 'start'} fontSize="10" fill="#666">
+        {payload.name}
+      </text>
+    </Layer>
+  );
+};
+
+const CustomFilledLink = (props: any) => {
+  const { sourceX, targetX, linkWidth, payload } = props;
+  let { sourceY, targetY } = props;
+
+  const nodeNameOffsets: Record<string, number> = { 'Assessments': ASSESSMENTS_Y_OFFSET };
+  sourceY += (nodeNameOffsets[payload.source?.name] ?? 0);
+  targetY += (nodeNameOffsets[payload.target?.name] ?? 0);
+
+  if (linkWidth <= 0) return null;
+  const midX = (sourceX + targetX) / 2;
+  const d = `M${sourceX},${sourceY - linkWidth / 2} C${midX},${sourceY - linkWidth / 2} ${midX},${targetY - linkWidth / 2} ${targetX},${targetY - linkWidth / 2} L${targetX},${targetY + linkWidth / 2} C${midX},${targetY + linkWidth / 2} ${midX},${sourceY + linkWidth / 2} ${sourceX},${sourceY + linkWidth / 2} Z`;
+
+  return <path d={d} fill={payload.color || '#E5E7EB'} fillOpacity={0.4} stroke="none" />;
+};
+
+// --- MAIN COMPONENT ---
 function AnalyticsDashboard() {
+  const [sankeyData, setSankeyData] = useState<any>(null);
   const [stats, setStats] = useState<any>(null);
   const [trends, setTrends] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -95,6 +211,7 @@ function AnalyticsDashboard() {
   useEffect(() => {
     getAnalyticsData()
       .then((apps) => {
+        setSankeyData(computeSankeyData(apps));
         setStats(computeStats(apps));
         setTrends(computeTrends(apps));
         setLoading(false);
@@ -102,16 +219,35 @@ function AnalyticsDashboard() {
       .catch(() => setLoading(false));
   }, []);
 
-  if (loading) return <div className="p-6">Loading analytics...</div>;
-  if (!stats) return <div className="p-6">No analytics data available.</div>;
+  if (loading) return <div className="p-6 text-gray-500">Loading analytics...</div>;
 
   return (
-    <div className="p-6 h-full overflow-y-auto">
-      <h2 className="text-2xl font-bold mb-6">Analytics</h2>
+    <div className="p-6 w-full">
+      <h2 className="text-2xl font-bold mb-6 text-gray-800">Analytics Dashboard</h2>
+
+      {/* Sankey Section */}
+      <div className="mb-10 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+        <h3 className="text-lg font-semibold mb-2 text-gray-800">Application Pipeline Flow</h3>
+        <p className="text-sm text-gray-500 mb-8">Visualization of how applications progress through stages</p>
+        <div style={{ width: '100%', height: '500px' }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <Sankey
+              data={sankeyData}
+              node={<CustomNode />}
+              link={<CustomFilledLink />}
+              nodePadding={100}
+              margin={{ top: 10, left: 10, right: 120, bottom: 10 }}
+              iterations={0}
+            >
+              <Tooltip />
+            </Sankey>
+          </ResponsiveContainer>
+        </div>
+      </div>
 
       {/* Weekly Trends Chart */}
       <div className="mb-10 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-        <h3 className="text-lg font-semibold mb-4 text-gray-800">Weekly Activity</h3>
+        <h3 className="text-lg font-semibold mb-6 text-gray-800">Weekly Activity</h3>
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={trends}>
@@ -128,41 +264,43 @@ function AnalyticsDashboard() {
       </div>
 
       {/* Funnel Table */}
-      <div className="mb-8">
-        <h3 className="text-lg font-semibold mb-4 text-gray-800">Pipeline Performance</h3>
-        <div className="overflow-hidden border border-gray-200 rounded-lg shadow-sm bg-white">
-          <table className="w-full text-left text-sm">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="px-6 py-4 font-semibold text-gray-700">Lead Source</th>
-                {stats.coldFunnel.map((d: any) => (
-                  <th key={d.label} className="px-6 py-4 font-semibold text-gray-700">
-                    {d.label}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              <tr className="hover:bg-gray-50 transition-colors">
-                <td className="px-6 py-4 font-bold text-indigo-600">Cold Applications</td>
-                {stats.coldFunnel.map((d: any, i: number) => (
-                  <td key={i} className="px-6 py-4 text-gray-900 text-base">
-                    {d.count}
-                  </td>
-                ))}
-              </tr>
-              <tr className="hover:bg-gray-50 transition-colors">
-                <td className="px-6 py-4 font-bold text-amber-600">Warm / Referrals</td>
-                {stats.warmFunnel.map((d: any, i: number) => (
-                  <td key={i} className="px-6 py-4 text-gray-900 text-base">
-                    {d.count}
-                  </td>
-                ))}
-              </tr>
-            </tbody>
-          </table>
+      {stats && (
+        <div className="mb-8">
+          <h3 className="text-lg font-semibold mb-4 text-gray-800">Pipeline Performance</h3>
+          <div className="overflow-hidden border border-gray-200 rounded-lg shadow-sm bg-white">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-gray-50 border-b border-gray-200">
+                <tr>
+                  <th className="px-6 py-4 font-semibold text-gray-700">Lead Source</th>
+                  {stats.coldFunnel.map((d: any) => (
+                    <th key={d.label} className="px-6 py-4 font-semibold text-gray-700">
+                      {d.label}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                <tr className="hover:bg-gray-50 transition-colors">
+                  <td className="px-6 py-4 font-bold text-indigo-600">Cold Applications</td>
+                  {stats.coldFunnel.map((d: any, i: number) => (
+                    <td key={i} className="px-6 py-4 text-gray-900 text-base">
+                      {d.count}
+                    </td>
+                  ))}
+                </tr>
+                <tr className="hover:bg-gray-50 transition-colors">
+                  <td className="px-6 py-4 font-bold text-amber-600">Warm / Referrals</td>
+                  {stats.warmFunnel.map((d: any, i: number) => (
+                    <td key={i} className="px-6 py-4 text-gray-900 text-base">
+                      {d.count}
+                    </td>
+                  ))}
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
