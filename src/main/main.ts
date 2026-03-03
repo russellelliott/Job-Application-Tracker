@@ -2,7 +2,7 @@
 
 /* eslint-disable global-require, no-console, promise/always-return */
 import path from 'path';
-import fs from 'fs/promises';  // Use promises for async consistency
+import fs from 'fs/promises'; // Use promises for async consistency
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
@@ -12,11 +12,18 @@ import { resolveHtmlPath } from './util';
 // In src/main/index.ts
 ipcMain.handle('read-initial-data', async () => {
   try {
-    const dataPath = path.join(process.cwd(), 'data/processed_applications.json');
-    console.log('[main] Loading from:', dataPath);  // Debug log
+    const dataPath = path.join(
+      process.cwd(),
+      'data/processed_applications.json',
+    );
+    console.log('[main] Loading from:', dataPath); // Debug log
     const raw = await fs.readFile(dataPath, 'utf-8');
     const parsed = JSON.parse(raw);
-    console.log('[main] Loaded', Array.isArray(parsed) ? parsed.length : 0, 'records');
+    console.log(
+      '[main] Loaded',
+      Array.isArray(parsed) ? parsed.length : 0,
+      'records',
+    );
     return Array.isArray(parsed) ? parsed : [];
   } catch (error: any) {
     console.error('[main] Data load failed:', error.code || error.message);
@@ -24,7 +31,6 @@ ipcMain.handle('read-initial-data', async () => {
     return [];
   }
 });
-
 
 // Rest of your main process code remains unchanged...
 class AppUpdater {
@@ -90,7 +96,7 @@ const createWindow = async () => {
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
         : path.join(__dirname, '../../.erb/dll/preload.js'),
-        devTools: false
+      devTools: false,
     },
   });
 

@@ -30,7 +30,8 @@ const normalizeTimeline = (timeline?: JobApplication['timeline']) => {
       if (!doc) continue;
       const oldTimeline = doc.timeline || [];
       const newTimeline = normalizeTimeline(oldTimeline);
-      const changed = JSON.stringify(oldTimeline) !== JSON.stringify(newTimeline);
+      const changed =
+        JSON.stringify(oldTimeline) !== JSON.stringify(newTimeline);
       if (changed) {
         const updated = { ...doc, timeline: newTimeline };
         try {
@@ -65,13 +66,15 @@ export const getAllApplications = async (): Promise<JobApplication[]> => {
     .filter(Boolean);
 };
 
-export const getApplication = async (id: string): Promise<JobApplication | null> => {
+export const getApplication = async (
+  id: string,
+): Promise<JobApplication | null> => {
   try {
     return await db.get(id);
   } catch (e) {
     // fallback: scan all docs for matching id or _id
     const all = await getAllApplications();
-    const found = all.find((d) => (d.id === id) || ((d as any)._id === id));
+    const found = all.find((d) => d.id === id || (d as any)._id === id);
     return found || null;
   }
 };
@@ -79,7 +82,8 @@ export const getApplication = async (id: string): Promise<JobApplication | null>
 export const updateApplication = async (app: JobApplication) => {
   const existing = await db.get(app.id);
   const merged = { ...existing, ...app } as any;
-  if (merged.timeline) merged.timeline = normalizeTimeline(merged.timeline as any);
+  if (merged.timeline)
+    merged.timeline = normalizeTimeline(merged.timeline as any);
   return db.put(merged);
 };
 
@@ -105,10 +109,15 @@ export const getDashboardStats = async () => {
   let totalInterviews = 0;
   let totalOffers = 0;
   let totalAssessments = 0;
-  const trends: Array<{ date: string; applications: number; interviews: number }> = [];
+  const trends: Array<{
+    date: string;
+    applications: number;
+    interviews: number;
+  }> = [];
 
   // Simple trend: count per week
-  const weeks: Record<string, { applications: number; interviews: number }> = {};
+  const weeks: Record<string, { applications: number; interviews: number }> =
+    {};
   all.forEach((app) => {
     (app.timeline || []).forEach((ev) => {
       const week = new Date(ev.date);
@@ -122,9 +131,17 @@ export const getDashboardStats = async () => {
       if (ev.stage.startsWith('Interview')) totalInterviews++;
     });
   });
-  Object.entries(weeks).forEach(([date, vals]) => trends.push({ date, ...vals }));
+  Object.entries(weeks).forEach(([date, vals]) =>
+    trends.push({ date, ...vals }),
+  );
   trends.sort((a, b) => a.date.localeCompare(b.date));
-  return { totalApplications, totalInterviews, totalOffers, totalAssessments, trends };
+  return {
+    totalApplications,
+    totalInterviews,
+    totalOffers,
+    totalAssessments,
+    trends,
+  };
 };
 
 // Helper: analytics data (for funnel, rates, etc)

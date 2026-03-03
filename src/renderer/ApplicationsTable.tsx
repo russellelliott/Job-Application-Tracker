@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -17,7 +16,6 @@ export default function ApplicationsTable() {
       .catch(console.error);
   }, []);
 
-
   // Sort jobs by the date shown in the table (most-recent first)
   const getDisplayDate = (app: any) => {
     const timeline = app.timeline || [];
@@ -25,9 +23,10 @@ export default function ApplicationsTable() {
     const lastEvent = timeline[timeline.length - 1] || null;
     if (!lastEvent) return -Infinity;
     const stage = lastEvent.stage || '';
-    const dateStr = (typeof stage === 'string' && stage.toLowerCase().includes('interview'))
-      ? (lastEvent.due_date || lastEvent.date)
-      : lastEvent.date;
+    const dateStr =
+      typeof stage === 'string' && stage.toLowerCase().includes('interview')
+        ? lastEvent.due_date || lastEvent.date
+        : lastEvent.date;
     if (!dateStr) return -Infinity;
     const t = new Date(dateStr).getTime();
     return Number.isNaN(t) ? -Infinity : t;
@@ -47,9 +46,10 @@ export default function ApplicationsTable() {
     return bDate - aDate;
   });
 
-  const filtered = sortedJobs.filter(app =>
-    (app.company_name || '').toLowerCase().includes(search.toLowerCase()) ||
-    (app.role_title || '').toLowerCase().includes(search.toLowerCase())
+  const filtered = sortedJobs.filter(
+    (app) =>
+      (app.company_name || '').toLowerCase().includes(search.toLowerCase()) ||
+      (app.role_title || '').toLowerCase().includes(search.toLowerCase()),
   );
 
   const isStagnant = (app: any) => {
@@ -75,7 +75,7 @@ export default function ApplicationsTable() {
           variant="outlined"
           placeholder="Search by company or role..."
           value={search}
-          onChange={e => setSearch(e.target.value)}
+          onChange={(e) => setSearch(e.target.value)}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -85,7 +85,13 @@ export default function ApplicationsTable() {
           }}
         />
       </div>
-      <div style={{ maxHeight: '500px', overflowY: 'auto', border: '1px solid #ddd' }}>
+      <div
+        style={{
+          maxHeight: '500px',
+          overflowY: 'auto',
+          border: '1px solid #ddd',
+        }}
+      >
         <table className="min-w-full bg-white data-table">
           <thead>
             <tr>
@@ -102,35 +108,68 @@ export default function ApplicationsTable() {
           <tbody>
             {filtered.map((app) => {
               const stagnant = isStagnant(app);
-                const lastEvent = (app.timeline || [])[app.timeline?.length - 1] || null;
-                const statusDate = (() => {
-                  if (!lastEvent) return '';
-                  const stage = (lastEvent as any).stage || '';
-                  if (typeof stage === 'string' && stage.toLowerCase().includes('interview')) {
-                    return (lastEvent as any).due_date || (lastEvent as any).date || '';
-                  }
-                  return (lastEvent as any).date || '';
-                })();
+              const lastEvent =
+                (app.timeline || [])[app.timeline?.length - 1] || null;
+              const statusDate = (() => {
+                if (!lastEvent) return '';
+                const stage = (lastEvent as any).stage || '';
+                if (
+                  typeof stage === 'string' &&
+                  stage.toLowerCase().includes('interview')
+                ) {
+                  return (
+                    (lastEvent as any).due_date || (lastEvent as any).date || ''
+                  );
+                }
+                return (lastEvent as any).date || '';
+              })();
               return (
-                <tr key={app.id || app._id} style={stagnant ? { backgroundColor: '#fff8e1' } : undefined}>
+                <tr
+                  key={app.id || app._id}
+                  style={stagnant ? { backgroundColor: '#fff8e1' } : undefined}
+                >
                   <td className="px-2 py-1">{app.company_name}</td>
                   <td className="px-2 py-1">{app.role_title}</td>
                   <td className="px-2 py-1">{app.location}</td>
                   <td className="px-2 py-1">{app.source}</td>
                   <td className="px-2 py-1">
                     {app.job_url ? (
-                      <a href={app.job_url} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">Link</a>
-                    ) : (app.contacts && app.contacts[0] && app.contacts[0].email ? (
-                      <a href={`mailto:${app.contacts[0].email}`} className="text-blue-600 hover:underline">{app.contacts[0].email}</a>
-                    ) : '' )}
+                      <a
+                        href={app.job_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-blue-600 hover:underline"
+                      >
+                        Link
+                      </a>
+                    ) : app.contacts &&
+                      app.contacts[0] &&
+                      app.contacts[0].email ? (
+                      <a
+                        href={`mailto:${app.contacts[0].email}`}
+                        className="text-blue-600 hover:underline"
+                      >
+                        {app.contacts[0].email}
+                      </a>
+                    ) : (
+                      ''
+                    )}
                   </td>
-                  <td className="px-2 py-1">{app.timeline?.[app.timeline.length-1]?.stage}</td>
-                  <td className="px-2 py-1">{statusDate ? new Date(statusDate).toLocaleDateString() : ''}</td>
+                  <td className="px-2 py-1">
+                    {app.timeline?.[app.timeline.length - 1]?.stage}
+                  </td>
+                  <td className="px-2 py-1">
+                    {statusDate
+                      ? new Date(statusDate).toLocaleDateString()
+                      : ''}
+                  </td>
                   <td className="px-2 py-1">
                     <button
                       type="button"
                       className="btn-secondary"
-                      onClick={() => navigate(`/applications/${app.id || app._id}/edit`)}
+                      onClick={() =>
+                        navigate(`/applications/${app.id || app._id}/edit`)
+                      }
                     >
                       Edit
                     </button>
@@ -142,7 +181,12 @@ export default function ApplicationsTable() {
         </table>
       </div>
       <div style={{ marginTop: 12 }}>
-        <button className="btn-primary" onClick={() => navigate('/applications/add')}>Add New Application</button>
+        <button
+          className="btn-primary"
+          onClick={() => navigate('/applications/add')}
+        >
+          Add New Application
+        </button>
       </div>
     </div>
   );

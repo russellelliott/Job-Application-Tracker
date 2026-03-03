@@ -1,16 +1,15 @@
 // One-time reset: clear DB and localStorage, then import fresh data
+// Uncomment the next line to perform a one-time reset and import on next reload
+// resetAndImport();
+import db, { addApplication } from '../renderer/db';
+import { JobApplication } from '../types';
+
 export async function resetAndImport() {
   await db.destroy();
   localStorage.removeItem('dataImported');
   // Re-create DB instance after destroy
   window.location.reload();
 }
-
-// Uncomment the next line to perform a one-time reset and import on next reload
-// resetAndImport();
-import db, { addApplication } from '../renderer/db';
-import { JobApplication } from '../types';
-
 
 export async function importInitialDataIfNeeded() {
   const importedFlag = localStorage.getItem('dataImported');
@@ -29,7 +28,7 @@ export async function importInitialDataIfNeeded() {
 
   try {
     // @ts-ignore
-    let data: JobApplication[] = await window.electron.readInitialData();
+    const data: JobApplication[] = await window.electron.readInitialData();
     console.log('[renderer] Read initial data:', data);
     // Import data as-is (no mapping)
     for (const app of data) {
@@ -54,4 +53,3 @@ export async function resetInitialData() {
   console.log('[renderer] Database and localStorage cleared. Reloading...');
   window.location.reload();
 }
-

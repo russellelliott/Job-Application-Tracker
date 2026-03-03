@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import {
-  BarChart, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Bar,
-  ResponsiveContainer, Sankey, Layer, Rectangle
+  BarChart,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  CartesianGrid,
+  Bar,
+  ResponsiveContainer,
+  Sankey,
+  Layer,
+  Rectangle,
 } from 'recharts';
 import { getAnalyticsData } from './db';
 import { JobApplication } from '../types';
@@ -25,52 +34,65 @@ const NODE_Y_OFFSETS: Record<number, number> = {
 // --- DATA PROCESSING HELPERS ---
 
 function computeSankeyData(apps: JobApplication[]) {
-  const activeApps = apps.filter(app => app.status !== 'Draft');
+  const activeApps = apps.filter((app) => app.status !== 'Draft');
 
   const getStages = (app: JobApplication) =>
-    (app.timeline || []).map(ev => (ev.stage || '').toLowerCase().trim());
+    (app.timeline || []).map((ev) => (ev.stage || '').toLowerCase().trim());
 
   // 1. App -> Assessment
-  const appsWithAssessment = activeApps.filter(app => getStages(app).includes('assessment'));
+  const appsWithAssessment = activeApps.filter((app) =>
+    getStages(app).includes('assessment'),
+  );
   const valAppToAssessment = appsWithAssessment.length;
 
   // 2. App -> Interview 1 (Direct, skipping assessment)
-  const appsDirectToInt1 = activeApps.filter(app => {
+  const appsDirectToInt1 = activeApps.filter((app) => {
     const s = getStages(app);
     return s.includes('interview 1') && !s.includes('assessment');
   });
   const valAppToInterview1 = appsDirectToInt1.length;
 
   // 3. Assessment -> Interview 1
-  const valAssessmentToInterview1 = appsWithAssessment.filter(app =>
-    getStages(app).includes('interview 1')
+  const valAssessmentToInterview1 = appsWithAssessment.filter((app) =>
+    getStages(app).includes('interview 1'),
   ).length;
 
   // 4. Interview 1 -> Interview 2
-  const appsWithInt1 = activeApps.filter(app => getStages(app).includes('interview 1'));
-  const appsWithInt2 = activeApps.filter(app => getStages(app).includes('interview 2'));
+  const appsWithInt1 = activeApps.filter((app) =>
+    getStages(app).includes('interview 1'),
+  );
+  const appsWithInt2 = activeApps.filter((app) =>
+    getStages(app).includes('interview 2'),
+  );
   const valInt1ToInt2 = appsWithInt2.length;
 
   // --- REJECTION CALCULATIONS (Sinks) ---
   // To keep the Sankey balanced: Output must equal Input for each node.
-  const valAppToRejected = activeApps.length - valAppToAssessment - valAppToInterview1;
-  const valAssessmentToRejected = valAppToAssessment - valAssessmentToInterview1;
+  const valAppToRejected =
+    activeApps.length - valAppToAssessment - valAppToInterview1;
+  const valAssessmentToRejected =
+    valAppToAssessment - valAssessmentToInterview1;
   const valInt1ToRejected = appsWithInt1.length - valInt1ToInt2;
   const valInt2ToRejected = appsWithInt2.length; // Everything currently in Int 2 that hasn't moved to "Offer"
 
   return {
     nodes: [
-      { name: 'Applications', color: COLOR_APPLICATIONS },     // 0
-      { name: 'Assessments', color: COLOR_ASSESSMENTS },      // 1
-      { name: 'Interview 1', color: COLOR_INTERVIEW_1 },      // 2
-      { name: 'Interview 2', color: COLOR_INTERVIEW_2 },      // 3
+      { name: 'Applications', color: COLOR_APPLICATIONS }, // 0
+      { name: 'Assessments', color: COLOR_ASSESSMENTS }, // 1
+      { name: 'Interview 1', color: COLOR_INTERVIEW_1 }, // 2
+      { name: 'Interview 2', color: COLOR_INTERVIEW_2 }, // 3
       { name: 'Rejected / No Response', color: COLOR_REJECTED }, // 4
     ],
     links: [
       // Forward Progress
       { source: 0, target: 2, value: valAppToInterview1, color: TINT_YELLOW },
       { source: 0, target: 1, value: valAppToAssessment, color: TINT_INDIGO },
-      { source: 1, target: 2, value: valAssessmentToInterview1, color: TINT_YELLOW },
+      {
+        source: 1,
+        target: 2,
+        value: valAssessmentToInterview1,
+        color: TINT_YELLOW,
+      },
       { source: 2, target: 3, value: valInt1ToInt2, color: TINT_YELLOW },
 
       // Rejections (Ordered to flow to the bottom)
@@ -78,52 +100,57 @@ function computeSankeyData(apps: JobApplication[]) {
       { source: 2, target: 4, value: valInt1ToRejected, color: TINT_RED },
       { source: 1, target: 4, value: valAssessmentToRejected, color: TINT_RED },
       { source: 0, target: 4, value: valAppToRejected, color: TINT_RED },
-    ].filter(link => link.value > 0) // Hide empty links
+    ].filter((link) => link.value > 0), // Hide empty links
   };
 }
 
 function computeStats(apps: JobApplication[]) {
   // 1. MUST exclude drafts
-  const activeApps = apps.filter(app => app.status !== 'Draft');
+  const activeApps = apps.filter((app) => app.status !== 'Draft');
 
   const cold = activeApps.filter((app) => app.source === 'Cold Application');
   const warm = activeApps.filter((app) => app.source !== 'Cold Application');
 
   const getPathData = (appsList: JobApplication[]) => {
     const getStages = (app: JobApplication) =>
-      (app.timeline || []).map(ev => (ev.stage || '').toLowerCase().trim());
+      (app.timeline || []).map((ev) => (ev.stage || '').toLowerCase().trim());
 
     // --- INTERVIEW 1 BREAKDOWN ---
 
     // Filter apps that reached Interview 1
-    const appsWithInt1 = appsList.filter(app => getStages(app).includes('interview 1'));
+    const appsWithInt1 = appsList.filter((app) =>
+      getStages(app).includes('interview 1'),
+    );
 
     // Path A: App -> Assessment -> Interview 1
-    const pathAssess = appsWithInt1.filter(app => {
+    const pathAssess = appsWithInt1.filter((app) => {
       const s = getStages(app);
       return s.includes('application submitted') && s.includes('assessment');
     }).length;
 
     // Path B: App -> Interview 1 (Directly, skipping assessment)
-    const pathDirect = appsWithInt1.filter(app => {
+    const pathDirect = appsWithInt1.filter((app) => {
       const s = getStages(app);
       return s.includes('application submitted') && !s.includes('assessment');
     }).length;
 
     // Path C: The "Missing" Data Catch-all
     // (Reached Int 1, but no 'Application Submitted' event was ever logged)
-    const pathOther = appsWithInt1.filter(app => {
+    const pathOther = appsWithInt1.filter((app) => {
       const s = getStages(app);
       return !s.includes('application submitted');
     }).length;
 
     // --- INTERVIEW 2 & BEYOND ---
 
-    const reachedInt2 = appsList.filter(app => getStages(app).includes('interview 2')).length;
+    const reachedInt2 = appsList.filter((app) =>
+      getStages(app).includes('interview 2'),
+    ).length;
 
-    const int1ToInt2Rate = appsWithInt1.length > 0
-      ? Math.round((reachedInt2 / appsWithInt1.length) * 100)
-      : 0;
+    const int1ToInt2Rate =
+      appsWithInt1.length > 0
+        ? Math.round((reachedInt2 / appsWithInt1.length) * 100)
+        : 0;
 
     return [
       { label: 'Total Apps', count: appsList.length },
@@ -143,25 +170,29 @@ function computeStats(apps: JobApplication[]) {
 }
 
 function computeTrends(apps: JobApplication[]) {
-  const weeks: Record<string, { applications: number; interviews: number }> = {};
+  const weeks: Record<string, { applications: number; interviews: number }> =
+    {};
 
   // Filter for active apps (no drafts) to match other metrics
-  apps.filter(a => a.status !== 'Draft').forEach((app) => {
-    (app.timeline || []).forEach((ev) => {
-      if (!ev.date) return;
-      const d = new Date(ev.date);
-      if (isNaN(d.getTime())) return;
+  apps
+    .filter((a) => a.status !== 'Draft')
+    .forEach((app) => {
+      (app.timeline || []).forEach((ev) => {
+        if (!ev.date) return;
+        const d = new Date(ev.date);
+        if (isNaN(d.getTime())) return;
 
-      const week = new Date(d);
-      week.setDate(week.getDate() - week.getDay());
-      const weekStr = week.toISOString().slice(0, 10);
+        const week = new Date(d);
+        week.setDate(week.getDate() - week.getDay());
+        const weekStr = week.toISOString().slice(0, 10);
 
-      if (!weeks[weekStr]) weeks[weekStr] = { applications: 0, interviews: 0 };
-      const stage = (ev.stage || '').toLowerCase();
-      if (stage === 'application submitted') weeks[weekStr].applications++;
-      if (stage.startsWith('interview')) weeks[weekStr].interviews++;
+        if (!weeks[weekStr])
+          weeks[weekStr] = { applications: 0, interviews: 0 };
+        const stage = (ev.stage || '').toLowerCase();
+        if (stage === 'application submitted') weeks[weekStr].applications++;
+        if (stage.startsWith('interview')) weeks[weekStr].interviews++;
+      });
     });
-  });
 
   return Object.entries(weeks)
     .map(([date, vals]) => ({ date, ...vals }))
@@ -169,42 +200,81 @@ function computeTrends(apps: JobApplication[]) {
 }
 
 // --- SANKEY SUB-COMPONENTS ---
-const CustomNode = ({ x, y, width, height, index, payload, containerWidth }: any) => {
+function CustomNode({
+  x,
+  y,
+  width,
+  height,
+  index,
+  payload,
+  containerWidth,
+}: any) {
   const yOffset = NODE_Y_OFFSETS[index] ?? 0;
   const adjustedY = y + yOffset;
   const isOut = x + width + 80 > (containerWidth || 1000);
   return (
     <Layer key={`node-${index}`}>
-      <Rectangle x={x} y={adjustedY} width={width} height={height} fill={payload.color} rx={2} />
-      <text x={isOut ? x - 10 : x + width + 10} y={adjustedY + height / 2 - 2} textAnchor={isOut ? 'end' : 'start'} fontSize="12" fontWeight="bold" fill="#333">
+      <Rectangle
+        x={x}
+        y={adjustedY}
+        width={width}
+        height={height}
+        fill={payload.color}
+        rx={2}
+      />
+      <text
+        x={isOut ? x - 10 : x + width + 10}
+        y={adjustedY + height / 2 - 2}
+        textAnchor={isOut ? 'end' : 'start'}
+        fontSize="12"
+        fontWeight="bold"
+        fill="#333"
+      >
         {payload.value}
       </text>
-      <text x={isOut ? x - 10 : x + width + 10} y={adjustedY + height / 2 + 12} textAnchor={isOut ? 'end' : 'start'} fontSize="10" fill="#666">
+      <text
+        x={isOut ? x - 10 : x + width + 10}
+        y={adjustedY + height / 2 + 12}
+        textAnchor={isOut ? 'end' : 'start'}
+        fontSize="10"
+        fill="#666"
+      >
         {payload.name}
       </text>
     </Layer>
   );
-};
+}
 
-const CustomFilledLink = (props: any) => {
+function CustomFilledLink(props: any) {
   const { sourceX, targetX, linkWidth, payload } = props;
   let { sourceY, targetY } = props;
 
-  const nodeNameOffsets: Record<string, number> = { 'Assessments': ASSESSMENTS_Y_OFFSET };
-  sourceY += (nodeNameOffsets[payload.source?.name] ?? 0);
-  targetY += (nodeNameOffsets[payload.target?.name] ?? 0);
+  const nodeNameOffsets: Record<string, number> = {
+    Assessments: ASSESSMENTS_Y_OFFSET,
+  };
+  sourceY += nodeNameOffsets[payload.source?.name] ?? 0;
+  targetY += nodeNameOffsets[payload.target?.name] ?? 0;
 
   if (linkWidth <= 0) return null;
   const midX = (sourceX + targetX) / 2;
   const d = `M${sourceX},${sourceY - linkWidth / 2} C${midX},${sourceY - linkWidth / 2} ${midX},${targetY - linkWidth / 2} ${targetX},${targetY - linkWidth / 2} L${targetX},${targetY + linkWidth / 2} C${midX},${targetY + linkWidth / 2} ${midX},${sourceY + linkWidth / 2} ${sourceX},${sourceY + linkWidth / 2} Z`;
 
-  return <path d={d} fill={payload.color || '#E5E7EB'} fillOpacity={0.4} stroke="none" />;
-};
+  return (
+    <path
+      d={d}
+      fill={payload.color || '#E5E7EB'}
+      fillOpacity={0.4}
+      stroke="none"
+    />
+  );
+}
 
 // --- MAIN COMPONENT ---
 function AnalyticsDashboard() {
   const [apps, setApps] = useState<JobApplication[]>([]);
-  const [sankeyFilter, setSankeyFilter] = useState<'all' | 'cold' | 'warm'>('all');
+  const [sankeyFilter, setSankeyFilter] = useState<'all' | 'cold' | 'warm'>(
+    'all',
+  );
   const [sankeyData, setSankeyData] = useState<any>(null);
   const [stats, setStats] = useState<any>(null);
   const [trends, setTrends] = useState<any[]>([]);
@@ -227,32 +297,41 @@ function AnalyticsDashboard() {
 
     let filteredApps = apps;
     if (sankeyFilter === 'cold') {
-      filteredApps = apps.filter(a => a.source === 'Cold Application');
+      filteredApps = apps.filter((a) => a.source === 'Cold Application');
     } else if (sankeyFilter === 'warm') {
-      filteredApps = apps.filter(a => a.source !== 'Cold Application');
+      filteredApps = apps.filter((a) => a.source !== 'Cold Application');
     }
 
     setSankeyData(computeSankeyData(filteredApps));
   }, [sankeyFilter, apps, loading]);
 
-  if (loading) return <div className="p-6 text-gray-500">Loading analytics...</div>;
+  if (loading)
+    return <div className="p-6 text-gray-500">Loading analytics...</div>;
 
   return (
     <div className="p-6 w-full">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800">Analytics Dashboard</h2>
+      <h2 className="text-2xl font-bold mb-6 text-gray-800">
+        Analytics Dashboard
+      </h2>
 
       {/* Sankey Section */}
       <div className="mb-10 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
         <div className="flex flex-row justify-between items-start mb-2">
           <div>
-            <h3 className="text-lg font-semibold text-gray-800">Application Pipeline Flow</h3>
-            <p className="text-sm text-gray-500 mb-6">Visualization of how applications progress through stages</p>
+            <h3 className="text-lg font-semibold text-gray-800">
+              Application Pipeline Flow
+            </h3>
+            <p className="text-sm text-gray-500 mb-6">
+              Visualization of how applications progress through stages
+            </p>
           </div>
           <div className="flex bg-gray-100 p-1 rounded-lg">
             <button
               onClick={() => setSankeyFilter('all')}
               className={`px-3 py-1 text-sm rounded-md transition-all ${
-                sankeyFilter === 'all' ? '!bg-green-600 text-white shadow-sm font-medium' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
+                sankeyFilter === 'all'
+                  ? '!bg-green-600 text-white shadow-sm font-medium'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
               }`}
             >
               All
@@ -260,7 +339,9 @@ function AnalyticsDashboard() {
             <button
               onClick={() => setSankeyFilter('cold')}
               className={`px-3 py-1 text-sm rounded-md transition-all ${
-                sankeyFilter === 'cold' ? '!bg-blue-600 text-white shadow-sm font-medium' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
+                sankeyFilter === 'cold'
+                  ? '!bg-blue-600 text-white shadow-sm font-medium'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
               }`}
             >
               Cold
@@ -268,7 +349,9 @@ function AnalyticsDashboard() {
             <button
               onClick={() => setSankeyFilter('warm')}
               className={`px-3 py-1 text-sm rounded-md transition-all ${
-                sankeyFilter === 'warm' ? '!bg-yellow-500 text-white shadow-sm font-medium' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
+                sankeyFilter === 'warm'
+                  ? '!bg-yellow-500 text-white shadow-sm font-medium'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
               }`}
             >
               Warm
@@ -294,17 +377,33 @@ function AnalyticsDashboard() {
 
       {/* Weekly Trends Chart */}
       <div className="mb-10 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-        <h3 className="text-lg font-semibold mb-6 text-gray-800">Weekly Activity</h3>
+        <h3 className="text-lg font-semibold mb-6 text-gray-800">
+          Weekly Activity
+        </h3>
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={trends}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                vertical={false}
+                stroke="#f0f0f0"
+              />
               <XAxis dataKey="date" fontSize={12} tickMargin={10} />
               <YAxis fontSize={12} />
               <Tooltip />
-              <Legend verticalAlign="top" height={36}/>
-              <Bar name="Applications" dataKey="applications" fill="#6366f1" radius={[4, 4, 0, 0]} />
-              <Bar name="Interviews" dataKey="interviews" fill="#fbbf24" radius={[4, 4, 0, 0]} />
+              <Legend verticalAlign="top" height={36} />
+              <Bar
+                name="Applications"
+                dataKey="applications"
+                fill="#6366f1"
+                radius={[4, 4, 0, 0]}
+              />
+              <Bar
+                name="Interviews"
+                dataKey="interviews"
+                fill="#fbbf24"
+                radius={[4, 4, 0, 0]}
+              />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -313,14 +412,21 @@ function AnalyticsDashboard() {
       {/* Funnel Table */}
       {stats && (
         <div className="mb-8">
-          <h3 className="text-lg font-semibold mb-4 text-gray-800">Pipeline Performance</h3>
+          <h3 className="text-lg font-semibold mb-4 text-gray-800">
+            Pipeline Performance
+          </h3>
           <div className="overflow-hidden border border-gray-200 rounded-lg shadow-sm bg-white">
             <table className="w-full text-left text-sm">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
-                  <th className="px-6 py-4 font-semibold text-gray-700">Lead Source</th>
+                  <th className="px-6 py-4 font-semibold text-gray-700">
+                    Lead Source
+                  </th>
                   {stats.coldFunnel.map((d: any) => (
-                    <th key={d.label} className="px-6 py-4 font-semibold text-gray-700">
+                    <th
+                      key={d.label}
+                      className="px-6 py-4 font-semibold text-gray-700"
+                    >
                       {d.label}
                     </th>
                   ))}
@@ -328,7 +434,9 @@ function AnalyticsDashboard() {
               </thead>
               <tbody className="divide-y divide-gray-100">
                 <tr className="hover:bg-gray-50 transition-colors">
-                  <td className="px-6 py-4 font-bold text-indigo-600">Cold Applications</td>
+                  <td className="px-6 py-4 font-bold text-indigo-600">
+                    Cold Applications
+                  </td>
                   {stats.coldFunnel.map((d: any, i: number) => (
                     <td key={i} className="px-6 py-4 text-gray-900 text-base">
                       {d.count}
@@ -336,7 +444,9 @@ function AnalyticsDashboard() {
                   ))}
                 </tr>
                 <tr className="hover:bg-gray-50 transition-colors">
-                  <td className="px-6 py-4 font-bold text-amber-600">Warm / Referrals</td>
+                  <td className="px-6 py-4 font-bold text-amber-600">
+                    Warm / Referrals
+                  </td>
                   {stats.warmFunnel.map((d: any, i: number) => (
                     <td key={i} className="px-6 py-4 text-gray-900 text-base">
                       {d.count}

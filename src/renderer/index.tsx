@@ -1,9 +1,8 @@
-
 import { createRoot } from 'react-dom/client';
-import App from './App';
 import { MemoryRouter as Router } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import App from './App';
 
 const container = document.getElementById('root') as HTMLElement;
 const root = createRoot(container);
@@ -13,7 +12,7 @@ root.render(
       <CssBaseline />
       <App />
     </ThemeProvider>
-  </Router>
+  </Router>,
 );
 
 // calling IPC exposed from preload script
