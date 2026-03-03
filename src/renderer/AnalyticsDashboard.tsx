@@ -68,8 +68,8 @@ function computeSankeyData(apps: JobApplication[]) {
     ],
     links: [
       // Forward Progress
-      { source: 0, target: 1, value: valAppToAssessment, color: TINT_INDIGO },
       { source: 0, target: 2, value: valAppToInterview1, color: TINT_YELLOW },
+      { source: 0, target: 1, value: valAppToAssessment, color: TINT_INDIGO },
       { source: 1, target: 2, value: valAssessmentToInterview1, color: TINT_YELLOW },
       { source: 2, target: 3, value: valInt1ToInt2, color: TINT_YELLOW },
 
