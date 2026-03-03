@@ -50,7 +50,7 @@ function computeStats(apps: JobApplication[]) {
       { label: 'Total Apps', count: appsList.length },
       { label: 'App → Assess → Int 1', count: pathAssess },
       { label: 'App → Int 1 (Direct)', count: pathDirect },
-      { label: 'Int 1 (No App Event)', count: pathOther },
+      // { label: 'Int 1 (No App Event)', count: pathOther },
       { label: 'TOTAL Int 1', count: appsWithInt1.length }, // Sum of the 3 above
       { label: 'Int 2', count: reachedInt2 },
       { label: 'Int 1 → 2 (%)', count: `${int1ToInt2Rate}%` },
