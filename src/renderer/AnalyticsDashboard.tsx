@@ -203,6 +203,8 @@ const CustomFilledLink = (props: any) => {
 
 // --- MAIN COMPONENT ---
 function AnalyticsDashboard() {
+  const [apps, setApps] = useState<JobApplication[]>([]);
+  const [sankeyFilter, setSankeyFilter] = useState<'all' | 'cold' | 'warm'>('all');
   const [sankeyData, setSankeyData] = useState<any>(null);
   const [stats, setStats] = useState<any>(null);
   const [trends, setTrends] = useState<any[]>([]);
@@ -210,14 +212,28 @@ function AnalyticsDashboard() {
 
   useEffect(() => {
     getAnalyticsData()
-      .then((apps) => {
-        setSankeyData(computeSankeyData(apps));
-        setStats(computeStats(apps));
-        setTrends(computeTrends(apps));
+      .then((data) => {
+        setApps(data);
+        setSankeyData(computeSankeyData(data));
+        setStats(computeStats(data));
+        setTrends(computeTrends(data));
         setLoading(false);
       })
       .catch(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    if (loading) return;
+
+    let filteredApps = apps;
+    if (sankeyFilter === 'cold') {
+      filteredApps = apps.filter(a => a.source === 'Cold Application');
+    } else if (sankeyFilter === 'warm') {
+      filteredApps = apps.filter(a => a.source !== 'Cold Application');
+    }
+
+    setSankeyData(computeSankeyData(filteredApps));
+  }, [sankeyFilter, apps, loading]);
 
   if (loading) return <div className="p-6 text-gray-500">Loading analytics...</div>;
 
@@ -227,8 +243,39 @@ function AnalyticsDashboard() {
 
       {/* Sankey Section */}
       <div className="mb-10 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-        <h3 className="text-lg font-semibold mb-2 text-gray-800">Application Pipeline Flow</h3>
-        <p className="text-sm text-gray-500 mb-8">Visualization of how applications progress through stages</p>
+        <div className="flex flex-row justify-between items-start mb-2">
+          <div>
+            <h3 className="text-lg font-semibold text-gray-800">Application Pipeline Flow</h3>
+            <p className="text-sm text-gray-500 mb-6">Visualization of how applications progress through stages</p>
+          </div>
+          <div className="flex bg-gray-100 p-1 rounded-lg">
+            <button
+              onClick={() => setSankeyFilter('all')}
+              className={`px-3 py-1 text-sm rounded-md transition-all ${
+                sankeyFilter === 'all' ? '!bg-green-600 text-white shadow-sm font-medium' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
+              }`}
+            >
+              All
+            </button>
+            <button
+              onClick={() => setSankeyFilter('cold')}
+              className={`px-3 py-1 text-sm rounded-md transition-all ${
+                sankeyFilter === 'cold' ? '!bg-blue-600 text-white shadow-sm font-medium' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
+              }`}
+            >
+              Cold
+            </button>
+            <button
+              onClick={() => setSankeyFilter('warm')}
+              className={`px-3 py-1 text-sm rounded-md transition-all ${
+                sankeyFilter === 'warm' ? '!bg-yellow-500 text-white shadow-sm font-medium' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
+              }`}
+            >
+              Warm
+            </button>
+          </div>
+        </div>
+
         <div style={{ width: '100%', height: '500px' }}>
           <ResponsiveContainer width="100%" height="100%">
             <Sankey
