@@ -331,6 +331,7 @@ export default function EditApplicationForm() {
                 const isInterview =
                   typeof stage === 'string' &&
                   stage.toLowerCase().includes('interview');
+                const isAssessment = stage === 'Assessment';
                 return (
                   <div
                     key={idx}
@@ -425,6 +426,73 @@ export default function EditApplicationForm() {
                             onChange={(e) =>
                               setTimelineEvent(idx, 'due_date', e.target.value)
                             }
+                          />
+                        </div>
+                      </div>
+                    ) : isAssessment ? (
+                      <div
+                        style={{
+                          display: 'grid',
+                          gridTemplateColumns: '1fr 1fr 1fr',
+                          gap: 8,
+                        }}
+                      >
+                        <div>
+                          <div
+                            style={{
+                              fontSize: 12,
+                              color: '#374151',
+                              marginBottom: 4,
+                            }}
+                          >
+                            Received
+                          </div>
+                          <TextField
+                            fullWidth
+                            type="date"
+                            value={dateToInput((ev as any).date)}
+                            onChange={(e) =>
+                              setTimelineEvent(idx, 'date', e.target.value)
+                            }
+                          />
+                        </div>
+                        <div>
+                          <div
+                            style={{
+                              fontSize: 12,
+                              color: '#374151',
+                              marginBottom: 4,
+                            }}
+                          >
+                            Due Date
+                          </div>
+                          <TextField
+                            fullWidth
+                            type="date"
+                            value={dateToInput((ev as any).due_date)}
+                            onChange={(e) =>
+                              setTimelineEvent(idx, 'due_date', e.target.value)
+                            }
+                          />
+                        </div>
+                        <div>
+                          <div
+                            style={{
+                              fontSize: 12,
+                              color: '#374151',
+                              marginBottom: 4,
+                            }}
+                          >
+                            Completed At
+                          </div>
+                          <TextField
+                            fullWidth
+                            type="date"
+                            value={dateToInput((ev as any).completed_at)}
+                            onChange={(e) =>
+                              setTimelineEvent(idx, 'completed_at', e.target.value)
+                            }
+                            InputLabelProps={{ shrink: true }}
                           />
                         </div>
                       </div>

@@ -17,33 +17,35 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
       .then((apps) => {
         if (!mounted) return;
         let todayC = 0;
-        let upcomingC = 0;
+        let visibleTotal = 0;
         const now = new Date();
         const todayStart = new Date(
           now.getFullYear(),
           now.getMonth(),
           now.getDate(),
         ).getTime();
+        const twoWeeksAgo = todayStart - 14 * 24 * 60 * 60 * 1000;
 
         apps.forEach((app) => {
           (app.timeline || []).forEach((ev: any) => {
             const stage = ev.stage || '';
-            if (
-              ev &&
-              (stage === 'Assessment' ||
-                (typeof stage === 'string' && stage.startsWith('Interview')))
-            ) {
-              const dueStr = ev.due_date || ev.date;
+            const isInterviewOrAssessment =
+              stage === 'Assessment' ||
+              (typeof stage === 'string' && stage.startsWith('Interview'));
+
+            if (isInterviewOrAssessment) {
+              let isVisible = false;
+
+              // Check Upcoming Logic (for Schedule View Top Table)
+              // If due_date >= today
+              const dueStr = ev.due_date || ev.date; // Use due_date mainly
               if (dueStr) {
-                // Handle YYYY-MM-DD vs ISO
                 let d: Date;
                 if (/^\d{4}-\d{2}-\d{2}$/.test(dueStr)) {
                   d = new Date(`${dueStr}T00:00:00`);
                 } else {
                   d = new Date(dueStr);
                 }
-
-                // Compare dates ignoring time
                 const dTime = new Date(
                   d.getFullYear(),
                   d.getMonth(),
@@ -53,14 +55,46 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
                 if (dTime === todayStart) {
                   todayC++;
                 }
-                if (dTime >= todayStart) {
-                  upcomingC++;
+
+                // If it's upcoming (due date >= today), it is visible
+                // Note: using ev.due_date specifically ideally, but keeping dueStr fallback logic for safety
+                // Actually, strict "Upcoming" usually implies based on due_date.
+                // Let's check strict due_date if available
+                const strictDueDate = ev.due_date;
+                if (strictDueDate) {
+                   const sd =  /^\d{4}-\d{2}-\d{2}$/.test(strictDueDate)
+                        ? new Date(`${strictDueDate}T00:00:00`)
+                        : new Date(strictDueDate);
+                   const sdTime = new Date(sd.getFullYear(), sd.getMonth(), sd.getDate()).getTime();
+                   if (sdTime >= todayStart) {
+                       isVisible = true;
+                   }
                 }
+                // Fallback for interviews that might use `date` as scheduled date if due_date invalid?
+                // But EditForm uses `due_date` for Interview Date.
+                // So checking `due_date` is correct for Upcoming.
+              }
+
+              // Check Received Logic (for Schedule View Bottom Table)
+              // If date >= 2 weeks ago
+              const receivedStr = ev.date;
+              if (receivedStr) {
+                 const rd = /^\d{4}-\d{2}-\d{2}$/.test(receivedStr)
+                    ? new Date(`${receivedStr}T00:00:00`)
+                    : new Date(receivedStr);
+                 const rdTime = new Date(rd.getFullYear(), rd.getMonth(), rd.getDate()).getTime();
+                 if (rdTime >= twoWeeksAgo) {
+                     isVisible = true;
+                 }
+              }
+
+              if (isVisible) {
+                visibleTotal++;
               }
             }
           });
         });
-        setCounts({ today: todayC, upcoming: upcomingC });
+        setCounts({ today: todayC, upcoming: visibleTotal });
       })
       .catch(() => {});
     return () => {

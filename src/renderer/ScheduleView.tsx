@@ -3,180 +3,211 @@ import { useNavigate } from 'react-router-dom';
 import { getAllApplications } from './db';
 import { JobApplication, TimelineEvent } from '../types';
 
-function isUpcoming(event: TimelineEvent) {
-  if (
-    event.stage === 'Assessment' ||
-    (typeof event.stage === 'string' && event.stage.startsWith('Interview'))
-  ) {
-    const dueStr = event.due_date || event.date;
-    if (!dueStr) return false;
-
-    // Parse considering local midnight for YYYY-MM-DD
-    let d: Date;
-    if (/^\d{4}-\d{2}-\d{2}$/.test(dueStr)) {
-      d = new Date(`${dueStr}T00:00:00`);
-    } else {
-      d = new Date(dueStr);
-    }
-    if (isNaN(d.getTime())) return false;
-
-    // Compare date parts only (start of day)
-    const now = new Date();
-    const today = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-    ).getTime();
-    const eventDay = new Date(
-      d.getFullYear(),
-      d.getMonth(),
-      d.getDate(),
-    ).getTime();
-
-    return eventDay >= today;
+function parseDate(dStr?: string | null): Date | null {
+  if (!dStr) return null;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dStr)) {
+    return new Date(`${dStr}T00:00:00`);
   }
-  return false;
+  const d = new Date(dStr);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
+function isAssessmentOrInterview(evt: TimelineEvent) {
+  const stage = evt.stage || '';
+  return (
+    stage === 'Assessment' ||
+    (typeof stage === 'string' && stage.startsWith('Interview'))
+  );
 }
 
 export default function ScheduleView() {
-  const [apps, setApps] = useState<JobApplication[]>([]);
-  const [events, setEvents] = useState<
-    Array<{ app: JobApplication; event: TimelineEvent }>
+  const [upcoming, setUpcoming] = useState<
+    Array<{ app: JobApplication; event: TimelineEvent; sortDate: number }>
   >([]);
-
-  const displayDate = (s?: string | null) => {
-    if (!s) return '';
-    const d = new Date(s);
-    if (Number.isNaN(d.getTime())) return '';
-    return d.toLocaleDateString();
-  };
-
-  useEffect(() => {
-    getAllApplications().then((apps) => {
-      setApps(apps);
-      const allEvents: Array<{ app: JobApplication; event: TimelineEvent }> =
-        [];
-      apps.forEach((app) => {
-        (app.timeline || []).forEach((event) => {
-          if (isUpcoming(event)) {
-            allEvents.push({ app, event });
-          }
-        });
-      });
-      allEvents.sort(
-        (a, b) =>
-          new Date((a.event as any).due_date || a.event.date).getTime() -
-          new Date((b.event as any).due_date || b.event.date).getTime(),
-      );
-      setEvents(allEvents);
-    });
-  }, []);
+  const [received, setReceived] = useState<
+    Array<{ app: JobApplication; event: TimelineEvent; sortDate: number }>
+  >([]);
 
   const navigate = useNavigate();
 
-  return (
-    <div className="w-full flex flex-col h-full p-6 box-border overflow-hidden">
-      <h2 className="text-xl font-bold mb-4">
-        Upcoming Assessments & Interviews
-      </h2>
-      <div className="flex-1 overflow-auto border border-gray-200 rounded-lg shadow-sm">
-        <table className="min-w-full bg-white data-table sticky-header">
-          <thead className="bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
-            <tr>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Company
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Role
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Type
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Due Date
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Notes
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-100">
-            {events.map(({ app, event }, idx) => {
-              const dateVal = (event as any).due_date || event.date;
-              // Check if it's today logic for highlighting
-              const d =
-                dateVal && /^\d{4}-\d{2}-\d{2}$/.test(dateVal)
-                  ? new Date(`${dateVal}T00:00:00`)
-                  : new Date(dateVal);
-              const now = new Date();
-              const isToday =
-                d &&
-                d.getFullYear() === now.getFullYear() &&
-                d.getMonth() === now.getMonth() &&
-                d.getDate() === now.getDate();
+  useEffect(() => {
+    getAllApplications().then((apps) => {
+      const up: typeof upcoming = [];
+      const rec: typeof received = [];
 
-              return (
-                <tr
-                  key={`${app.id || app._id}-${idx}`}
-                  className={isToday ? 'bg-red-50' : 'hover:bg-gray-50'}
-                >
-                  <td className="px-4 py-3 whitespace-nowrap">
-                    {app.company_name}
-                  </td>
-                  <td className="px-4 py-3 whitespace-nowrap">
-                    {app.role_title}
-                  </td>
-                  <td className="px-4 py-3 whitespace-nowrap">
-                    <span
-                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                        event.stage === 'Assessment'
-                          ? 'bg-blue-100 text-blue-800'
-                          : 'bg-yellow-100 text-yellow-800'
-                      }`}
-                    >
-                      {event.stage}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 whitespace-nowrap font-medium">
-                    {displayDate(dateVal)}
-                    {isToday && (
-                      <span className="ml-2 text-red-600 font-bold text-xs">
-                        (Today)
-                      </span>
-                    )}
-                  </td>
-                  <td
-                    className="px-4 py-3 text-sm text-gray-500 max-w-xs truncate"
-                    title={event.notes}
+      const now = new Date();
+      const todayStart = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+      ).getTime();
+      const twoWeeksAgo = todayStart - 14 * 24 * 60 * 60 * 1000;
+
+      apps.forEach((app) => {
+        (app.timeline || []).forEach((ev) => {
+          if (isAssessmentOrInterview(ev)) {
+            // Check Upcoming (Due Date >= Today)
+            const dueDate = (ev as any).due_date;
+            const dDue = parseDate(dueDate);
+            if (dDue) {
+              const tDue = new Date(
+                dDue.getFullYear(),
+                dDue.getMonth(),
+                dDue.getDate(),
+              ).getTime();
+              if (tDue >= todayStart) {
+                up.push({ app, event: ev, sortDate: tDue });
+              }
+            }
+
+            // Check Received (Date >= 2 Weeks Ago)
+            const receivedDate = (ev as any).date;
+            const dRec = parseDate(receivedDate);
+            if (dRec) {
+              const tRec = new Date(
+                dRec.getFullYear(),
+                dRec.getMonth(),
+                dRec.getDate(),
+              ).getTime();
+              // Show if not stale (received within last 14 days OR in future)
+              if (tRec >= twoWeeksAgo) {
+                rec.push({ app, event: ev, sortDate: tRec });
+              }
+            }
+          }
+        });
+      });
+
+      // Sort upcoming ascending by due date
+      up.sort((a, b) => a.sortDate - b.sortDate);
+      // Sort received descending by received date
+      rec.sort((a, b) => b.sortDate - a.sortDate);
+
+      setUpcoming(up);
+      setReceived(rec);
+    });
+  }, []);
+
+  const displayDate = (s?: string | null) => {
+    const d = parseDate(s);
+    return d ? d.toLocaleDateString() : '';
+  };
+
+  const renderTable = (
+    items: typeof upcoming,
+    title: string,
+    isUpcomingTable: boolean,
+  ) => {
+    return (
+      <div className="flex flex-col mb-6" style={{ maxHeight: '45vh' }}>
+        <h3 className="text-lg font-bold mb-2">{title}</h3>
+        <div className="flex-1 overflow-auto border border-gray-200 rounded-lg shadow-sm">
+          <table className="min-w-full bg-white data-table sticky-header">
+            <thead className="bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
+              <tr>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Company
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Role
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Type
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  {isUpcomingTable ? 'Due Date' : 'Received Date'}
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Notes
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {items.map(({ app, event }, idx) => {
+                const dateVal = isUpcomingTable
+                  ? (event as any).due_date
+                  : (event as any).date;
+                const d = parseDate(dateVal);
+                const now = new Date();
+                const isToday =
+                  d &&
+                  d.getFullYear() === now.getFullYear() &&
+                  d.getMonth() === now.getMonth() &&
+                  d.getDate() === now.getDate();
+
+                return (
+                  <tr
+                    key={`${app.id || app._id}-${idx}`}
+                    className={isToday ? 'bg-red-50' : 'hover:bg-gray-50'}
                   >
-                    {event.notes}
-                  </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
-                    <button
-                      className="text-indigo-600 hover:text-indigo-900"
-                      onClick={() =>
-                        navigate(`/applications/${app.id || app._id}/edit`)
-                      }
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      {app.company_name}
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      {app.role_title}
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <span
+                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                          event.stage === 'Assessment'
+                            ? 'bg-blue-100 text-blue-800'
+                            : 'bg-yellow-100 text-yellow-800'
+                        }`}
+                      >
+                        {event.stage}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap font-medium">
+                      {displayDate(dateVal)}
+                      {isToday && (
+                        <span className="ml-2 text-red-600 font-bold text-xs">
+                          (Today)
+                        </span>
+                      )}
+                    </td>
+                    <td
+                      className="px-4 py-3 text-sm text-gray-500 max-w-xs truncate"
+                      title={event.notes || ''}
                     >
-                      Edit
-                    </button>
+                      {event.notes}
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
+                      <button
+                        className="text-indigo-600 hover:text-indigo-900"
+                        onClick={() =>
+                          navigate(`/applications/${app.id || app._id}/edit`)
+                        }
+                      >
+                        Edit
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+              {items.length === 0 && (
+                <tr>
+                  <td
+                    colSpan={6}
+                    className="px-4 py-8 text-center text-gray-500"
+                  >
+                    No items found.
                   </td>
                 </tr>
-              );
-            })}
-            {events.length === 0 && (
-              <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-gray-500">
-                  No upcoming assessments or interviews.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
+    );
+  };
+
+  return (
+    <div className="w-full flex flex-col h-full p-6 box-border overflow-hidden">
+      {renderTable(upcoming, 'Upcoming (Due)', true)}
+      {renderTable(received, 'Received (Recent)', false)}
     </div>
   );
 }

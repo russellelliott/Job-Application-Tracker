@@ -11,6 +11,8 @@ function Dashboard() {
     submittedToday: 0,
     interviewsUpcoming: 0,
     interviewsTotal: 0,
+    assessmentsUpcoming: 0,
+    assessmentsTotal: 0,
     offersTotal: 0,
   });
   const [loading, setLoading] = useState(true);
@@ -27,6 +29,8 @@ function Dashboard() {
         let submittedToday = 0;
         let interviewsUpcoming = 0;
         let interviewsTotal = 0;
+        let assessmentsUpcoming = 0;
+        let assessmentsTotal = 0;
         let offersTotal = 0;
 
         const now = new Date();
@@ -87,6 +91,28 @@ function Dashboard() {
               }
             }
 
+            // Assessments
+            if (stage === 'Assessment') {
+              assessmentsTotal++;
+              const dueStr = ev.due_date;
+              if (dueStr) {
+                let d: Date;
+                if (/^\d{4}-\d{2}-\d{2}$/.test(dueStr)) {
+                  d = new Date(`${dueStr}T00:00:00`);
+                } else {
+                  d = new Date(dueStr);
+                }
+                const t = new Date(
+                  d.getFullYear(),
+                  d.getMonth(),
+                  d.getDate(),
+                ).getTime();
+                if (t >= todayStart) {
+                  assessmentsUpcoming++;
+                }
+              }
+            }
+
             // Offers
             if (stage === 'Offer') {
               offersTotal++;
@@ -100,6 +126,8 @@ function Dashboard() {
           submittedToday,
           interviewsUpcoming,
           interviewsTotal,
+          assessmentsUpcoming,
+          assessmentsTotal,
           offersTotal,
         });
         setLoading(false);
@@ -217,6 +245,56 @@ function Dashboard() {
             }}
           >
             Based on scheduled dates
+          </div>
+        </div>
+
+        {/* Assessments Box */}
+        <div
+          onClick={() => navigate('/schedule')}
+          style={{
+            flex: 1,
+            padding: 24,
+            backgroundColor: '#e0e7ff', // Light indigo
+            borderRadius: 12,
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+            border: '1px solid #c7d2fe',
+            cursor: 'pointer',
+          }}
+        >
+          <div
+            style={{
+              fontSize: 18,
+              fontWeight: 600,
+              color: '#3730a3',
+              marginBottom: 8,
+            }}
+          >
+            Upcoming Assessments
+          </div>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+            <span style={{ fontSize: 36, fontWeight: 700, color: '#312e81' }}>
+              {counts.assessmentsUpcoming}
+            </span>
+            <span
+              style={{
+                fontSize: 18,
+                color: '#312e81',
+                opacity: 0.7,
+                fontWeight: 500,
+              }}
+            >
+              ({counts.assessmentsTotal} total)
+            </span>
+          </div>
+          <div
+            style={{
+              marginTop: 8,
+              fontSize: 14,
+              color: '#312e81',
+              opacity: 0.8,
+            }}
+          >
+            Based on due dates
           </div>
         </div>
       </div>
