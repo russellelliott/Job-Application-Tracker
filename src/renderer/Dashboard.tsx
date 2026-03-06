@@ -198,56 +198,6 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* Interviews Box */}
-        <div
-          onClick={() => navigate('/schedule')}
-          style={{
-            flex: 1,
-            padding: 24,
-            backgroundColor: '#fef3c7', // Bolder yellow
-            borderRadius: 12,
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-            border: '1px solid #fcd34d',
-            cursor: 'pointer',
-          }}
-        >
-          <div
-            style={{
-              fontSize: 18,
-              fontWeight: 600,
-              color: '#713f12',
-              marginBottom: 8,
-            }}
-          >
-            Upcoming Interviews
-          </div>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-            <span style={{ fontSize: 36, fontWeight: 700, color: '#854d0e' }}>
-              {counts.interviewsUpcoming}
-            </span>
-            <span
-              style={{
-                fontSize: 18,
-                color: '#854d0e',
-                opacity: 0.7,
-                fontWeight: 500,
-              }}
-            >
-              ({counts.interviewsTotal} total)
-            </span>
-          </div>
-          <div
-            style={{
-              marginTop: 8,
-              fontSize: 14,
-              color: '#854d0e',
-              opacity: 0.8,
-            }}
-          >
-            Based on scheduled dates
-          </div>
-        </div>
-
         {/* Assessments Box */}
         <div
           onClick={() => navigate('/schedule')}
@@ -295,6 +245,56 @@ function Dashboard() {
             }}
           >
             Based on due dates
+          </div>
+        </div>
+
+        {/* Interviews Box */}
+        <div
+          onClick={() => navigate('/schedule')}
+          style={{
+            flex: 1,
+            padding: 24,
+            backgroundColor: '#fef3c7', // Bolder yellow
+            borderRadius: 12,
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+            border: '1px solid #fcd34d',
+            cursor: 'pointer',
+          }}
+        >
+          <div
+            style={{
+              fontSize: 18,
+              fontWeight: 600,
+              color: '#713f12',
+              marginBottom: 8,
+            }}
+          >
+            Upcoming Interviews
+          </div>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+            <span style={{ fontSize: 36, fontWeight: 700, color: '#854d0e' }}>
+              {counts.interviewsUpcoming}
+            </span>
+            <span
+              style={{
+                fontSize: 18,
+                color: '#854d0e',
+                opacity: 0.7,
+                fontWeight: 500,
+              }}
+            >
+              ({counts.interviewsTotal} total)
+            </span>
+          </div>
+          <div
+            style={{
+              marginTop: 8,
+              fontSize: 14,
+              color: '#854d0e',
+              opacity: 0.8,
+            }}
+          >
+            Based on scheduled dates
           </div>
         </div>
       </div>
