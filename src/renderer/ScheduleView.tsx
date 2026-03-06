@@ -27,6 +27,9 @@ export default function ScheduleView() {
   const [received, setReceived] = useState<
     Array<{ app: JobApplication; event: TimelineEvent; sortDate: number }>
   >([]);
+  const [completed, setCompleted] = useState<
+    Array<{ app: JobApplication; event: TimelineEvent; sortDate: number }>
+  >([]);
 
   const navigate = useNavigate();
 
@@ -34,6 +37,7 @@ export default function ScheduleView() {
     getAllApplications().then((apps) => {
       const up: typeof upcoming = [];
       const rec: typeof received = [];
+      const comp: typeof completed = [];
 
       const now = new Date();
       const todayStart = new Date(
@@ -44,52 +48,122 @@ export default function ScheduleView() {
       const twoWeeksAgo = todayStart - 14 * 24 * 60 * 60 * 1000;
 
       apps.forEach((app) => {
+        // Collect all candidate items for this app
+        const candidates: Array<{
+          app: JobApplication;
+          event: TimelineEvent;
+          sortDate: number;
+          type: 'upcoming' | 'received' | 'completed';
+        }> = [];
+
         (app.timeline || []).forEach((ev) => {
           if (isAssessmentOrInterview(ev)) {
-            // Check Upcoming (Due Date >= Today)
-            const dueDate = (ev as any).due_date;
-            const dDue = parseDate(dueDate);
-            if (dDue) {
-              const tDue = new Date(
-                dDue.getFullYear(),
-                dDue.getMonth(),
-                dDue.getDate(),
-              ).getTime();
-              if (tDue >= todayStart) {
-                up.push({ app, event: ev, sortDate: tDue });
+            // Check Completed
+            if (ev.stage === 'Assessment' && (ev as any).completed_at) {
+              const cDate = parseDate((ev as any).completed_at);
+              if (cDate) {
+                 const cTime = new Date(cDate.getFullYear(), cDate.getMonth(), cDate.getDate()).getTime();
+                 // Show completed assessment only if within last 2 weeks
+                 if (cTime >= twoWeeksAgo) {
+                   candidates.push({ app, event: ev, sortDate: cTime, type: 'completed' });
+                 }
+              }
+            } else if (typeof ev.stage === 'string' && ev.stage.startsWith('Interview')) {
+              const dueDate = (ev as any).due_date;
+              const dDue = parseDate(dueDate);
+              if (dDue) {
+                const tDue = new Date(dDue.getFullYear(), dDue.getMonth(), dDue.getDate()).getTime();
+                 if (tDue < todayStart && tDue >= twoWeeksAgo) {
+                   candidates.push({ app, event: ev, sortDate: tDue, type: 'completed' });
+                 }
               }
             }
 
-            // Check Received (Date >= 2 Weeks Ago)
+            // Check Upcoming
+            // Assessment is NOT upcoming if completed (handled above logic or check here)
+            const isDoneAssessment = ev.stage === 'Assessment' && !!(ev as any).completed_at;
+            if (!isDoneAssessment) {
+              const dueDate = (ev as any).due_date;
+              const dDue = parseDate(dueDate);
+              if (dDue) {
+                const tDue = new Date(dDue.getFullYear(), dDue.getMonth(), dDue.getDate()).getTime();
+                if (tDue >= todayStart) {
+                  // Only push if future interview logic holds (Interviews < Today are completed)
+                  // If it's today or future, it's upcoming.
+                  candidates.push({ app, event: ev, sortDate: tDue, type: 'upcoming' });
+                }
+              }
+            }
+
+            // Check Received
+            // Only if NOT upcoming and NOT completed?
+            // "Recieved" logic: Recent (2 weeks).
+            // Usually if it's "Received", it might not have a Due Date yet.
+            // If it has a Due Date >= Today, it is also Upcoming.
+            // We'll collect it, and prioritize later.
             const receivedDate = (ev as any).date;
             const dRec = parseDate(receivedDate);
             if (dRec) {
-              const tRec = new Date(
-                dRec.getFullYear(),
-                dRec.getMonth(),
-                dRec.getDate(),
-              ).getTime();
-              // Show if not stale (received within last 14 days OR in future)
+              const tRec = new Date(dRec.getFullYear(), dRec.getMonth(), dRec.getDate()).getTime();
               if (tRec >= twoWeeksAgo) {
-                rec.push({ app, event: ev, sortDate: tRec });
+                candidates.push({ app, event: ev, sortDate: tRec, type: 'received' });
               }
             }
           }
         });
+
+        // SELECT BEST CANDIDATE FOR THIS APP
+        // Priority: Upcoming (Earliest) > Received (Latest) > Completed (Latest)
+        // Actually, if we have Upcoming, we show that.
+        // If no Upcoming, do we show Received or Completed?
+        // "Received" means "Pending Action" usually. "Completed" means "Done".
+        // Pending > Done.
+        // So:
+        // 1. Has Upcoming? Pick earliest upcoming.
+        // 2. Has Received? Pick latest received? (Or earliest? "Oldest pending"? User didn't specify, but usually newest received is top of mind, or oldest is most urgent? Let's go with Newest Recieved matching typical feed).
+        // 3. Has Completed? Pick latest completed ("just passed").
+
+        // Filter candidates by type
+        const appUpcoming = candidates.filter(c => c.type === 'upcoming').sort((a,b) => a.sortDate - b.sortDate); // Earliest first
+        const appReceived = candidates.filter(c => c.type === 'received').sort((a,b) => b.sortDate - a.sortDate); // Newest first
+        const appCompleted = candidates.filter(c => c.type === 'completed').sort((a,b) => b.sortDate - a.sortDate); // Newest (latest date) first
+
+        if (appUpcoming.length > 0) {
+           // Show ONLY the first upcoming event
+           up.push(appUpcoming[0]);
+        } else if (appReceived.length > 0) {
+           // Show ONLY the most relevant received event
+           // Note: check if this received event is same as completed one? (e.g. Assessment Recieved X, Completed Y).
+           // If 'received' candidate refers to an event that is actually completed, we might have filtered it?
+           // In `candidates` collection:
+           // If assessment completed: added to `completed`.
+           // Also added to `received` (based on date).
+           // If I have a completed assessment, do I show it as "Received"? No.
+           // Filter out received candidates that are actually completed events.
+           const validReceived = appReceived.filter(r => {
+              const isComp = appCompleted.some(c => c.event === r.event);
+              return !isComp;
+           });
+
+           if (validReceived.length > 0) {
+             rec.push(validReceived[0]);
+           } else if (appCompleted.length > 0) {
+             comp.push(appCompleted[0]);
+           }
+        } else if (appCompleted.length > 0) {
+           // Show ONLY the latest completed event
+           comp.push(appCompleted[0]);
+        }
       });
 
-      // Sort upcoming ascending by due date
+      // Sort final lists
       up.sort((a, b) => a.sortDate - b.sortDate);
-
-      // Filter received: if an app is in 'upcoming', don't show its 'received' events
-      const upcomingAppIds = new Set(up.map((u) => u.app.id || (u.app as any)._id));
-      const filteredRec = rec.filter((r) => !upcomingAppIds.has(r.app.id || (r.app as any)._id));
-
-      // Sort received descending by received date
-      filteredRec.sort((a, b) => b.sortDate - a.sortDate);
+      comp.sort((a, b) => b.sortDate - a.sortDate);
+      rec.sort((a, b) => b.sortDate - a.sortDate);
 
       setUpcoming(up);
-      setReceived(filteredRec);
+      setReceived(rec);
+      setCompleted(comp);
     });
   }, []);
 
@@ -101,7 +175,7 @@ export default function ScheduleView() {
   const renderTable = (
     items: typeof upcoming,
     title: string,
-    isUpcomingTable: boolean,
+    mode: 'upcoming' | 'received' | 'completed',
   ) => {
     return (
       <div className="flex flex-col mb-6" style={{ maxHeight: '45vh' }}>
@@ -120,7 +194,12 @@ export default function ScheduleView() {
                   Type
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  {isUpcomingTable ? 'Due Date' : 'Received Date'}
+                  {mode === 'upcoming'
+                    ? 'Due Date'
+                    : mode === 'completed'
+                      ? 'Completed/Date'
+                      : 'Received Date'
+                  }
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Notes
@@ -132,9 +211,20 @@ export default function ScheduleView() {
             </thead>
             <tbody className="divide-y divide-gray-100">
               {items.map(({ app, event }, idx) => {
-                const dateVal = isUpcomingTable
-                  ? (event as any).due_date
-                  : (event as any).date;
+                let dateVal;
+                if (mode === 'upcoming') {
+                   dateVal = (event as any).due_date;
+                } else if (mode === 'completed') {
+                   // If assessment, completed_at; if interview, due_date(interview date)
+                   if (event.stage === 'Assessment') {
+                      dateVal = (event as any).completed_at;
+                   } else {
+                      dateVal = (event as any).due_date;
+                   }
+                } else {
+                   dateVal = (event as any).date;
+                }
+
                 const d = parseDate(dateVal);
                 const now = new Date();
                 const isToday =
@@ -145,7 +235,7 @@ export default function ScheduleView() {
 
                 return (
                   <tr
-                    key={`${app.id || app._id}-${idx}`}
+                    key={`${app.id || (app as any)._id}-${idx}`}
                     className={isToday ? 'bg-red-50' : 'hover:bg-gray-50'}
                   >
                     <td className="px-4 py-3 whitespace-nowrap">
@@ -167,7 +257,7 @@ export default function ScheduleView() {
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap font-medium">
                       {displayDate(dateVal)}
-                      {isToday && (
+                      {isToday && mode === 'upcoming' && (
                         <span className="ml-2 text-red-600 font-bold text-xs">
                           (Today)
                         </span>
@@ -183,7 +273,7 @@ export default function ScheduleView() {
                       <button
                         className="text-indigo-600 hover:text-indigo-900"
                         onClick={() =>
-                          navigate(`/applications/${app.id || app._id}/edit`)
+                          navigate(`/applications/${app.id || (app as any)._id}/edit`)
                         }
                       >
                         Edit
@@ -211,8 +301,10 @@ export default function ScheduleView() {
 
   return (
     <div className="w-full flex flex-col h-full p-6 box-border overflow-hidden">
-      {renderTable(upcoming, 'Upcoming (Due)', true)}
-      {renderTable(received, 'Received (Recent)', false)}
+      {renderTable(upcoming, 'Upcoming', 'upcoming')}
+      {renderTable(received, 'Received', 'received')}
+      {renderTable(completed, 'Completed', 'completed')}
+
     </div>
   );
 }

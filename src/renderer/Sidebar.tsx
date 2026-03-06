@@ -27,8 +27,7 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
         const twoWeeksAgo = todayStart - 14 * 24 * 60 * 60 * 1000;
 
         apps.forEach((app) => {
-          let appVisibleUpcomingCount = 0;
-          let appVisibleReceivedCount = 0;
+          let hasCandidate = false;
 
           (app.timeline || []).forEach((ev: any) => {
             const stage = ev.stage || '';
@@ -37,47 +36,69 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
               (typeof stage === 'string' && stage.startsWith('Interview'));
 
             if (isInterviewOrAssessment) {
-              // Check "Today" due count (always counts regardless of view logic)
-              const dueStr = ev.due_date || ev.date;
+              // --- TODAY BADGE CHECK (RED) ---
+              const dueStr = ev.due_date;
               if (dueStr) {
-                let d: Date;
-                if (/^\d{4}-\d{2}-\d{2}$/.test(dueStr)) {
-                  d = new Date(`${dueStr}T00:00:00`);
-                } else {
-                  d = new Date(dueStr);
-                }
-                const dTime = new Date(
-                  d.getFullYear(),
-                  d.getMonth(),
-                  d.getDate(),
-                ).getTime();
-
+                const d = /^\d{4}-\d{2}-\d{2}$/.test(dueStr)
+                    ? new Date(`${dueStr}T00:00:00`)
+                    : new Date(dueStr);
+                const dTime = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
                 if (dTime === todayStart) {
-                  todayC++;
+                   const isDone = stage === 'Assessment' && !!ev.completed_at;
+                   if (!isDone) {
+                      todayC++;
+                   }
                 }
               }
 
-              // Determine visibility for "Upcoming" list
-              let isUpcoming = false;
-              const strictDueDate = ev.due_date;
-              if (strictDueDate) {
-                 const sd =  /^\d{4}-\d{2}-\d{2}$/.test(strictDueDate)
-                      ? new Date(`${strictDueDate}T00:00:00`)
-                      : new Date(strictDueDate);
-                 if (!isNaN(sd.getTime())) {
-                   const sdTime = new Date(sd.getFullYear(), sd.getMonth(), sd.getDate()).getTime();
-                   if (sdTime >= todayStart) {
-                       isUpcoming = true;
+              // --- VISIBILITY CANDIDATE CHECKS (ORANGE BADGE) ---
+
+              // 1. Completed
+              if (stage === 'Assessment' && ev.completed_at) {
+                const cDate = /^\d{4}-\d{2}-\d{2}$/.test(ev.completed_at)
+                  ? new Date(`${ev.completed_at}T00:00:00`)
+                  : new Date(ev.completed_at);
+                if (!isNaN(cDate.getTime())) {
+                   const cTime = new Date(cDate.getFullYear(), cDate.getMonth(), cDate.getDate()).getTime();
+                   // Show if within last 2 weeks (matching ScheduleView)
+                   if (cTime >= twoWeeksAgo) {
+                       hasCandidate = true;
                    }
+                }
+              } else if (typeof stage === 'string' && stage.startsWith('Interview')) {
+                 const idate = ev.due_date;
+                 if (idate) {
+                    const iDateObj = /^\d{4}-\d{2}-\d{2}$/.test(idate)
+                        ? new Date(`${idate}T00:00:00`)
+                        : new Date(idate);
+                    if (!isNaN(iDateObj.getTime())) {
+                       const iTime = new Date(iDateObj.getFullYear(), iDateObj.getMonth(), iDateObj.getDate()).getTime();
+                       // Show if completed (past) AND within last 2 weeks
+                       if (iTime < todayStart && iTime >= twoWeeksAgo) {
+                           hasCandidate = true;
+                       }
+                    }
                  }
               }
 
-              if (isUpcoming) {
-                appVisibleUpcomingCount++;
+              // 2. Upcoming
+              const isDoneAssessment = stage === 'Assessment' && !!ev.completed_at;
+              if (!isDoneAssessment) {
+                 const strictDueDate = ev.due_date;
+                 if (strictDueDate) {
+                    const sd = /^\d{4}-\d{2}-\d{2}$/.test(strictDueDate)
+                          ? new Date(`${strictDueDate}T00:00:00`)
+                          : new Date(strictDueDate);
+                    if (!isNaN(sd.getTime())) {
+                       const sdTime = new Date(sd.getFullYear(), sd.getMonth(), sd.getDate()).getTime();
+                       if (sdTime >= todayStart) {
+                           hasCandidate = true;
+                       }
+                    }
+                 }
               }
 
-              // Determine visibility for "Received" list
-              let isReceived = false;
+              // 3. Received
               const receivedStr = ev.date;
               if (receivedStr) {
                  const rd = /^\d{4}-\d{2}-\d{2}$/.test(receivedStr)
@@ -86,23 +107,15 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
                  if (!isNaN(rd.getTime())) {
                    const rdTime = new Date(rd.getFullYear(), rd.getMonth(), rd.getDate()).getTime();
                    if (rdTime >= twoWeeksAgo) {
-                       isReceived = true;
+                       hasCandidate = true;
                    }
                  }
-              }
-
-              if (isReceived) {
-                appVisibleReceivedCount++;
               }
             }
           });
 
-          // Logic: If an app has ANY upcoming item, only count upcoming items.
-          // Otherwise, count received items.
-          if (appVisibleUpcomingCount > 0) {
-            visibleTotal += appVisibleUpcomingCount;
-          } else {
-            visibleTotal += appVisibleReceivedCount;
+          if (hasCandidate) {
+            visibleTotal++;
           }
         });
         setCounts({ today: todayC, upcoming: visibleTotal });
