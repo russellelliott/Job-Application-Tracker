@@ -346,36 +346,34 @@ function AnalyticsDashboard() {
             </p>
           </div>
           <div className="flex bg-gray-100 p-1 rounded-lg">
-            <button
-              onClick={() => setSankeyFilter('all')}
-              className={`px-3 py-1 text-sm rounded-md transition-all ${
-                sankeyFilter === 'all'
-                  ? '!bg-green-600 text-white shadow-sm font-medium'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
-              }`}
-            >
-              All
-            </button>
-            <button
-              onClick={() => setSankeyFilter('cold')}
-              className={`px-3 py-1 text-sm rounded-md transition-all ${
-                sankeyFilter === 'cold'
-                  ? '!bg-blue-600 text-white shadow-sm font-medium'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
-              }`}
-            >
-              Cold
-            </button>
-            <button
-              onClick={() => setSankeyFilter('warm')}
-              className={`px-3 py-1 text-sm rounded-md transition-all ${
-                sankeyFilter === 'warm'
-                  ? '!bg-yellow-500 text-white shadow-sm font-medium'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
-              }`}
-            >
-              Warm
-            </button>
+            {(
+              [
+                { key: 'all', label: 'All', activeColor: '#16a34a' },
+                { key: 'cold', label: 'Cold', activeColor: '#2563eb' },
+                { key: 'warm', label: 'Warm', activeColor: '#eab308' },
+              ] as const
+            ).map(({ key, label, activeColor }) => {
+              const isActive = sankeyFilter === key;
+              return (
+                <button
+                  type="button"
+                  key={key}
+                  onClick={() => setSankeyFilter(key)}
+                  className="px-3 py-1 text-sm rounded-md transition-all font-medium"
+                  style={
+                    isActive
+                      ? {
+                          backgroundColor: activeColor,
+                          color: '#fff',
+                          boxShadow: '0 1px 2px rgba(0,0,0,0.15)',
+                        }
+                      : { color: '#4b5563' }
+                  }
+                >
+                  {label}
+                </button>
+              );
+            })}
           </div>
         </div>
 
