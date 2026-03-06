@@ -323,6 +323,11 @@ export default function EditApplicationForm() {
                     typeof (t as any).stage === 'string' &&
                     (t as any).stage.toLowerCase().includes('interview 1'),
                 );
+                const hasInterview2 = (app.timeline || []).some(
+                  (t) =>
+                    typeof (t as any).stage === 'string' &&
+                    (t as any).stage.toLowerCase().includes('interview 2'),
+                );
                 const isInterview =
                   typeof stage === 'string' &&
                   stage.toLowerCase().includes('interview');
@@ -366,6 +371,12 @@ export default function EditApplicationForm() {
                             disabled={!hasInterview1 && stage !== 'Interview 2'}
                           >
                             Interview 2
+                          </MenuItem>
+                          <MenuItem
+                            value="Interview 3"
+                            disabled={!hasInterview2 && stage !== 'Interview 3'}
+                          >
+                            Interview 3
                           </MenuItem>
                         </Select>
                       </FormControl>

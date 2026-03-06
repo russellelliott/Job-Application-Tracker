@@ -20,6 +20,7 @@ const COLOR_APPLICATIONS = '#6366f1';
 const COLOR_ASSESSMENTS = '#818cf8';
 const COLOR_INTERVIEW_1 = '#fbbf24';
 const COLOR_INTERVIEW_2 = '#f59e0b';
+const COLOR_INTERVIEW_3 = '#d97706';
 const COLOR_REJECTED = '#ef4444';
 
 const TINT_INDIGO = '#c7d2fe';
@@ -66,6 +67,12 @@ function computeSankeyData(apps: JobApplication[]) {
   );
   const valInt1ToInt2 = appsWithInt2.length;
 
+  // 5. Interview 2 -> Interview 3
+  const appsWithInt3 = activeApps.filter((app) =>
+    getStages(app).includes('interview 3'),
+  );
+  const valInt2ToInt3 = appsWithInt3.length;
+
   // --- REJECTION CALCULATIONS (Sinks) ---
   // To keep the Sankey balanced: Output must equal Input for each node.
   const valAppToRejected =
@@ -73,7 +80,8 @@ function computeSankeyData(apps: JobApplication[]) {
   const valAssessmentToRejected =
     valAppToAssessment - valAssessmentToInterview1;
   const valInt1ToRejected = appsWithInt1.length - valInt1ToInt2;
-  const valInt2ToRejected = appsWithInt2.length; // Everything currently in Int 2 that hasn't moved to "Offer"
+  const valInt2ToRejected = appsWithInt2.length - valInt2ToInt3;
+  const valInt3ToRejected = appsWithInt3.length;
 
   return {
     nodes: [
@@ -81,7 +89,8 @@ function computeSankeyData(apps: JobApplication[]) {
       { name: 'Assessments', color: COLOR_ASSESSMENTS }, // 1
       { name: 'Interview 1', color: COLOR_INTERVIEW_1 }, // 2
       { name: 'Interview 2', color: COLOR_INTERVIEW_2 }, // 3
-      { name: 'Rejected / No Response', color: COLOR_REJECTED }, // 4
+      { name: 'Interview 3', color: COLOR_INTERVIEW_3 }, // 4
+      { name: 'Rejected / No Response', color: COLOR_REJECTED }, // 5
     ],
     links: [
       // Forward Progress
@@ -94,12 +103,14 @@ function computeSankeyData(apps: JobApplication[]) {
         color: TINT_YELLOW,
       },
       { source: 2, target: 3, value: valInt1ToInt2, color: TINT_YELLOW },
+      { source: 3, target: 4, value: valInt2ToInt3, color: TINT_YELLOW },
 
       // Rejections (Ordered to flow to the bottom)
-      { source: 3, target: 4, value: valInt2ToRejected, color: TINT_RED },
-      { source: 2, target: 4, value: valInt1ToRejected, color: TINT_RED },
-      { source: 1, target: 4, value: valAssessmentToRejected, color: TINT_RED },
-      { source: 0, target: 4, value: valAppToRejected, color: TINT_RED },
+      { source: 4, target: 5, value: valInt3ToRejected, color: TINT_RED },
+      { source: 3, target: 5, value: valInt2ToRejected, color: TINT_RED },
+      { source: 2, target: 5, value: valInt1ToRejected, color: TINT_RED },
+      { source: 1, target: 5, value: valAssessmentToRejected, color: TINT_RED },
+      { source: 0, target: 5, value: valAppToRejected, color: TINT_RED },
     ].filter((link) => link.value > 0), // Hide empty links
   };
 }
@@ -146,10 +157,17 @@ function computeStats(apps: JobApplication[]) {
     const reachedInt2 = appsList.filter((app) =>
       getStages(app).includes('interview 2'),
     ).length;
+    const reachedInt3 = appsList.filter((app) =>
+      getStages(app).includes('interview 3'),
+    ).length;
 
     const int1ToInt2Rate =
       appsWithInt1.length > 0
         ? Math.round((reachedInt2 / appsWithInt1.length) * 100)
+        : 0;
+    const int2ToInt3Rate =
+      reachedInt2 > 0
+        ? Math.round((reachedInt3 / reachedInt2) * 100)
         : 0;
 
     return [
@@ -160,6 +178,8 @@ function computeStats(apps: JobApplication[]) {
       { label: 'TOTAL Int 1', count: appsWithInt1.length }, // Sum of the 3 above
       { label: 'Int 2', count: reachedInt2 },
       { label: 'Int 1 → 2 (%)', count: `${int1ToInt2Rate}%` },
+      { label: 'Int 3', count: reachedInt3 },
+      { label: 'Int 2 → 3 (%)', count: `${int2ToInt3Rate}%` },
     ];
   };
 
