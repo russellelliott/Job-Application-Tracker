@@ -27,6 +27,9 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
         const twoWeeksAgo = todayStart - 14 * 24 * 60 * 60 * 1000;
 
         apps.forEach((app) => {
+          let appVisibleUpcomingCount = 0;
+          let appVisibleReceivedCount = 0;
+
           (app.timeline || []).forEach((ev: any) => {
             const stage = ev.stage || '';
             const isInterviewOrAssessment =
@@ -34,11 +37,8 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
               (typeof stage === 'string' && stage.startsWith('Interview'));
 
             if (isInterviewOrAssessment) {
-              let isVisible = false;
-
-              // Check Upcoming Logic (for Schedule View Top Table)
-              // If due_date >= today
-              const dueStr = ev.due_date || ev.date; // Use due_date mainly
+              // Check "Today" due count (always counts regardless of view logic)
+              const dueStr = ev.due_date || ev.date;
               if (dueStr) {
                 let d: Date;
                 if (/^\d{4}-\d{2}-\d{2}$/.test(dueStr)) {
@@ -55,44 +55,55 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
                 if (dTime === todayStart) {
                   todayC++;
                 }
-
-                // If it's upcoming (due date >= today), it is visible
-                // Note: using ev.due_date specifically ideally, but keeping dueStr fallback logic for safety
-                // Actually, strict "Upcoming" usually implies based on due_date.
-                // Let's check strict due_date if available
-                const strictDueDate = ev.due_date;
-                if (strictDueDate) {
-                   const sd =  /^\d{4}-\d{2}-\d{2}$/.test(strictDueDate)
-                        ? new Date(`${strictDueDate}T00:00:00`)
-                        : new Date(strictDueDate);
-                   const sdTime = new Date(sd.getFullYear(), sd.getMonth(), sd.getDate()).getTime();
-                   if (sdTime >= todayStart) {
-                       isVisible = true;
-                   }
-                }
-                // Fallback for interviews that might use `date` as scheduled date if due_date invalid?
-                // But EditForm uses `due_date` for Interview Date.
-                // So checking `due_date` is correct for Upcoming.
               }
 
-              // Check Received Logic (for Schedule View Bottom Table)
-              // If date >= 2 weeks ago
+              // Determine visibility for "Upcoming" list
+              let isUpcoming = false;
+              const strictDueDate = ev.due_date;
+              if (strictDueDate) {
+                 const sd =  /^\d{4}-\d{2}-\d{2}$/.test(strictDueDate)
+                      ? new Date(`${strictDueDate}T00:00:00`)
+                      : new Date(strictDueDate);
+                 if (!isNaN(sd.getTime())) {
+                   const sdTime = new Date(sd.getFullYear(), sd.getMonth(), sd.getDate()).getTime();
+                   if (sdTime >= todayStart) {
+                       isUpcoming = true;
+                   }
+                 }
+              }
+
+              if (isUpcoming) {
+                appVisibleUpcomingCount++;
+              }
+
+              // Determine visibility for "Received" list
+              let isReceived = false;
               const receivedStr = ev.date;
               if (receivedStr) {
                  const rd = /^\d{4}-\d{2}-\d{2}$/.test(receivedStr)
                     ? new Date(`${receivedStr}T00:00:00`)
                     : new Date(receivedStr);
-                 const rdTime = new Date(rd.getFullYear(), rd.getMonth(), rd.getDate()).getTime();
-                 if (rdTime >= twoWeeksAgo) {
-                     isVisible = true;
+                 if (!isNaN(rd.getTime())) {
+                   const rdTime = new Date(rd.getFullYear(), rd.getMonth(), rd.getDate()).getTime();
+                   if (rdTime >= twoWeeksAgo) {
+                       isReceived = true;
+                   }
                  }
               }
 
-              if (isVisible) {
-                visibleTotal++;
+              if (isReceived) {
+                appVisibleReceivedCount++;
               }
             }
           });
+
+          // Logic: If an app has ANY upcoming item, only count upcoming items.
+          // Otherwise, count received items.
+          if (appVisibleUpcomingCount > 0) {
+            visibleTotal += appVisibleUpcomingCount;
+          } else {
+            visibleTotal += appVisibleReceivedCount;
+          }
         });
         setCounts({ today: todayC, upcoming: visibleTotal });
       })

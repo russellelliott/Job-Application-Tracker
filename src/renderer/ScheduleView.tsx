@@ -80,11 +80,16 @@ export default function ScheduleView() {
 
       // Sort upcoming ascending by due date
       up.sort((a, b) => a.sortDate - b.sortDate);
+
+      // Filter received: if an app is in 'upcoming', don't show its 'received' events
+      const upcomingAppIds = new Set(up.map((u) => u.app.id || (u.app as any)._id));
+      const filteredRec = rec.filter((r) => !upcomingAppIds.has(r.app.id || (r.app as any)._id));
+
       // Sort received descending by received date
-      rec.sort((a, b) => b.sortDate - a.sortDate);
+      filteredRec.sort((a, b) => b.sortDate - a.sortDate);
 
       setUpcoming(up);
-      setReceived(rec);
+      setReceived(filteredRec);
     });
   }, []);
 
