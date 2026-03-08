@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
 import { getAllApplications } from './db';
 import { JobApplication, TimelineEvent } from '../types';
 
@@ -21,6 +24,7 @@ function isAssessmentOrInterview(evt: TimelineEvent) {
 }
 
 export default function ScheduleView() {
+  const [activeTab, setActiveTab] = useState<'upcoming' | 'received' | 'completed'>('upcoming');
   const [upcoming, setUpcoming] = useState<
     Array<{ app: JobApplication; event: TimelineEvent; sortDate: number }>
   >([]);
@@ -174,13 +178,11 @@ export default function ScheduleView() {
 
   const renderTable = (
     items: typeof upcoming,
-    title: string,
     mode: 'upcoming' | 'received' | 'completed',
   ) => {
     return (
-      <div className="flex flex-col mb-6" style={{ maxHeight: '45vh' }}>
-        <h3 className="text-lg font-bold mb-2">{title}</h3>
-        <div className="flex-1 overflow-auto border border-gray-200 rounded-lg shadow-sm">
+      <div className="flex flex-col h-full">
+        <div className="flex-1 overflow-auto border border-gray-200 rounded-lg shadow-sm bg-white">
           <table className="min-w-full bg-white data-table sticky-header">
             <thead className="bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
               <tr>
@@ -300,11 +302,21 @@ export default function ScheduleView() {
   };
 
   return (
-    <div className="w-full flex flex-col h-full p-6 box-border overflow-hidden">
-      {renderTable(upcoming, 'Upcoming', 'upcoming')}
-      {renderTable(received, 'Received', 'received')}
-      {renderTable(completed, 'Completed', 'completed')}
+    <div className="w-full flex flex-col h-full p-6 pr-20 box-border overflow-hidden">
+      {/* Tab Navigation */}
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+        <Tabs value={activeTab} onChange={(e, newValue) => setActiveTab(newValue)} aria-label="schedule tabs">
+          <Tab label="Upcoming" value="upcoming" sx={{ minWidth: 110 }} />
+          <Tab label="Received" value="received" sx={{ minWidth: 110 }} />
+          <Tab label="Completed" value="completed" sx={{ minWidth: 110 }} />
+        </Tabs>
+      </Box>
 
+      <div className="flex-1 overflow-hidden relative">
+        {activeTab === 'upcoming' && renderTable(upcoming, 'upcoming')}
+        {activeTab === 'received' && renderTable(received, 'received')}
+        {activeTab === 'completed' && renderTable(completed, 'completed')}
+      </div>
     </div>
   );
 }
