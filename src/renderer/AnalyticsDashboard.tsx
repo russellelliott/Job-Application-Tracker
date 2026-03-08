@@ -34,8 +34,14 @@ const NODE_Y_OFFSETS: Record<number, number> = {
 
 // --- DATA PROCESSING HELPERS ---
 
+const isSubmitted = (app: JobApplication) => {
+  return (app.timeline || []).some(
+    (ev) => ev.stage === 'Application Submitted'
+  );
+};
+
 function computeSankeyData(apps: JobApplication[]) {
-  const activeApps = apps.filter((app) => app.status !== 'Draft');
+  const activeApps = apps.filter(isSubmitted);
 
   const getStages = (app: JobApplication) =>
     (app.timeline || []).map((ev) => (ev.stage || '').toLowerCase().trim());
@@ -117,7 +123,7 @@ function computeSankeyData(apps: JobApplication[]) {
 
 function computeStats(apps: JobApplication[]) {
   // 1. MUST exclude drafts
-  const activeApps = apps.filter((app) => app.status !== 'Draft');
+  const activeApps = apps.filter(isSubmitted);
 
   const cold = activeApps.filter((app) => app.source === 'Cold Application');
   const warm = activeApps.filter((app) => app.source !== 'Cold Application');
@@ -195,7 +201,7 @@ function computeTrends(apps: JobApplication[]) {
 
   // Filter for active apps (no drafts) to match other metrics
   apps
-    .filter((a) => a.status !== 'Draft')
+    .filter(isSubmitted)
     .forEach((app) => {
       (app.timeline || []).forEach((ev) => {
         if (!ev.date) return;
