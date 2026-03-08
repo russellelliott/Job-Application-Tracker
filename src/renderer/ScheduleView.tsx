@@ -302,17 +302,17 @@ export default function ScheduleView() {
   };
 
   return (
-    <div className="w-full flex flex-col h-full p-6 pr-20 box-border overflow-hidden">
+    <div className="w-full flex flex-col h-full p-6 box-border overflow-hidden">
       {/* Tab Navigation */}
       <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
         <Tabs value={activeTab} onChange={(e, newValue) => setActiveTab(newValue)} aria-label="schedule tabs">
-          <Tab label="Upcoming" value="upcoming" sx={{ minWidth: 110 }} />
-          <Tab label="Received" value="received" sx={{ minWidth: 110 }} />
-          <Tab label="Completed" value="completed" sx={{ minWidth: 110 }} />
+          <Tab label="Upcoming" value="upcoming" />
+          <Tab label="Received" value="received" />
+          <Tab label="Completed" value="completed" />
         </Tabs>
       </Box>
 
-      <div className="flex-1 overflow-hidden relative">
+      <div className="flex-1 flex flex-col min-h-0 relative">
         {activeTab === 'upcoming' && renderTable(upcoming, 'upcoming')}
         {activeTab === 'received' && renderTable(received, 'received')}
         {activeTab === 'completed' && renderTable(completed, 'completed')}
