@@ -53,63 +53,73 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
 
               // --- VISIBILITY CANDIDATE CHECKS (ORANGE BADGE) ---
 
-              // 1. Completed
-              if (stage === 'Assessment' && ev.completed_at) {
-                const cDate = /^\d{4}-\d{2}-\d{2}$/.test(ev.completed_at)
-                  ? new Date(`${ev.completed_at}T00:00:00`)
-                  : new Date(ev.completed_at);
-                if (!isNaN(cDate.getTime())) {
-                   const cTime = new Date(cDate.getFullYear(), cDate.getMonth(), cDate.getDate()).getTime();
-                   // Show if within last 2 weeks (matching ScheduleView)
-                   if (cTime >= twoWeeksAgo) {
-                       hasCandidate = true;
-                   }
-                }
-              } else if (typeof stage === 'string' && stage.startsWith('Interview')) {
-                 const idate = ev.due_date;
-                 if (idate) {
-                    const iDateObj = /^\d{4}-\d{2}-\d{2}$/.test(idate)
-                        ? new Date(`${idate}T00:00:00`)
-                        : new Date(idate);
-                    if (!isNaN(iDateObj.getTime())) {
-                       const iTime = new Date(iDateObj.getFullYear(), iDateObj.getMonth(), iDateObj.getDate()).getTime();
-                       // Show if completed (past) AND within last 2 weeks
-                       if (iTime < todayStart && iTime >= twoWeeksAgo) {
-                           hasCandidate = true;
-                       }
-                    }
-                 }
-              }
-
-              // 2. Upcoming
-              const isDoneAssessment = stage === 'Assessment' && !!ev.completed_at;
+              // 1. Upcoming
+              const isDoneAssessment =
+                stage === 'Assessment' && !!ev.completed_at;
               if (!isDoneAssessment) {
-                 const strictDueDate = ev.due_date;
-                 if (strictDueDate) {
-                    const sd = /^\d{4}-\d{2}-\d{2}$/.test(strictDueDate)
-                          ? new Date(`${strictDueDate}T00:00:00`)
-                          : new Date(strictDueDate);
-                    if (!isNaN(sd.getTime())) {
-                       const sdTime = new Date(sd.getFullYear(), sd.getMonth(), sd.getDate()).getTime();
-                       if (sdTime >= todayStart) {
-                           hasCandidate = true;
-                       }
+                const strictDueDate = ev.due_date;
+                if (strictDueDate) {
+                  const sd = /^\d{4}-\d{2}-\d{2}$/.test(strictDueDate)
+                    ? new Date(`${strictDueDate}T00:00:00`)
+                    : new Date(strictDueDate);
+                  if (!isNaN(sd.getTime())) {
+                    const sdTime = new Date(
+                      sd.getFullYear(),
+                      sd.getMonth(),
+                      sd.getDate(),
+                    ).getTime();
+                    if (sdTime >= todayStart) {
+                      hasCandidate = true;
                     }
-                 }
+                  }
+                }
               }
 
-              // 3. Received
-              const receivedStr = ev.date;
-              if (receivedStr) {
-                 const rd = /^\d{4}-\d{2}-\d{2}$/.test(receivedStr)
+              // 2. Received (Recent but NOT completed/past)
+              if (!hasCandidate) {
+                const receivedStr = ev.date;
+                if (receivedStr) {
+                  const rd = /^\d{4}-\d{2}-\d{2}$/.test(receivedStr)
                     ? new Date(`${receivedStr}T00:00:00`)
                     : new Date(receivedStr);
-                 if (!isNaN(rd.getTime())) {
-                   const rdTime = new Date(rd.getFullYear(), rd.getMonth(), rd.getDate()).getTime();
-                   if (rdTime >= twoWeeksAgo) {
-                       hasCandidate = true;
-                   }
-                 }
+                  if (!isNaN(rd.getTime())) {
+                    const rdTime = new Date(
+                      rd.getFullYear(),
+                      rd.getMonth(),
+                      rd.getDate(),
+                    ).getTime();
+                    if (rdTime >= twoWeeksAgo) {
+                      // Check completion status
+                      let effectivelyCompleted = false;
+
+                      if (stage === 'Assessment' && ev.completed_at) {
+                        effectivelyCompleted = true;
+                      } else if (
+                        typeof stage === 'string' &&
+                        stage.startsWith('Interview')
+                      ) {
+                        const iDateStr = ev.due_date;
+                        if (iDateStr) {
+                          const iDate = /^\d{4}-\d{2}-\d{2}$/.test(iDateStr)
+                            ? new Date(`${iDateStr}T00:00:00`)
+                            : new Date(iDateStr);
+                          const iTime = new Date(
+                            iDate.getFullYear(),
+                            iDate.getMonth(),
+                            iDate.getDate(),
+                          ).getTime();
+                          if (iTime < todayStart) {
+                            effectivelyCompleted = true;
+                          }
+                        }
+                      }
+
+                      if (!effectivelyCompleted) {
+                        hasCandidate = true;
+                      }
+                    }
+                  }
+                }
               }
             }
           });
