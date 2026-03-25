@@ -6,133 +6,79 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
-import { getAllApplications } from './db';
+import db, { getAllApplications } from './db';
 
 export default function Sidebar({ children }: { children: React.ReactNode }) {
   const [counts, setCounts] = useState({ today: 0, upcoming: 0 });
 
-  useEffect(() => {
-    let mounted = true;
-    getAllApplications()
-      .then((apps) => {
-        if (!mounted) return;
-        let todayC = 0;
-        let visibleTotal = 0;
-        const now = new Date();
-        const todayStart = new Date(
-          now.getFullYear(),
-          now.getMonth(),
-          now.getDate(),
-        ).getTime();
-        const twoWeeksAgo = todayStart - 14 * 24 * 60 * 60 * 1000;
+  const fetchCounts = async () => {
+    try {
+      const apps = await getAllApplications();
+      let todayC = 0;
+      let upcomingC = 0;
+      const now = new Date();
+      // Reset to beginning of today
+      const todayStart = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+      ).getTime();
 
-        apps.forEach((app) => {
-          let hasCandidate = false;
+      apps.forEach((app) => {
+        (app.timeline || []).forEach((ev: any) => {
+          const stage = ev.stage || '';
+          const isInterviewOrAssessment =
+            stage === 'Assessment' ||
+            (typeof stage === 'string' && stage.startsWith('Interview'));
 
-          (app.timeline || []).forEach((ev: any) => {
-            const stage = ev.stage || '';
-            const isInterviewOrAssessment =
-              stage === 'Assessment' ||
-              (typeof stage === 'string' && stage.startsWith('Interview'));
+          if (isInterviewOrAssessment) {
+            const dueStr = ev.due_date;
+            if (dueStr) {
+              const d = /^\d{4}-\d{2}-\d{2}$/.test(dueStr)
+                ? new Date(`${dueStr}T00:00:00`)
+                : new Date(dueStr);
+              // Normalize to midnight local time
+              const dTime = new Date(
+                d.getFullYear(),
+                d.getMonth(),
+                d.getDate(),
+              ).getTime();
 
-            if (isInterviewOrAssessment) {
-              // --- TODAY BADGE CHECK (RED) ---
-              const dueStr = ev.due_date;
-              if (dueStr) {
-                const d = /^\d{4}-\d{2}-\d{2}$/.test(dueStr)
-                    ? new Date(`${dueStr}T00:00:00`)
-                    : new Date(dueStr);
-                const dTime = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
-                if (dTime === todayStart) {
-                   const isDone = stage === 'Assessment' && !!ev.completed_at;
-                   if (!isDone) {
-                      todayC++;
-                   }
+              if (!isNaN(dTime)) {
+                // Determine if event is active (not completed)
+                let isComplete = false;
+                if (stage === 'Assessment' && ev.completed_at) {
+                  isComplete = true;
                 }
-              }
+                // Interviews are considered "upcoming" if date is today or future.
+                // Past interviews are implicitly "done" or passed.
 
-              // --- VISIBILITY CANDIDATE CHECKS (ORANGE BADGE) ---
-
-              // 1. Upcoming
-              const isDoneAssessment =
-                stage === 'Assessment' && !!ev.completed_at;
-              if (!isDoneAssessment) {
-                const strictDueDate = ev.due_date;
-                if (strictDueDate) {
-                  const sd = /^\d{4}-\d{2}-\d{2}$/.test(strictDueDate)
-                    ? new Date(`${strictDueDate}T00:00:00`)
-                    : new Date(strictDueDate);
-                  if (!isNaN(sd.getTime())) {
-                    const sdTime = new Date(
-                      sd.getFullYear(),
-                      sd.getMonth(),
-                      sd.getDate(),
-                    ).getTime();
-                    if (sdTime >= todayStart) {
-                      hasCandidate = true;
-                    }
-                  }
-                }
-              }
-
-              // 2. Received (Recent but NOT completed/past)
-              if (!hasCandidate) {
-                const receivedStr = ev.date;
-                if (receivedStr) {
-                  const rd = /^\d{4}-\d{2}-\d{2}$/.test(receivedStr)
-                    ? new Date(`${receivedStr}T00:00:00`)
-                    : new Date(receivedStr);
-                  if (!isNaN(rd.getTime())) {
-                    const rdTime = new Date(
-                      rd.getFullYear(),
-                      rd.getMonth(),
-                      rd.getDate(),
-                    ).getTime();
-                    if (rdTime >= twoWeeksAgo) {
-                      // Check completion status
-                      let effectivelyCompleted = false;
-
-                      if (stage === 'Assessment' && ev.completed_at) {
-                        effectivelyCompleted = true;
-                      } else if (
-                        typeof stage === 'string' &&
-                        stage.startsWith('Interview')
-                      ) {
-                        const iDateStr = ev.due_date;
-                        if (iDateStr) {
-                          const iDate = /^\d{4}-\d{2}-\d{2}$/.test(iDateStr)
-                            ? new Date(`${iDateStr}T00:00:00`)
-                            : new Date(iDateStr);
-                          const iTime = new Date(
-                            iDate.getFullYear(),
-                            iDate.getMonth(),
-                            iDate.getDate(),
-                          ).getTime();
-                          if (iTime < todayStart) {
-                            effectivelyCompleted = true;
-                          }
-                        }
-                      }
-
-                      if (!effectivelyCompleted) {
-                        hasCandidate = true;
-                      }
-                    }
+                if (!isComplete && dTime >= todayStart) {
+                  upcomingC++;
+                  if (dTime === todayStart) {
+                    todayC++;
                   }
                 }
               }
             }
-          });
-
-          if (hasCandidate) {
-            visibleTotal++;
           }
         });
-        setCounts({ today: todayC, upcoming: visibleTotal });
-      })
-      .catch(() => {});
+      });
+      setCounts({ today: todayC, upcoming: upcomingC });
+    } catch (error) {
+      console.error('Error fetching counts:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCounts();
+    const changes = db
+      .changes({ since: 'now', live: true, include_docs: true })
+      .on('change', () => {
+        fetchCounts();
+      });
     return () => {
-      mounted = false;
+      changes.cancel();
     };
   }, []);
 
