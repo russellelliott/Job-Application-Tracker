@@ -316,7 +316,7 @@ export default function AddApplicationForm({
                   key={idx}
                   style={{
                     display: 'grid',
-                    gridTemplateColumns: '1fr 1fr 1fr 1fr auto',
+                    gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr auto',
                     gap: 8,
                     marginBottom: 8,
                   }}
@@ -347,6 +347,13 @@ export default function AddApplicationForm({
                     value={c.linkedin_url || ''}
                     onChange={(e) =>
                       handleContactChange(idx, 'linkedin_url', e.target.value)
+                    }
+                  />
+                  <TextField
+                    label="Connection Type"
+                    value={c.connection_type || ''}
+                    onChange={(e) =>
+                      handleContactChange(idx, 'connection_type', e.target.value)
                     }
                   />
                   <div style={{ display: 'flex', alignItems: 'center' }}>

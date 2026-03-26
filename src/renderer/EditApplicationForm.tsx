@@ -294,7 +294,7 @@ export default function EditApplicationForm() {
                   />
                   <TextField
                     label="Connection Type"
-                    value={(c as any).connection_type || ''}
+                    value={c.connection_type || ''}
                     onChange={(e) =>
                       setContactField(idx, 'connection_type', e.target.value)
                     }
