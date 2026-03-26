@@ -34,9 +34,15 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
           if (isInterviewOrAssessment) {
             const dueStr = ev.due_date;
             if (dueStr) {
-              const d = /^\d{4}-\d{2}-\d{2}$/.test(dueStr)
-                ? new Date(`${dueStr}T00:00:00`)
-                : new Date(dueStr);
+              let d: Date;
+              if (/^\d{4}-\d{2}-\d{2}$/.test(dueStr)) {
+                // Parse YYYY-MM-DD as local midnight
+                const [y, m, day] = dueStr.split('-').map(Number);
+                d = new Date(y, m - 1, day);
+              } else {
+                d = new Date(dueStr);
+              }
+
               // Normalize to midnight local time
               const dTime = new Date(
                 d.getFullYear(),

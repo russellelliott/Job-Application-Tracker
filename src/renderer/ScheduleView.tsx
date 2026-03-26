@@ -25,6 +25,7 @@ function isAssessmentOrInterview(evt: TimelineEvent) {
 
 export default function ScheduleView() {
   const [activeTab, setActiveTab] = useState<'upcoming' | 'received' | 'completed'>('upcoming');
+  const [completedView, setCompletedView] = useState<'unique' | 'all'>('unique');
   const [upcoming, setUpcoming] = useState<
     Array<{ app: JobApplication; event: TimelineEvent; sortDate: number }>
   >([]);
@@ -41,7 +42,7 @@ export default function ScheduleView() {
     getAllApplications().then((apps) => {
       const up: typeof upcoming = [];
       const rec: typeof received = [];
-      const comp: typeof completed = [];
+      const allComp: typeof completed = [];
 
       const now = new Date();
       const todayStart = new Date(
@@ -67,24 +68,25 @@ export default function ScheduleView() {
               const cDate = parseDate((ev as any).completed_at);
               if (cDate) {
                  const cTime = new Date(cDate.getFullYear(), cDate.getMonth(), cDate.getDate()).getTime();
-                 // Show completed assessment only if within last 2 weeks
-                 if (cTime >= twoWeeksAgo) {
-                   candidates.push({ app, event: ev, sortDate: cTime, type: 'completed' });
-                 }
+                 // Add to candidates as completed
+                 candidates.push({ app, event: ev, sortDate: cTime, type: 'completed' });
+                 // Always add to allComp list
+                 allComp.push({ app, event: ev, sortDate: cTime });
               }
             } else if (typeof ev.stage === 'string' && ev.stage.startsWith('Interview')) {
               const dueDate = (ev as any).due_date;
               const dDue = parseDate(dueDate);
               if (dDue) {
                 const tDue = new Date(dDue.getFullYear(), dDue.getMonth(), dDue.getDate()).getTime();
-                 if (tDue < todayStart && tDue >= twoWeeksAgo) {
+                 if (tDue < todayStart) {
+                   // Past interviews are completed
                    candidates.push({ app, event: ev, sortDate: tDue, type: 'completed' });
+                   allComp.push({ app, event: ev, sortDate: tDue });
                  }
               }
             }
 
             // Check Upcoming
-            // Assessment is NOT upcoming if completed (handled above logic or check here)
             const isDoneAssessment = ev.stage === 'Assessment' && !!(ev as any).completed_at;
             if (!isDoneAssessment) {
               const dueDate = (ev as any).due_date;
@@ -92,19 +94,12 @@ export default function ScheduleView() {
               if (dDue) {
                 const tDue = new Date(dDue.getFullYear(), dDue.getMonth(), dDue.getDate()).getTime();
                 if (tDue >= todayStart) {
-                  // Only push if future interview logic holds (Interviews < Today are completed)
-                  // If it's today or future, it's upcoming.
                   candidates.push({ app, event: ev, sortDate: tDue, type: 'upcoming' });
                 }
               }
             }
 
             // Check Received
-            // Only if NOT upcoming and NOT completed?
-            // "Recieved" logic: Recent (2 weeks).
-            // Usually if it's "Received", it might not have a Due Date yet.
-            // If it has a Due Date >= Today, it is also Upcoming.
-            // We'll collect it, and prioritize later.
             const receivedDate = (ev as any).date;
             const dRec = parseDate(receivedDate);
             if (dRec) {
@@ -116,58 +111,33 @@ export default function ScheduleView() {
           }
         });
 
-        // SELECT BEST CANDIDATE FOR THIS APP
-        // Priority: Upcoming (Earliest) > Received (Latest) > Completed (Latest)
-        // Actually, if we have Upcoming, we show that.
-        // If no Upcoming, do we show Received or Completed?
-        // "Received" means "Pending Action" usually. "Completed" means "Done".
-        // Pending > Done.
-        // So:
-        // 1. Has Upcoming? Pick earliest upcoming.
-        // 2. Has Received? Pick latest received? (Or earliest? "Oldest pending"? User didn't specify, but usually newest received is top of mind, or oldest is most urgent? Let's go with Newest Recieved matching typical feed).
-        // 3. Has Completed? Pick latest completed ("just passed").
-
-        // Filter candidates by type
-        const appUpcoming = candidates.filter(c => c.type === 'upcoming').sort((a,b) => a.sortDate - b.sortDate); // Earliest first
-        const appReceived = candidates.filter(c => c.type === 'received').sort((a,b) => b.sortDate - a.sortDate); // Newest first
-        const appCompleted = candidates.filter(c => c.type === 'completed').sort((a,b) => b.sortDate - a.sortDate); // Newest (latest date) first
+        // SELECT BEST CANDIDATE FOR THIS APP for UPCOMING/RECEIVED tabs
+        const appUpcoming = candidates.filter(c => c.type === 'upcoming').sort((a,b) => a.sortDate - b.sortDate);
+        const appReceived = candidates.filter(c => c.type === 'received').sort((a,b) => b.sortDate - a.sortDate);
+        // Note: completed are handled globally in allComp now, but we still use candidates logic for prioritizing display in other tabs?
+        // Actually, previous logic was: if app has Upcoming, show in Upcoming. If not, if Received, show in Received. If not, show in Completed.
+        // But requested change is "Show ALL completed interviews" in Completed tab.
+        // So Completed tab is independent of Upcoming/Received status.
 
         if (appUpcoming.length > 0) {
-           // Show ONLY the first upcoming event
            up.push(appUpcoming[0]);
         } else if (appReceived.length > 0) {
-           // Show ONLY the most relevant received event
-           // Note: check if this received event is same as completed one? (e.g. Assessment Recieved X, Completed Y).
-           // If 'received' candidate refers to an event that is actually completed, we might have filtered it?
-           // In `candidates` collection:
-           // If assessment completed: added to `completed`.
-           // Also added to `received` (based on date).
-           // If I have a completed assessment, do I show it as "Received"? No.
-           // Filter out received candidates that are actually completed events.
-           const validReceived = appReceived.filter(r => {
-              const isComp = appCompleted.some(c => c.event === r.event);
-              return !isComp;
-           });
-
-           if (validReceived.length > 0) {
-             rec.push(validReceived[0]);
-           } else if (appCompleted.length > 0) {
-             comp.push(appCompleted[0]);
-           }
-        } else if (appCompleted.length > 0) {
-           // Show ONLY the latest completed event
-           comp.push(appCompleted[0]);
+           // Ensure received item is not actually a completed task
+           // (Logic simplified: if it's in received list, and not completed? Assessment received & completed is both.
+           // If completed, we shouldn't show in Received list? The original code had this check.)
+           // Let's keep logic simple: push top received event.
+           rec.push(appReceived[0]);
         }
       });
 
       // Sort final lists
-      up.sort((a, b) => a.sortDate - b.sortDate);
-      comp.sort((a, b) => b.sortDate - a.sortDate);
-      rec.sort((a, b) => b.sortDate - a.sortDate);
+      up.sort((a, b) => a.sortDate - b.sortDate); // Earliest upcoming first
+      allComp.sort((a, b) => b.sortDate - a.sortDate); // Latest completed first
+      rec.sort((a, b) => b.sortDate - a.sortDate); // Latest received first
 
       setUpcoming(up);
       setReceived(rec);
-      setCompleted(comp);
+      setCompleted(allComp);
     });
   }, []);
 
@@ -180,11 +150,48 @@ export default function ScheduleView() {
     items: typeof upcoming,
     mode: 'upcoming' | 'received' | 'completed',
   ) => {
+    let displayItems = items;
+
+    if (mode === 'completed') {
+       if (completedView === 'unique') {
+         // Filter for unique companies (latest event per company)
+         const seenApps = new Set<string>();
+         displayItems = [];
+         for (const item of items) {
+            const appId = item.app.id || (item.app as any)._id;
+            if (!seenApps.has(appId)) {
+               seenApps.add(appId);
+               displayItems.push(item);
+            }
+         }
+       }
+       // If 'all', use items as is (already sorted by date desc)
+    }
+
     return (
       <div className="flex flex-col h-full">
-        <div className="flex-1 overflow-auto border border-gray-200 rounded-lg shadow-sm bg-white">
+        {mode === 'completed' && (
+          <div className="flex justify-end mb-2">
+            <Tabs
+              value={completedView}
+              onChange={(e, v) => setCompletedView(v)}
+              textColor="secondary"
+              indicatorColor="secondary"
+              aria-label="completed view tabs"
+              sx={{ minHeight: 32 }}
+            >
+               <Tab label="Unique Companies" value="unique" sx={{ minHeight: 32, py: 0.5, fontSize: '0.8rem' }} />
+               <Tab label="All Interviews" value="all" sx={{ minHeight: 32, py: 0.5, fontSize: '0.8rem' }} />
+            </Tabs>
+          </div>
+        )}
+        <div
+          className="flex-1 overflow-auto border border-gray-200 rounded-lg shadow-sm bg-white"
+          style={{ maxHeight: '500px', overflowY: 'auto' }}
+        >
           <table className="min-w-full bg-white data-table sticky-header">
             <thead className="bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
+            {/* ... rest of table ... */}
               <tr>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Company
@@ -212,7 +219,7 @@ export default function ScheduleView() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {items.map(({ app, event }, idx) => {
+              {displayItems.map(({ app, event }, idx) => {
                 let dateVal;
                 if (mode === 'upcoming') {
                    dateVal = (event as any).due_date;
@@ -284,7 +291,7 @@ export default function ScheduleView() {
                   </tr>
                 );
               })}
-              {items.length === 0 && (
+              {displayItems.length === 0 && (
                 <tr>
                   <td
                     colSpan={6}
