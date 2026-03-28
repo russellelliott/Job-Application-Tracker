@@ -70,7 +70,7 @@ export default function EditApplicationForm() {
     if (!app) return false;
     try {
       return JSON.stringify(app) !== originalJson;
-    } catch (e) {
+    } catch {
       return false;
     }
   }, [app, originalJson]);
@@ -78,9 +78,14 @@ export default function EditApplicationForm() {
   if (loading) return <div>Loading application...</div>;
   if (!app) return <div>Application not found.</div>;
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  // Separate handlers for text and select fields to satisfy MUI types
+  const handleTextFieldChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
+    const { name, value } = e.target;
+    setApp((prev) => ({ ...(prev || {}), [name]: value }));
+  };
+  const handleSelectChange = (e: any) => {
     const { name, value } = e.target;
     setApp((prev) => ({ ...(prev || {}), [name]: value }));
   };
@@ -189,25 +194,25 @@ export default function EditApplicationForm() {
             <TextField
               label="Company Name"
               value={app.company_name || ''}
-              onChange={handleChange}
+              onChange={handleTextFieldChange}
               name="company_name"
             />
             <TextField
               label="Role Title"
               value={app.role_title || ''}
-              onChange={handleChange}
+              onChange={handleTextFieldChange}
               name="role_title"
             />
             <TextField
               label="Location"
               value={app.location || ''}
-              onChange={handleChange}
+              onChange={handleTextFieldChange}
               name="location"
             />
             <TextField
               label="Job URL"
               value={app.job_url || ''}
-              onChange={handleChange}
+              onChange={handleTextFieldChange}
               name="job_url"
             />
 
@@ -218,7 +223,7 @@ export default function EditApplicationForm() {
                 label="Source"
                 name="source"
                 value={app.source || ''}
-                onChange={handleChange}
+                onChange={handleSelectChange}
               >
                 <MenuItem value="">(None)</MenuItem>
                 <MenuItem value="Cold Application">Cold Application</MenuItem>
@@ -234,7 +239,7 @@ export default function EditApplicationForm() {
               </div>
               {(app.auxiliary_urls || []).map((url, idx) => (
                 <div
-                  key={idx}
+                  key={url ? `aux-url-${url}-${idx}` : `aux-url-${idx}`}
                   style={{ display: 'flex', gap: 8, marginBottom: 8 }}
                 >
                   <TextField
@@ -256,7 +261,7 @@ export default function EditApplicationForm() {
               <div style={{ marginBottom: 8, fontWeight: 600 }}>Contacts</div>
               {(app.contacts || []).map((c, idx) => (
                 <div
-                  key={idx}
+                  key={c.email ? `contact-${c.email}-${idx}` : `contact-${idx}`}
                   style={{
                     display: 'grid',
                     gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr auto',
@@ -334,7 +339,12 @@ export default function EditApplicationForm() {
                 const isAssessment = stage === 'Assessment';
                 return (
                   <div
-                    key={idx}
+                    key={(() => {
+                      if (ev && (ev as any).stage) {
+                        return `timeline-${(ev as any).stage}-${idx}`;
+                      }
+                      return `timeline-${idx}`;
+                    })()}
                     style={{
                       border: '1px solid #e5e7eb',
                       borderRadius: 6,
@@ -382,7 +392,8 @@ export default function EditApplicationForm() {
                         </Select>
                       </FormControl>
                     </div>
-                    {isInterview ? (
+                    {/* Use explicit if/else instead of nested ternary for clarity */}
+                    {isInterview && (
                       <div
                         style={{
                           display: 'grid',
@@ -429,7 +440,8 @@ export default function EditApplicationForm() {
                           />
                         </div>
                       </div>
-                    ) : isAssessment ? (
+                    )}
+                    {isAssessment && !isInterview && (
                       <div
                         style={{
                           display: 'grid',
@@ -490,13 +502,18 @@ export default function EditApplicationForm() {
                             type="date"
                             value={dateToInput((ev as any).completed_at)}
                             onChange={(e) =>
-                              setTimelineEvent(idx, 'completed_at', e.target.value)
+                              setTimelineEvent(
+                                idx,
+                                'completed_at',
+                                e.target.value,
+                              )
                             }
                             InputLabelProps={{ shrink: true }}
                           />
                         </div>
                       </div>
-                    ) : (
+                    )}
+                    {!isInterview && !isAssessment && (
                       <div>
                         <div
                           style={{
@@ -548,6 +565,54 @@ export default function EditApplicationForm() {
                 Add Event
               </Button>
             </div>
+            {/* Notes Section */}
+
+            <div style={{ marginTop: 24 }}>
+              <div style={{ marginBottom: 8, fontWeight: 600 }}>Notes</div>
+              {(app.raw_notes || []).map((n, idx) => (
+                <div
+                  key={n ? `note-${n.slice(0, 8)}-${idx}` : `note-${idx}`}
+                  style={{ display: 'flex', gap: 8, marginBottom: 8 }}
+                >
+                  <TextField
+                    fullWidth
+                    value={n}
+                    onChange={(e) => {
+                      setApp((prev) => {
+                        const notes = [...(prev?.raw_notes || [])];
+                        notes[idx] = e.target.value;
+                        return { ...(prev || {}), raw_notes: notes };
+                      });
+                    }}
+                  />
+                  <IconButton
+                    size="small"
+                    onClick={() => {
+                      setApp((prev) => {
+                        const notes = [...(prev?.raw_notes || [])];
+                        notes.splice(idx, 1);
+                        return { ...(prev || {}), raw_notes: notes };
+                      });
+                    }}
+                  >
+                    <RemoveIcon />
+                  </IconButton>
+                </div>
+              ))}
+              <Button
+                size="small"
+                startIcon={<AddIcon />}
+                onClick={() => {
+                  setApp((prev) => ({
+                    ...(prev || {}),
+                    raw_notes: [...(prev?.raw_notes || []), ''],
+                  }));
+                }}
+              >
+                Add Note
+              </Button>
+            </div>
+
             <div
               style={{
                 position: 'sticky',
