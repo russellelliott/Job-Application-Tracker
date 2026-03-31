@@ -50,19 +50,19 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
                 d.getDate(),
               ).getTime();
 
-              if (!isNaN(dTime)) {
+              if (!Number.isNaN(dTime)) {
                 // Determine if event is active (not completed)
                 let isComplete = false;
                 if (stage === 'Assessment' && ev.completed_at) {
                   isComplete = true;
                 }
-                // Interviews are considered "upcoming" if date is today or future.
-                // Past interviews are implicitly "done" or passed.
-
-                if (!isComplete && dTime >= todayStart) {
-                  upcomingC++;
+                // Red badge = events scheduled for today.
+                // Orange badge = events scheduled strictly after today.
+                if (!isComplete) {
                   if (dTime === todayStart) {
-                    todayC++;
+                    todayC += 1;
+                  } else if (dTime > todayStart) {
+                    upcomingC += 1;
                   }
                 }
               }
@@ -71,8 +71,8 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
         });
       });
       setCounts({ today: todayC, upcoming: upcomingC });
-    } catch (error) {
-      console.error('Error fetching counts:', error);
+    } catch {
+      // Intentionally ignore transient count refresh failures.
     }
   };
 
