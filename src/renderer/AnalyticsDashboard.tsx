@@ -384,8 +384,8 @@ function AnalyticsDashboard() {
 
   return (
     <div className="p-6 w-full">
-      {/* Tab Navigation */}
-      <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
+      {/* Tab Navigation with Filters */}
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Tabs
           value={activeTab}
           onChange={(e, newValue) => setActiveTab(newValue)}
@@ -406,6 +406,37 @@ function AnalyticsDashboard() {
           <Tab label="Overview" value="overview" />
           <Tab label="Pipeline Flow" value="sankey" />
         </Tabs>
+
+        {/* Filter Buttons */}
+        <Box sx={{ display: 'flex', gap: 1 }}>
+          {(
+            [
+              { key: 'all', label: 'All', activeColor: '#16a34a' },
+              { key: 'cold', label: 'Cold', activeColor: '#2563eb' },
+              { key: 'warm', label: 'Warm', activeColor: '#eab308' },
+            ] as const
+          ).map(({ key, label, activeColor }) => {
+            const isActive = sankeyFilter === key;
+            return (
+              <button
+                type="button"
+                key={key}
+                onClick={() => setSankeyFilter(key)}
+                className="px-4 py-2 font-medium transition-colors rounded"
+                style={
+                  isActive
+                    ? {
+                        backgroundColor: activeColor,
+                        color: '#fff',
+                      }
+                    : { color: '#666', backgroundColor: '#f3f4f6' }
+                }
+              >
+                {label}
+              </button>
+            );
+          })}
+        </Box>
       </Box>
 
       {/* Overview Tab */}
@@ -528,36 +559,6 @@ function AnalyticsDashboard() {
       {/* Sankey Tab */}
       {activeTab === 'sankey' && (
         <div className="mb-10 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-          <div className="flex border-b border-gray-200 -mx-6 px-6 pb-0 mb-6">
-              {(
-                [
-                  { key: 'all', label: 'All', activeColor: '#16a34a' },
-                  { key: 'cold', label: 'Cold', activeColor: '#2563eb' },
-                  { key: 'warm', label: 'Warm', activeColor: '#eab308' },
-                ] as const
-              ).map(({ key, label, activeColor }) => {
-                const isActive = sankeyFilter === key;
-                return (
-                  <button
-                    type="button"
-                    key={key}
-                    onClick={() => setSankeyFilter(key)}
-                    className="px-4 py-2 font-medium transition-colors"
-                    style={
-                      isActive
-                        ? {
-                            backgroundColor: activeColor,
-                            color: '#fff',
-                            borderRadius: '0.375rem',
-                          }
-                        : { color: '#666' }
-                    }
-                  >
-                    {label}
-                  </button>
-                );
-              })}
-          </div>
 
           <div style={{ width: '100%', height: '500px' }}>
             <ResponsiveContainer width="100%" height="100%">
