@@ -197,7 +197,7 @@ function computeStats(apps: JobApplication[]) {
 }
 
 function computeTrends(apps: JobApplication[]) {
-  const weeks: Record<string, { applications: number; interviews: number }> =
+  const weeks: Record<string, { applications: number; assessments: number; interviews: number }> =
     {};
 
   // Filter for active apps (no drafts) to match other metrics
@@ -214,9 +214,10 @@ function computeTrends(apps: JobApplication[]) {
         const weekStr = week.toISOString().slice(0, 10);
 
         if (!weeks[weekStr])
-          weeks[weekStr] = { applications: 0, interviews: 0 };
-        const stage = (ev.stage || '').toLowerCase();
+          weeks[weekStr] = { applications: 0, assessments: 0, interviews: 0 };
+        const stage = (ev.stage || '').toLowerCase().trim();
         if (stage === 'application submitted') weeks[weekStr].applications++;
+        if (stage === 'assessment') weeks[weekStr].assessments++;
         if (stage.startsWith('interview')) weeks[weekStr].interviews++;
       });
     });
@@ -226,36 +227,6 @@ function computeTrends(apps: JobApplication[]) {
     .sort((a, b) => a.date.localeCompare(b.date));
 }
 
-function computeDailyTrends(apps: JobApplication[]) {
-  const days: Record<
-    string,
-    { applications: number; assessments: number; interviews: number }
-  > = {};
-
-  // Filter for active apps (no drafts) to match other metrics
-  apps
-    .filter(isSubmitted)
-    .forEach((app) => {
-      (app.timeline || []).forEach((ev) => {
-        if (!ev.date) return;
-        const d = new Date(ev.date);
-        if (isNaN(d.getTime())) return;
-
-        const dayStr = d.toISOString().slice(0, 10);
-
-        if (!days[dayStr])
-          days[dayStr] = { applications: 0, assessments: 0, interviews: 0 };
-        const stage = (ev.stage || '').toLowerCase().trim();
-        if (stage === 'application submitted') days[dayStr].applications++;
-        if (stage === 'assessment') days[dayStr].assessments++;
-        if (stage.startsWith('interview')) days[dayStr].interviews++;
-      });
-    });
-
-  return Object.entries(days)
-    .map(([date, vals]) => ({ date, ...vals }))
-    .sort((a, b) => a.date.localeCompare(b.date));
-}
 
 // --- SANKEY SUB-COMPONENTS ---
 function CustomNode({
@@ -376,7 +347,6 @@ function AnalyticsDashboard() {
   const [sankeyData, setSankeyData] = useState<any>(null);
   const [stats, setStats] = useState<any>(null);
   const [trends, setTrends] = useState<any[]>([]);
-  const [dailyTrends, setDailyTrends] = useState<any[]>([]);
   const [metricsData, setMetricsData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -405,11 +375,6 @@ function AnalyticsDashboard() {
 
     setSankeyData(computeSankeyData(filteredApps));
   }, [sankeyFilter, apps, loading]);
-
-  useEffect(() => {
-    if (loading) return;
-    setDailyTrends(computeDailyTrends(apps));
-  }, [apps, loading]);
 
   if (loading)
     return <div className="p-6 text-gray-500">Loading analytics...</div>;
@@ -485,30 +450,27 @@ function AnalyticsDashboard() {
             </div>
           </div>
 
-          {/* Daily Trends Bar Chart */}
+          {/* Weekly Trends Bar Chart - Stacked */}
           <div className="mb-10 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
             <h3 className="text-lg font-semibold mb-6 text-gray-800">
-              Daily Activity Trends
+              Weekly Activity Trends
             </h3>
-            <div className="mb-4 text-sm text-gray-600">
-              Data points: {dailyTrends.length} | Apps: {apps.length}
-            </div>
             <div style={{ width: '100%', height: '400px' }}>
-              {dailyTrends.length === 0 ? (
+              {trends.length === 0 ? (
                 <div className="flex items-center justify-center h-full text-gray-500">
-                  No daily activity data available
+                  No activity data available
                 </div>
               ) : (
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={dailyTrends}>
+                  <BarChart data={trends}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                     <XAxis dataKey="date" angle={-45} textAnchor="end" height={80} />
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey="applications" fill="#6366f1" name="Applications" />
-                    <Bar dataKey="assessments" fill="#818cf8" name="Assessments" />
-                    <Bar dataKey="interviews" fill="#fbbf24" name="Interviews" />
+                    <Bar dataKey="applications" stackId="stack" fill="#6366f1" name="Applications" />
+                    <Bar dataKey="assessments" stackId="stack" fill="#818cf8" name="Assessments" />
+                    <Bar dataKey="interviews" stackId="stack" fill="#fbbf24" name="Interviews" />
                   </BarChart>
                 </ResponsiveContainer>
               )}
