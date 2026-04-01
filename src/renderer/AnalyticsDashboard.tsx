@@ -13,6 +13,7 @@ import {
   Layer,
   Rectangle,
 } from 'recharts';
+import { Tabs, Tab, Box } from '@mui/material';
 import { getAnalyticsData } from './db';
 import { JobApplication } from '../types';
 
@@ -347,6 +348,7 @@ function AnalyticsDashboard() {
   const [sankeyData, setSankeyData] = useState<any>(null);
   const [stats, setStats] = useState<any>(null);
   const [trends, setTrends] = useState<any[]>([]);
+  const [filteredTrends, setFilteredTrends] = useState<any[]>([]);
   const [metricsData, setMetricsData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -374,6 +376,7 @@ function AnalyticsDashboard() {
     }
 
     setSankeyData(computeSankeyData(filteredApps));
+    setFilteredTrends(computeTrends(filteredApps));
   }, [sankeyFilter, apps, loading]);
 
   if (loading)
@@ -381,42 +384,35 @@ function AnalyticsDashboard() {
 
   return (
     <div className="p-6 w-full">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800">
-        Analytics Dashboard
-      </h2>
-
       {/* Tab Navigation */}
-      <div className="flex border-b border-gray-200 mb-6">
-        <button
-          onClick={() => setActiveTab('overview')}
-          className={`px-4 py-2 font-medium transition-colors ${
-            activeTab === 'overview'
-              ? 'text-indigo-600 border-b-2 border-indigo-600'
-              : 'text-gray-600 hover:text-gray-900'
-          }`}
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
+        <Tabs
+          value={activeTab}
+          onChange={(e, newValue) => setActiveTab(newValue)}
+          sx={{
+            '& .MuiTab-root': {
+              textTransform: 'none',
+              fontSize: '1rem',
+              fontWeight: 500,
+            },
+            '& .Mui-selected': {
+              color: '#4f46e5',
+            },
+            '& .MuiTabs-indicator': {
+              backgroundColor: '#4f46e5',
+            },
+          }}
         >
-          Overview
-        </button>
-        <button
-          onClick={() => setActiveTab('sankey')}
-          className={`px-4 py-2 font-medium transition-colors ${
-            activeTab === 'sankey'
-              ? 'text-indigo-600 border-b-2 border-indigo-600'
-              : 'text-gray-600 hover:text-gray-900'
-          }`}
-        >
-          Pipeline Flow
-        </button>
-      </div>
+          <Tab label="Overview" value="overview" />
+          <Tab label="Pipeline Flow" value="sankey" />
+        </Tabs>
+      </Box>
 
       {/* Overview Tab */}
       {activeTab === 'overview' && (
         <>
           {/* Application Metrics Bar Chart */}
           <div className="mb-10 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-            <h3 className="text-lg font-semibold mb-6 text-gray-800">
-              Activity Summary
-            </h3>
             <div className="h-48">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
@@ -456,13 +452,13 @@ function AnalyticsDashboard() {
               Weekly Activity Trends
             </h3>
             <div style={{ width: '100%', height: '400px' }}>
-              {trends.length === 0 ? (
+              {filteredTrends.length === 0 ? (
                 <div className="flex items-center justify-center h-full text-gray-500">
                   No activity data available
                 </div>
               ) : (
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={trends}>
+                  <BarChart data={filteredTrends}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                     <XAxis dataKey="date" angle={-45} textAnchor="end" height={80} />
                     <YAxis />
@@ -532,16 +528,7 @@ function AnalyticsDashboard() {
       {/* Sankey Tab */}
       {activeTab === 'sankey' && (
         <div className="mb-10 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-          <div className="flex flex-row justify-between items-start mb-2">
-            <div>
-              <h3 className="text-lg font-semibold text-gray-800">
-                Application Pipeline Flow
-              </h3>
-              <p className="text-sm text-gray-500 mb-6">
-                Visualization of how applications progress through stages
-              </p>
-            </div>
-            <div className="flex bg-gray-100 p-1 rounded-lg">
+          <div className="flex border-b border-gray-200 -mx-6 px-6 pb-0 mb-6">
               {(
                 [
                   { key: 'all', label: 'All', activeColor: '#16a34a' },
@@ -555,22 +542,21 @@ function AnalyticsDashboard() {
                     type="button"
                     key={key}
                     onClick={() => setSankeyFilter(key)}
-                    className="px-3 py-1 text-sm rounded-md transition-all font-medium"
+                    className="px-4 py-2 font-medium transition-colors"
                     style={
                       isActive
                         ? {
                             backgroundColor: activeColor,
                             color: '#fff',
-                            boxShadow: '0 1px 2px rgba(0,0,0,0.15)',
+                            borderRadius: '0.375rem',
                           }
-                        : { color: '#4b5563' }
+                        : { color: '#666' }
                     }
                   >
                     {label}
                   </button>
                 );
               })}
-            </div>
           </div>
 
           <div style={{ width: '100%', height: '500px' }}>
