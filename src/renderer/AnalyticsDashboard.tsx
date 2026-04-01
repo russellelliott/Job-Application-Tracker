@@ -7,6 +7,7 @@ import {
   Legend,
   CartesianGrid,
   Bar,
+  Cell,
   ResponsiveContainer,
   Sankey,
   Layer,
@@ -225,6 +226,37 @@ function computeTrends(apps: JobApplication[]) {
     .sort((a, b) => a.date.localeCompare(b.date));
 }
 
+function computeDailyTrends(apps: JobApplication[]) {
+  const days: Record<
+    string,
+    { applications: number; assessments: number; interviews: number }
+  > = {};
+
+  // Filter for active apps (no drafts) to match other metrics
+  apps
+    .filter(isSubmitted)
+    .forEach((app) => {
+      (app.timeline || []).forEach((ev) => {
+        if (!ev.date) return;
+        const d = new Date(ev.date);
+        if (isNaN(d.getTime())) return;
+
+        const dayStr = d.toISOString().slice(0, 10);
+
+        if (!days[dayStr])
+          days[dayStr] = { applications: 0, assessments: 0, interviews: 0 };
+        const stage = (ev.stage || '').toLowerCase().trim();
+        if (stage === 'application submitted') days[dayStr].applications++;
+        if (stage === 'assessment') days[dayStr].assessments++;
+        if (stage.startsWith('interview')) days[dayStr].interviews++;
+      });
+    });
+
+  return Object.entries(days)
+    .map(([date, vals]) => ({ date, ...vals }))
+    .sort((a, b) => a.date.localeCompare(b.date));
+}
+
 // --- SANKEY SUB-COMPONENTS ---
 function CustomNode({
   x,
@@ -295,15 +327,57 @@ function CustomFilledLink(props: any) {
   );
 }
 
+function computeApplicationMetrics(apps: JobApplication[]) {
+  // Compute count metrics for applications, assessments, and interviews
+  const activeApps = apps.filter(isSubmitted);
+
+  const getStages = (app: JobApplication) =>
+    (app.timeline || []).map((ev) => (ev.stage || '').toLowerCase().trim());
+
+  const totalApplications = activeApps.length;
+  const totalAssessments = activeApps.filter((app) =>
+    getStages(app).includes('assessment'),
+  ).length;
+  const totalInterviews = activeApps.filter((app) => {
+    const s = getStages(app);
+    return (
+      s.includes('interview 1') ||
+      s.includes('interview 2') ||
+      s.includes('interview 3')
+    );
+  }).length;
+
+  return [
+    {
+      label: 'Applications',
+      value: totalApplications,
+      fill: '#6366f1',
+    },
+    {
+      label: 'Assessments',
+      value: totalAssessments,
+      fill: '#818cf8',
+    },
+    {
+      label: 'Interviews',
+      value: totalInterviews,
+      fill: '#fbbf24',
+    },
+  ];
+}
+
 // --- MAIN COMPONENT ---
 function AnalyticsDashboard() {
   const [apps, setApps] = useState<JobApplication[]>([]);
+  const [activeTab, setActiveTab] = useState<'overview' | 'sankey'>('overview');
   const [sankeyFilter, setSankeyFilter] = useState<'all' | 'cold' | 'warm'>(
     'all',
   );
   const [sankeyData, setSankeyData] = useState<any>(null);
   const [stats, setStats] = useState<any>(null);
   const [trends, setTrends] = useState<any[]>([]);
+  const [dailyTrends, setDailyTrends] = useState<any[]>([]);
+  const [metricsData, setMetricsData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -313,6 +387,7 @@ function AnalyticsDashboard() {
         setSankeyData(computeSankeyData(data));
         setStats(computeStats(data));
         setTrends(computeTrends(data));
+        setMetricsData(computeApplicationMetrics(data));
         setLoading(false);
       })
       .catch(() => setLoading(false));
@@ -331,6 +406,11 @@ function AnalyticsDashboard() {
     setSankeyData(computeSankeyData(filteredApps));
   }, [sankeyFilter, apps, loading]);
 
+  useEffect(() => {
+    if (loading) return;
+    setDailyTrends(computeDailyTrends(apps));
+  }, [apps, loading]);
+
   if (loading)
     return <div className="p-6 text-gray-500">Loading analytics...</div>;
 
@@ -340,145 +420,210 @@ function AnalyticsDashboard() {
         Analytics Dashboard
       </h2>
 
-      {/* Sankey Section */}
-      <div className="mb-10 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-        <div className="flex flex-row justify-between items-start mb-2">
-          <div>
-            <h3 className="text-lg font-semibold text-gray-800">
-              Application Pipeline Flow
+      {/* Tab Navigation */}
+      <div className="flex border-b border-gray-200 mb-6">
+        <button
+          onClick={() => setActiveTab('overview')}
+          className={`px-4 py-2 font-medium transition-colors ${
+            activeTab === 'overview'
+              ? 'text-indigo-600 border-b-2 border-indigo-600'
+              : 'text-gray-600 hover:text-gray-900'
+          }`}
+        >
+          Overview
+        </button>
+        <button
+          onClick={() => setActiveTab('sankey')}
+          className={`px-4 py-2 font-medium transition-colors ${
+            activeTab === 'sankey'
+              ? 'text-indigo-600 border-b-2 border-indigo-600'
+              : 'text-gray-600 hover:text-gray-900'
+          }`}
+        >
+          Pipeline Flow
+        </button>
+      </div>
+
+      {/* Overview Tab */}
+      {activeTab === 'overview' && (
+        <>
+          {/* Application Metrics Bar Chart */}
+          <div className="mb-10 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+            <h3 className="text-lg font-semibold mb-6 text-gray-800">
+              Activity Summary
             </h3>
-            <p className="text-sm text-gray-500 mb-6">
-              Visualization of how applications progress through stages
-            </p>
-          </div>
-          <div className="flex bg-gray-100 p-1 rounded-lg">
-            {(
-              [
-                { key: 'all', label: 'All', activeColor: '#16a34a' },
-                { key: 'cold', label: 'Cold', activeColor: '#2563eb' },
-                { key: 'warm', label: 'Warm', activeColor: '#eab308' },
-              ] as const
-            ).map(({ key, label, activeColor }) => {
-              const isActive = sankeyFilter === key;
-              return (
-                <button
-                  type="button"
-                  key={key}
-                  onClick={() => setSankeyFilter(key)}
-                  className="px-3 py-1 text-sm rounded-md transition-all font-medium"
-                  style={
-                    isActive
-                      ? {
-                          backgroundColor: activeColor,
-                          color: '#fff',
-                          boxShadow: '0 1px 2px rgba(0,0,0,0.15)',
-                        }
-                      : { color: '#4b5563' }
-                  }
+            <div className="h-48">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={metricsData}
+                  layout="vertical"
+                  margin={{ top: 5, right: 30, left: 150, bottom: 5 }}
                 >
-                  {label}
-                </button>
-              );
-            })}
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    vertical={false}
+                    stroke="#f0f0f0"
+                  />
+                  <XAxis type="number" fontSize={12} />
+                  <YAxis
+                    dataKey="label"
+                    type="category"
+                    fontSize={12}
+                    width={140}
+                  />
+                  <Tooltip />
+                  <Bar
+                    dataKey="value"
+                    radius={[0, 4, 4, 0]}
+                  >
+                    {metricsData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.fill} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
-        </div>
 
-        <div style={{ width: '100%', height: '500px' }}>
-          <ResponsiveContainer width="100%" height="100%">
-            <Sankey
-              data={sankeyData}
-              node={<CustomNode />}
-              link={<CustomFilledLink />}
-              nodePadding={100}
-              margin={{ top: 10, left: 10, right: 120, bottom: 10 }}
-              iterations={0}
-            >
-              <Tooltip />
-            </Sankey>
-          </ResponsiveContainer>
-        </div>
-      </div>
+          {/* Daily Trends Bar Chart */}
+          <div className="mb-10 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+            <h3 className="text-lg font-semibold mb-6 text-gray-800">
+              Daily Activity Trends
+            </h3>
+            <div className="mb-4 text-sm text-gray-600">
+              Data points: {dailyTrends.length} | Apps: {apps.length}
+            </div>
+            <div style={{ width: '100%', height: '400px' }}>
+              {dailyTrends.length === 0 ? (
+                <div className="flex items-center justify-center h-full text-gray-500">
+                  No daily activity data available
+                </div>
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={dailyTrends}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                    <XAxis dataKey="date" angle={-45} textAnchor="end" height={80} />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="applications" fill="#6366f1" name="Applications" />
+                    <Bar dataKey="assessments" fill="#818cf8" name="Assessments" />
+                    <Bar dataKey="interviews" fill="#fbbf24" name="Interviews" />
+                  </BarChart>
+                </ResponsiveContainer>
+              )}
+            </div>
+          </div>
 
-      {/* Weekly Trends Chart */}
-      <div className="mb-10 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-        <h3 className="text-lg font-semibold mb-6 text-gray-800">
-          Weekly Activity
-        </h3>
-        <div className="h-64">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={trends}>
-              <CartesianGrid
-                strokeDasharray="3 3"
-                vertical={false}
-                stroke="#f0f0f0"
-              />
-              <XAxis dataKey="date" fontSize={12} tickMargin={10} />
-              <YAxis fontSize={12} />
-              <Tooltip />
-              <Legend verticalAlign="top" height={36} />
-              <Bar
-                name="Applications"
-                dataKey="applications"
-                fill="#6366f1"
-                radius={[4, 4, 0, 0]}
-              />
-              <Bar
-                name="Interviews"
-                dataKey="interviews"
-                fill="#fbbf24"
-                radius={[4, 4, 0, 0]}
-              />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
+          {/* Pipeline Performance Table with Borders */}
+          {stats && (
+            <div>
+              <h3 className="text-lg font-semibold mb-6 text-gray-800">
+                Pipeline Performance
+              </h3>
+              <div className="overflow-hidden rounded-lg shadow-sm bg-white border border-gray-300">
+                <table className="w-full text-left text-sm data-table">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-4 font-semibold text-gray-700">
+                        Lead Source
+                      </th>
+                      {stats.coldFunnel.map((d: any) => (
+                        <th
+                          key={d.label}
+                          className="px-6 py-4 font-semibold text-gray-700"
+                        >
+                          {d.label}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="hover:bg-gray-50 transition-colors">
+                      <td className="px-6 py-4 font-bold text-indigo-600">
+                        Cold Applications
+                      </td>
+                      {stats.coldFunnel.map((d: any, i: number) => (
+                        <td key={i} className="px-6 py-4 text-gray-900 text-base">
+                          {d.count}
+                        </td>
+                      ))}
+                    </tr>
+                    <tr className="hover:bg-gray-50 transition-colors">
+                      <td className="px-6 py-4 font-bold text-amber-600">
+                        Warm / Referrals
+                      </td>
+                      {stats.warmFunnel.map((d: any, i: number) => (
+                        <td key={i} className="px-6 py-4 text-gray-900 text-base">
+                          {d.count}
+                        </td>
+                      ))}
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </>
+      )}
 
-      {/* Funnel Table */}
-      {stats && (
-        <div className="mb-8">
-          <h3 className="text-lg font-semibold mb-4 text-gray-800">
-            Pipeline Performance
-          </h3>
-          <div className="overflow-hidden border border-gray-200 rounded-lg shadow-sm bg-white">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-gray-50 border-b border-gray-200">
-                <tr>
-                  <th className="px-6 py-4 font-semibold text-gray-700">
-                    Lead Source
-                  </th>
-                  {stats.coldFunnel.map((d: any) => (
-                    <th
-                      key={d.label}
-                      className="px-6 py-4 font-semibold text-gray-700"
-                    >
-                      {d.label}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                <tr className="hover:bg-gray-50 transition-colors">
-                  <td className="px-6 py-4 font-bold text-indigo-600">
-                    Cold Applications
-                  </td>
-                  {stats.coldFunnel.map((d: any, i: number) => (
-                    <td key={i} className="px-6 py-4 text-gray-900 text-base">
-                      {d.count}
-                    </td>
-                  ))}
-                </tr>
-                <tr className="hover:bg-gray-50 transition-colors">
-                  <td className="px-6 py-4 font-bold text-amber-600">
-                    Warm / Referrals
-                  </td>
-                  {stats.warmFunnel.map((d: any, i: number) => (
-                    <td key={i} className="px-6 py-4 text-gray-900 text-base">
-                      {d.count}
-                    </td>
-                  ))}
-                </tr>
-              </tbody>
-            </table>
+      {/* Sankey Tab */}
+      {activeTab === 'sankey' && (
+        <div className="mb-10 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+          <div className="flex flex-row justify-between items-start mb-2">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-800">
+                Application Pipeline Flow
+              </h3>
+              <p className="text-sm text-gray-500 mb-6">
+                Visualization of how applications progress through stages
+              </p>
+            </div>
+            <div className="flex bg-gray-100 p-1 rounded-lg">
+              {(
+                [
+                  { key: 'all', label: 'All', activeColor: '#16a34a' },
+                  { key: 'cold', label: 'Cold', activeColor: '#2563eb' },
+                  { key: 'warm', label: 'Warm', activeColor: '#eab308' },
+                ] as const
+              ).map(({ key, label, activeColor }) => {
+                const isActive = sankeyFilter === key;
+                return (
+                  <button
+                    type="button"
+                    key={key}
+                    onClick={() => setSankeyFilter(key)}
+                    className="px-3 py-1 text-sm rounded-md transition-all font-medium"
+                    style={
+                      isActive
+                        ? {
+                            backgroundColor: activeColor,
+                            color: '#fff',
+                            boxShadow: '0 1px 2px rgba(0,0,0,0.15)',
+                          }
+                        : { color: '#4b5563' }
+                    }
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div style={{ width: '100%', height: '500px' }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <Sankey
+                data={sankeyData}
+                node={<CustomNode />}
+                link={<CustomFilledLink />}
+                nodePadding={100}
+                margin={{ top: 10, left: 10, right: 120, bottom: 10 }}
+                iterations={0}
+              >
+                <Tooltip />
+              </Sankey>
+            </ResponsiveContainer>
           </div>
         </div>
       )}
