@@ -104,7 +104,17 @@ export default function ScheduleView() {
             const dRec = parseDate(receivedDate);
             if (dRec) {
               const tRec = new Date(dRec.getFullYear(), dRec.getMonth(), dRec.getDate()).getTime();
-              if (tRec >= twoWeeksAgo) {
+              const isInterview =
+                typeof ev.stage === 'string' && ev.stage.startsWith('Interview');
+              const hasInterviewDate = !!parseDate((ev as any).due_date);
+              const isCompletedAssessment =
+                ev.stage === 'Assessment' && !!parseDate((ev as any).completed_at);
+
+              // Received should only include unscheduled interviews and incomplete assessments.
+              const shouldIncludeReceived =
+                (!isInterview || !hasInterviewDate) && !isCompletedAssessment;
+
+              if (tRec >= twoWeeksAgo && shouldIncludeReceived) {
                 candidates.push({ app, event: ev, sortDate: tRec, type: 'received' });
               }
             }
@@ -297,7 +307,7 @@ export default function ScheduleView() {
                     colSpan={6}
                     className="px-4 py-8 text-center text-gray-500"
                   >
-                    No items found.
+                    No pending assessments or interviews.
                   </td>
                 </tr>
               )}
