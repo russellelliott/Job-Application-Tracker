@@ -228,6 +228,45 @@ function computeTrends(apps: JobApplication[]) {
     .sort((a, b) => a.date.localeCompare(b.date));
 }
 
+function computeTrendsWithWeeks(allWeeks: any[], apps: JobApplication[]) {
+  // Create a map of weeks from the input for reference
+  const weekMap = new Map(allWeeks.map((w) => [w.date, w]));
+
+  const weeks: Record<string, { applications: number; assessments: number; interviews: number }> =
+    {};
+
+  // Initialize all weeks with 0 values
+  for (const week of allWeeks) {
+    weeks[week.date] = { applications: 0, assessments: 0, interviews: 0 };
+  }
+
+  // Filter for active apps (no drafts) to match other metrics
+  apps
+    .filter(isSubmitted)
+    .forEach((app) => {
+      (app.timeline || []).forEach((ev) => {
+        if (!ev.date) return;
+        const d = new Date(ev.date);
+        if (isNaN(d.getTime())) return;
+
+        const week = new Date(d);
+        week.setDate(week.getDate() - week.getDay());
+        const weekStr = week.toISOString().slice(0, 10);
+
+        if (weekStr in weeks) {
+          const stage = (ev.stage || '').toLowerCase().trim();
+          if (stage === 'application submitted') weeks[weekStr].applications++;
+          if (stage === 'assessment') weeks[weekStr].assessments++;
+          if (stage.startsWith('interview')) weeks[weekStr].interviews++;
+        }
+      });
+    });
+
+  return Object.entries(weeks)
+    .map(([date, vals]) => ({ date, ...vals }))
+    .sort((a, b) => a.date.localeCompare(b.date));
+}
+
 
 // --- SANKEY SUB-COMPONENTS ---
 function CustomNode({
@@ -376,8 +415,8 @@ function AnalyticsDashboard() {
     }
 
     setSankeyData(computeSankeyData(filteredApps));
-    setFilteredTrends(computeTrends(filteredApps));
-  }, [sankeyFilter, apps, loading]);
+    setFilteredTrends(computeTrendsWithWeeks(trends, filteredApps));
+  }, [sankeyFilter, apps, loading, trends]);
 
   if (loading)
     return <div className="p-6 text-gray-500">Loading analytics...</div>;
