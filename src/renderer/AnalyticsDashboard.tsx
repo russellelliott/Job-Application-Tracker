@@ -182,8 +182,8 @@ function computeStats(apps: JobApplication[]) {
       { label: 'Total Apps', count: appsList.length },
       { label: 'App → Assess → Int 1', count: pathAssess },
       { label: 'App → Int 1 (Direct)', count: pathDirect },
-      // { label: 'Int 1 (No App Event)', count: pathOther },
-      { label: 'TOTAL Int 1', count: appsWithInt1.length }, // Sum of the 3 above
+      { label: 'TOTAL Int 1', count: appsWithInt1.length },
+      { label: 'Convert to Int 1 (%)', count: appsList.length > 0 ? `${Math.round((appsWithInt1.length / appsList.length) * 100)}%` : '0%' },
       { label: 'Int 2', count: reachedInt2 },
       { label: 'Int 1 → 2 (%)', count: `${int1ToInt2Rate}%` },
       { label: 'Int 3', count: reachedInt3 },
@@ -192,6 +192,7 @@ function computeStats(apps: JobApplication[]) {
   };
 
   return {
+    allFunnel: getPathData(activeApps),
     coldFunnel: getPathData(cold),
     warmFunnel: getPathData(warm),
   };
@@ -553,10 +554,13 @@ function AnalyticsDashboard() {
                 <table className="w-full text-left text-sm data-table">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th className="px-6 py-4 font-semibold text-gray-700">
-                        Lead Source
-                      </th>
-                      {stats.coldFunnel.map((d: any) => (
+                      {(
+                        sankeyFilter === 'all'
+                          ? stats.allFunnel
+                          : sankeyFilter === 'cold'
+                            ? stats.coldFunnel
+                            : stats.warmFunnel
+                      ).map((d: any) => (
                         <th
                           key={d.label}
                           className="px-6 py-4 font-semibold text-gray-700"
@@ -568,20 +572,13 @@ function AnalyticsDashboard() {
                   </thead>
                   <tbody>
                     <tr className="hover:bg-gray-50 transition-colors">
-                      <td className="px-6 py-4 font-bold text-indigo-600">
-                        Cold Applications
-                      </td>
-                      {stats.coldFunnel.map((d: any, i: number) => (
-                        <td key={i} className="px-6 py-4 text-gray-900 text-base">
-                          {d.count}
-                        </td>
-                      ))}
-                    </tr>
-                    <tr className="hover:bg-gray-50 transition-colors">
-                      <td className="px-6 py-4 font-bold text-amber-600">
-                        Warm / Referrals
-                      </td>
-                      {stats.warmFunnel.map((d: any, i: number) => (
+                      {(
+                        sankeyFilter === 'all'
+                          ? stats.allFunnel
+                          : sankeyFilter === 'cold'
+                            ? stats.coldFunnel
+                            : stats.warmFunnel
+                      ).map((d: any, i: number) => (
                         <td key={i} className="px-6 py-4 text-gray-900 text-base">
                           {d.count}
                         </td>
