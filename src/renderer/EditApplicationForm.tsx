@@ -8,10 +8,14 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Stack from '@mui/material/Stack';
 import IconButton from '@mui/material/IconButton';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { JobApplication } from '../types';
-import { getApplication, updateApplication } from './db';
+import { getApplication, updateApplication, deleteApplication } from './db';
 
 export default function EditApplicationForm() {
   const { id } = useParams<{ id: string }>();
@@ -19,6 +23,8 @@ export default function EditApplicationForm() {
   const [app, setApp] = useState<Partial<JobApplication> | null>(null);
   const [originalJson, setOriginalJson] = useState<string>('');
   const [loading, setLoading] = useState(true);
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   useEffect(() => {
     if (!id) {
       setLoading(false);
@@ -175,6 +181,18 @@ export default function EditApplicationForm() {
     const updated: JobApplication = { ...(app as JobApplication), id };
     await updateApplication(updated as JobApplication);
     navigate('/applications');
+  };
+
+  const handleDelete = async () => {
+    if (!id) return;
+    setDeleting(true);
+    try {
+      await deleteApplication(id);
+      navigate('/applications');
+    } finally {
+      setDeleting(false);
+      setConfirmDeleteOpen(false);
+    }
   };
 
   return (
@@ -647,11 +665,60 @@ export default function EditApplicationForm() {
                 >
                   Exit
                 </Button>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={() => setConfirmDeleteOpen(true)}
+                >
+                  Delete Application
+                </Button>
               </div>
             </div>
           </Stack>
         </div>
       </form>
+      <Dialog
+        open={confirmDeleteOpen}
+        onClose={() => {
+          if (!deleting) setConfirmDeleteOpen(false);
+        }}
+      >
+        <DialogTitle>Delete this application?</DialogTitle>
+        <DialogContent>
+          <div style={{ marginBottom: 12 }}>
+            This action is permanent and will remove the application from your
+            database.
+          </div>
+          <div style={{ display: 'grid', gap: 6 }}>
+            <div>
+              <strong>Company:</strong> {app.company_name || 'Not provided'}
+            </div>
+            <div>
+              <strong>Role:</strong> {app.role_title || 'Not provided'}
+            </div>
+            <div>
+              <strong>Location:</strong> {app.location || 'Not provided'}
+            </div>
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => setConfirmDeleteOpen(false)}
+            disabled={deleting}
+            variant="outlined"
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleDelete}
+            color="error"
+            variant="contained"
+            disabled={deleting}
+          >
+            {deleting ? 'Deleting...' : 'Delete Application'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
