@@ -43,6 +43,8 @@ export interface JobApplication {
   lastTimelineDate?: string;
 }
 
+export type JobApplicationInput = Omit<JobApplication, 'id' | 'lastTimelineDate'>;
+
 // Analytics types
 export interface AnalyticsStats {
   interviewTransition: number;

@@ -4,10 +4,12 @@ import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router-dom';
 import { getAllApplications } from './db';
+import AddApplicationOptionsDialog from './AddApplicationOptionsDialog';
 
 export default function ApplicationsTable() {
   const [jobs, setJobs] = useState<any[]>([]);
   const [search, setSearch] = useState('');
+  const [optionsOpen, setOptionsOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -183,11 +185,17 @@ export default function ApplicationsTable() {
       <div style={{ marginTop: 12 }}>
         <button
           className="btn-primary"
-          onClick={() => navigate('/applications/add')}
+          onClick={() => setOptionsOpen(true)}
         >
-          Add New Application
+          Add New Application(s)
         </button>
       </div>
+      <AddApplicationOptionsDialog
+        open={optionsOpen}
+        onClose={() => setOptionsOpen(false)}
+        onSelectManual={() => navigate('/applications/add')}
+        onSelectBulk={() => navigate('/applications/bulk-import')}
+      />
     </div>
   );
 }

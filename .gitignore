@@ -32,3 +32,5 @@ npm-debug.log.*
 .github
 .vscode
 release
+
+.env

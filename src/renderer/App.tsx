@@ -13,6 +13,7 @@ import ScheduleView from './ScheduleView';
 import Dashboard from './Dashboard';
 import AnalyticsDashboard from './AnalyticsDashboard';
 import EditApplicationForm from './EditApplicationForm';
+import BulkNetworkingImport from './BulkNetworkingImport';
 
 function Applications() {
   return <ApplicationsTable />;
@@ -64,6 +65,10 @@ export default function App() {
         <Route
           path="/applications/:id/edit"
           element={<EditApplicationForm />}
+        />
+        <Route
+          path="/applications/bulk-import"
+          element={<BulkNetworkingImport />}
         />
         <Route path="/schedule" element={<Schedule />} />
         <Route path="/analytics" element={<AnalyticsDashboard />} />

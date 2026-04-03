@@ -2,6 +2,7 @@
 /* eslint no-unused-vars: off */
 
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
+import { JobApplicationInput } from '../types';
 
 export type Channels = 'ipc-example';
 
@@ -24,6 +25,8 @@ const electronHandler = {
     },
   },
   readInitialData: () => ipcRenderer.invoke('read-initial-data'),
+  parseNetworkingNotes: (notes: string): Promise<JobApplicationInput[]> =>
+    ipcRenderer.invoke('parse-networking-notes', notes),
 };
 
 contextBridge.exposeInMainWorld('electron', electronHandler);

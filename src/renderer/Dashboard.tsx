@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import { getAllApplications } from './db';
+import AddApplicationOptionsDialog from './AddApplicationOptionsDialog';
 
 function Dashboard() {
   const [counts, setCounts] = useState({
@@ -16,6 +17,7 @@ function Dashboard() {
     offersTotal: 0,
   });
   const [loading, setLoading] = useState(true);
+  const [optionsOpen, setOptionsOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -344,7 +346,7 @@ function Dashboard() {
           variant="contained"
           size="large"
           startIcon={<AddIcon />}
-          onClick={() => navigate('/applications/add')}
+          onClick={() => setOptionsOpen(true)}
           sx={{
             py: 2,
             px: 6,
@@ -353,9 +355,15 @@ function Dashboard() {
             borderRadius: 2,
           }}
         >
-          Add New Application
+          Add New Application(s)
         </Button>
       </div>
+      <AddApplicationOptionsDialog
+        open={optionsOpen}
+        onClose={() => setOptionsOpen(false)}
+        onSelectManual={() => navigate('/applications/add')}
+        onSelectBulk={() => navigate('/applications/bulk-import')}
+      />
     </div>
   );
 }
