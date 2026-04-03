@@ -105,6 +105,26 @@ const getStatusDotColor = (status: ReviewItem['status']) => {
   return '#f59e0b';
 };
 
+const getRequiredFieldsErrors = (app: JobApplicationInput): string[] => {
+  const errors: string[] = [];
+  if (!app.company_name || !app.company_name.trim()) {
+    errors.push('Company name');
+  }
+  if (!app.role_title || !app.role_title.trim()) {
+    errors.push('Role title');
+  }
+  if (!app.location || !app.location.trim()) {
+    errors.push('Location');
+  }
+  if (!app.job_url || !app.job_url.trim()) {
+    errors.push('Job URL');
+  }
+  if (!app.source || !app.source.trim()) {
+    errors.push('Source');
+  }
+  return errors;
+};
+
 export default function BulkNetworkingImport() {
   const navigate = useNavigate();
   const [mode, setMode] = useState<ScreenMode>('input');
@@ -202,6 +222,13 @@ export default function BulkNetworkingImport() {
   const setCurrentStatus = (
     status: 'under_review' | 'completed' | 'skipped',
   ) => {
+    // Prevent marking as completed if required fields are missing
+    if (status === 'completed' && currentItem) {
+      const errors = getRequiredFieldsErrors(currentItem.application);
+      if (errors.length > 0) {
+        return;
+      }
+    }
     setReviewItems((prev) =>
       prev.map((item, idx) =>
         idx === currentIndex ? { ...item, status } : item,
@@ -409,353 +436,393 @@ export default function BulkNetworkingImport() {
             overflow: 'hidden',
           }}
         >
-          <Box
-            sx={{
-              position: 'sticky',
-              top: 0,
-              zIndex: 3,
-              background: '#fff',
-              borderBottom: '1px solid #e2e8f0',
-              px: 2,
-              py: 1.5,
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 1,
-            }}
-          >
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                Verify Application {currentIndex + 1} / {reviewItems.length}
-              </Typography>
-              <Chip
-                label={getStatusLabel(currentItem.status)}
-                color={getStatusChipColor(currentItem.status)}
-              />
-            </Box>
-
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                gap: 1,
-              }}
-            >
-              <Box sx={{ display: 'flex', gap: 1 }}>
-                <Button
-                  variant="outlined"
-                  onClick={() => setMode('input')}
-                  sx={{ textTransform: 'none' }}
+          {(() => {
+            const requiredFieldErrors = getRequiredFieldsErrors(
+              currentItem.application,
+            );
+            return (
+              <>
+                <Box
+                  sx={{
+                    position: 'sticky',
+                    top: 0,
+                    zIndex: 3,
+                    background: '#fff',
+                    borderBottom: '1px solid #e2e8f0',
+                    px: 2,
+                    py: 1.5,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 1,
+                  }}
                 >
-                  Back to Notes
-                </Button>
-                <Button variant="outlined" onClick={goPrev}>
-                  Previous
-                </Button>
-                <Button variant="outlined" onClick={goNext}>
-                  Next
-                </Button>
-              </Box>
-              <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                <button
-                  type="button"
-                  aria-label="Mark as skipped"
-                  onClick={() => setCurrentStatus('skipped')}
-                  style={{
-                    width: 28,
-                    height: 28,
-                    borderRadius: '50%',
-                    border:
-                      currentItem.status === 'skipped'
-                        ? '2px solid #7f1d1d'
-                        : '1px solid #fecaca',
-                    background: '#dc2626',
-                    boxShadow: 'none',
-                    padding: 0,
-                  }}
-                />
-                <button
-                  type="button"
-                  aria-label="Mark as under review"
-                  onClick={() => setCurrentStatus('under_review')}
-                  style={{
-                    width: 28,
-                    height: 28,
-                    borderRadius: '50%',
-                    border:
-                      currentItem.status === 'under_review'
-                        ? '2px solid #78350f'
-                        : '1px solid #fcd34d',
-                    background: '#f59e0b',
-                    boxShadow: 'none',
-                    padding: 0,
-                  }}
-                />
-                <button
-                  type="button"
-                  aria-label="Mark as completed"
-                  onClick={() => setCurrentStatus('completed')}
-                  style={{
-                    width: 28,
-                    height: 28,
-                    borderRadius: '50%',
-                    border:
-                      currentItem.status === 'completed'
-                        ? '2px solid #14532d'
-                        : '1px solid #86efac',
-                    background: '#16a34a',
-                    boxShadow: 'none',
-                    padding: 0,
-                  }}
-                />
-              </Box>
-            </Box>
-
-            <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
-              {reviewItems.map((item, idx) => {
-                const isCurrent = idx === currentIndex;
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => setCurrentIndex(idx)}
-                    aria-label={`Go to record ${idx + 1}`}
-                    style={{
-                      width: 14,
-                      height: 14,
-                      borderRadius: '50%',
-                      border: isCurrent
-                        ? '2px solid #0f172a'
-                        : '1px solid #cbd5e1',
-                      background: getStatusDotColor(item.status),
-                      boxShadow: 'none',
-                      padding: 0,
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
                     }}
-                  />
-                );
-              })}
-            </Box>
-          </Box>
+                  >
+                    <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                      Verify Application {currentIndex + 1} / {reviewItems.length}
+                    </Typography>
+                    <Chip
+                      label={getStatusLabel(currentItem.status)}
+                      color={getStatusChipColor(currentItem.status)}
+                    />
+                  </Box>
 
-          <Box sx={{ px: 2, py: 2, overflowY: 'auto', flex: 1 }}>
-            <Stack spacing={2}>
-              <TextField
-                label="Company"
-                value={currentItem.application.company_name || ''}
-                onChange={(e) =>
-                  setAppField('company_name', e.target.value.trim() || null)
-                }
-              />
-              <TextField
-                label="Role Title"
-                value={currentItem.application.role_title || ''}
-                onChange={(e) =>
-                  setAppField('role_title', e.target.value.trim() || null)
-                }
-              />
-              <TextField
-                label="Location"
-                value={currentItem.application.location || ''}
-                onChange={(e) =>
-                  setAppField('location', e.target.value.trim() || null)
-                }
-              />
-
-              <FormControl fullWidth>
-                <InputLabel id="bulk-source-label">Source</InputLabel>
-                <Select
-                  labelId="bulk-source-label"
-                  label="Source"
-                  value={currentItem.application.source || ''}
-                  onChange={(e) =>
-                    setAppField(
-                      'source',
-                      (e.target.value || null) as JobApplicationInput['source'],
-                    )
-                  }
-                >
-                  <MenuItem value="">(None)</MenuItem>
-                  {SOURCE_OPTIONS.map((source) => (
-                    <MenuItem key={source} value={source}>
-                      {source}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              <TextField
-                label="Primary Job URL"
-                value={currentItem.application.job_url || ''}
-                onChange={(e) =>
-                  setAppField('job_url', e.target.value.trim() || null)
-                }
-              />
-
-              <TextField
-                label="Auxiliary URLs (one per line)"
-                multiline
-                minRows={2}
-                value={(currentItem.application.auxiliary_urls || []).join(
-                  '\n',
-                )}
-                onChange={(e) =>
-                  setAppField(
-                    'auxiliary_urls',
-                    e.target.value
-                      .split('\n')
-                      .map((line) => line.trim())
-                      .filter(Boolean),
-                  )
-                }
-              />
-
-              <Box>
-                <Typography sx={{ fontWeight: 600, mb: 1 }}>
-                  Contacts
-                </Typography>
-                {(currentItem.application.contacts || []).map(
-                  (contact, contactIndex) => {
-                    const contactKey = [
-                      contact.name || 'unknown',
-                      contact.email || 'unknown',
-                      contact.linkedin_url || 'unknown',
-                      contact.phone || 'unknown',
-                      String(contactIndex),
-                    ].join('-');
-
-                    return (
-                      <Box
-                        key={contactKey}
-                        sx={{
-                          display: 'grid',
-                          gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr auto',
-                          gap: 1,
-                          mb: 1,
-                        }}
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      gap: 1,
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', gap: 1 }}>
+                      <Button
+                        variant="outlined"
+                        onClick={() => setMode('input')}
+                        sx={{ textTransform: 'none' }}
                       >
-                        <TextField
-                          label="Name"
-                          value={contact.name || ''}
-                          onChange={(e) =>
-                            setContactField(
-                              contactIndex,
-                              'name',
-                              e.target.value,
-                            )
-                          }
+                        Back to Notes
+                      </Button>
+                      <Button variant="outlined" onClick={goPrev}>
+                        Previous
+                      </Button>
+                      <Button variant="outlined" onClick={goNext}>
+                        Next
+                      </Button>
+                    </Box>
+                    <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                      <button
+                        type="button"
+                        aria-label="Mark as skipped"
+                        onClick={() => setCurrentStatus('skipped')}
+                        style={{
+                          width: 28,
+                          height: 28,
+                          borderRadius: '50%',
+                          border:
+                            currentItem.status === 'skipped'
+                              ? '2px solid #7f1d1d'
+                              : '1px solid #fecaca',
+                          background: '#dc2626',
+                          boxShadow: 'none',
+                          padding: 0,
+                        }}
+                      />
+                      <button
+                        type="button"
+                        aria-label="Mark as under review"
+                        onClick={() => setCurrentStatus('under_review')}
+                        style={{
+                          width: 28,
+                          height: 28,
+                          borderRadius: '50%',
+                          border:
+                            currentItem.status === 'under_review'
+                              ? '2px solid #78350f'
+                              : '1px solid #fcd34d',
+                          background: '#f59e0b',
+                          boxShadow: 'none',
+                          padding: 0,
+                        }}
+                      />
+                      <button
+                        type="button"
+                        aria-label="Mark as completed"
+                        onClick={() => setCurrentStatus('completed')}
+                        disabled={requiredFieldErrors.length > 0}
+                        title={
+                          requiredFieldErrors.length > 0
+                            ? `Missing required fields: ${requiredFieldErrors.join(', ')}`
+                            : 'Mark this application as completed'
+                        }
+                        style={{
+                          width: 28,
+                          height: 28,
+                          borderRadius: '50%',
+                          border:
+                            currentItem.status === 'completed'
+                              ? '2px solid #14532d'
+                              : '1px solid #86efac',
+                          background: '#16a34a',
+                          boxShadow: 'none',
+                          padding: 0,
+                          opacity:
+                            requiredFieldErrors.length > 0 ? 0.5 : 1,
+                          cursor:
+                            requiredFieldErrors.length > 0
+                              ? 'not-allowed'
+                              : 'pointer',
+                        }}
+                      />
+                    </Box>
+                  </Box>
+
+                  <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
+                    {reviewItems.map((item, idx) => {
+                      const isCurrent = idx === currentIndex;
+                      return (
+                        <button
+                          key={item.id}
+                          type="button"
+                          onClick={() => setCurrentIndex(idx)}
+                          aria-label={`Go to record ${idx + 1}`}
+                          style={{
+                            width: 14,
+                            height: 14,
+                            borderRadius: '50%',
+                            border: isCurrent
+                              ? '2px solid #0f172a'
+                              : '1px solid #cbd5e1',
+                            background: getStatusDotColor(item.status),
+                            boxShadow: 'none',
+                            padding: 0,
+                          }}
                         />
-                        <TextField
-                          label="Email"
-                          value={contact.email || ''}
-                          onChange={(e) =>
-                            setContactField(
-                              contactIndex,
-                              'email',
-                              e.target.value,
-                            )
-                          }
-                        />
-                        <TextField
-                          label="Phone"
-                          value={contact.phone || ''}
-                          onChange={(e) =>
-                            setContactField(
-                              contactIndex,
-                              'phone',
-                              e.target.value,
-                            )
-                          }
-                        />
-                        <TextField
-                          label="LinkedIn"
-                          value={contact.linkedin_url || ''}
-                          onChange={(e) =>
-                            setContactField(
-                              contactIndex,
-                              'linkedin_url',
-                              e.target.value,
-                            )
-                          }
-                        />
-                        <TextField
-                          label="Connection Type"
-                          value={contact.connection_type || ''}
-                          onChange={(e) =>
-                            setContactField(
-                              contactIndex,
-                              'connection_type',
-                              e.target.value,
-                            )
-                          }
-                        />
-                        <IconButton onClick={() => removeContact(contactIndex)}>
-                          <RemoveIcon />
-                        </IconButton>
-                      </Box>
-                    );
-                  },
-                )}
-                <Button
-                  size="small"
-                  startIcon={<AddIcon />}
-                  onClick={addContact}
+                      );
+                    })}
+                  </Box>
+                </Box>
+
+                <Box sx={{ px: 2, py: 2, overflowY: 'auto', flex: 1 }}>
+                  <Stack spacing={2}>
+                    {requiredFieldErrors.length > 0 && (
+                      <Alert severity="warning">
+                        <Typography
+                          variant="body2"
+                          sx={{ fontWeight: 600, mb: 0.5 }}
+                        >
+                          Required fields to mark as completed:
+                        </Typography>
+                        <Typography variant="body2">
+                          {requiredFieldErrors.join(', ')}
+                        </Typography>
+                      </Alert>
+                    )}
+                    <TextField
+                      label="Company"
+                      value={currentItem.application.company_name || ''}
+                      onChange={(e) =>
+                        setAppField('company_name', e.target.value.trim() || null)
+                      }
+                    />
+                    <TextField
+                      label="Role Title"
+                      value={currentItem.application.role_title || ''}
+                      onChange={(e) =>
+                        setAppField('role_title', e.target.value.trim() || null)
+                      }
+                    />
+                    <TextField
+                      label="Location"
+                      value={currentItem.application.location || ''}
+                      onChange={(e) =>
+                        setAppField('location', e.target.value.trim() || null)
+                      }
+                    />
+
+                    <FormControl fullWidth>
+                      <InputLabel id="bulk-source-label">Source</InputLabel>
+                      <Select
+                        labelId="bulk-source-label"
+                        label="Source"
+                        value={currentItem.application.source || ''}
+                        onChange={(e) =>
+                          setAppField(
+                            'source',
+                            (e.target.value ||
+                              null) as JobApplicationInput['source'],
+                          )
+                        }
+                      >
+                        <MenuItem value="">(None)</MenuItem>
+                        {SOURCE_OPTIONS.map((source) => (
+                          <MenuItem key={source} value={source}>
+                            {source}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+
+                    <TextField
+                      label="Primary Job URL"
+                      value={currentItem.application.job_url || ''}
+                      onChange={(e) =>
+                        setAppField('job_url', e.target.value.trim() || null)
+                      }
+                    />
+
+                    <TextField
+                      label="Auxiliary URLs (one per line)"
+                      multiline
+                      minRows={2}
+                      value={(currentItem.application.auxiliary_urls || []).join(
+                        '\n',
+                      )}
+                      onChange={(e) =>
+                        setAppField(
+                          'auxiliary_urls',
+                          e.target.value
+                            .split('\n')
+                            .map((line) => line.trim())
+                            .filter(Boolean),
+                        )
+                      }
+                    />
+
+                    <Box>
+                      <Typography sx={{ fontWeight: 600, mb: 1 }}>
+                        Contacts
+                      </Typography>
+                      {(currentItem.application.contacts || []).map(
+                        (contact, contactIndex) => {
+                          const contactKey = [
+                            contact.name || 'unknown',
+                            contact.email || 'unknown',
+                            contact.linkedin_url || 'unknown',
+                            contact.phone || 'unknown',
+                            String(contactIndex),
+                          ].join('-');
+
+                          return (
+                            <Box
+                              key={contactKey}
+                              sx={{
+                                display: 'grid',
+                                gridTemplateColumns:
+                                  '1fr 1fr 1fr 1fr 1fr auto',
+                                gap: 1,
+                                mb: 1,
+                              }}
+                            >
+                              <TextField
+                                label="Name"
+                                value={contact.name || ''}
+                                onChange={(e) =>
+                                  setContactField(
+                                    contactIndex,
+                                    'name',
+                                    e.target.value,
+                                  )
+                                }
+                              />
+                              <TextField
+                                label="Email"
+                                value={contact.email || ''}
+                                onChange={(e) =>
+                                  setContactField(
+                                    contactIndex,
+                                    'email',
+                                    e.target.value,
+                                  )
+                                }
+                              />
+                              <TextField
+                                label="Phone"
+                                value={contact.phone || ''}
+                                onChange={(e) =>
+                                  setContactField(
+                                    contactIndex,
+                                    'phone',
+                                    e.target.value,
+                                  )
+                                }
+                              />
+                              <TextField
+                                label="LinkedIn"
+                                value={contact.linkedin_url || ''}
+                                onChange={(e) =>
+                                  setContactField(
+                                    contactIndex,
+                                    'linkedin_url',
+                                    e.target.value,
+                                  )
+                                }
+                              />
+                              <TextField
+                                label="Connection Type"
+                                value={contact.connection_type || ''}
+                                onChange={(e) =>
+                                  setContactField(
+                                    contactIndex,
+                                    'connection_type',
+                                    e.target.value,
+                                  )
+                                }
+                              />
+                              <IconButton
+                                onClick={() => removeContact(contactIndex)}
+                              >
+                                <RemoveIcon />
+                              </IconButton>
+                            </Box>
+                          );
+                        },
+                      )}
+                      <Button
+                        size="small"
+                        startIcon={<AddIcon />}
+                        onClick={addContact}
+                      >
+                        Add Contact
+                      </Button>
+                    </Box>
+
+                    <TextField
+                      label="Notes (one per line)"
+                      helperText="Use this for any other company, role, or context details."
+                      multiline
+                      minRows={3}
+                      value={(currentItem.application.raw_notes || []).join(
+                        '\n',
+                      )}
+                      onChange={(e) =>
+                        setAppField(
+                          'raw_notes',
+                          e.target.value
+                            .split('\n')
+                            .map((line) => line.trim())
+                            .filter(Boolean),
+                        )
+                      }
+                    />
+                  </Stack>
+                </Box>
+
+                <Box
+                  sx={{
+                    px: 2,
+                    py: 1.5,
+                    borderTop: '1px solid #e2e8f0',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
                 >
-                  Add Contact
-                </Button>
-              </Box>
-
-              <TextField
-                label="Notes (one per line)"
-                helperText="Use this for any other company, role, or context details."
-                multiline
-                minRows={3}
-                value={(currentItem.application.raw_notes || []).join('\n')}
-                onChange={(e) =>
-                  setAppField(
-                    'raw_notes',
-                    e.target.value
-                      .split('\n')
-                      .map((line) => line.trim())
-                      .filter(Boolean),
-                  )
-                }
-              />
-            </Stack>
-          </Box>
-
-          <Box
-            sx={{
-              px: 2,
-              py: 1.5,
-              borderTop: '1px solid #e2e8f0',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <Typography
-              variant="body2"
-              sx={{ color: allReviewed ? '#166534' : '#854d0e' }}
-            >
-              {allReviewed
-                ? `Ready: ${completedCount} completed, ${skippedCount} skipped.`
-                : 'Every record must be set to Completed (green) or Skipped (red) before submit.'}
-            </Typography>
-            <Button
-              variant="contained"
-              color="success"
-              disabled={!allReviewed || isSaving}
-              onClick={() => setConfirmOpen(true)}
-            >
-              {isSaving ? 'Saving...' : 'Submit All to Database'}
-            </Button>
-          </Box>
+                  <Typography
+                    variant="body2"
+                    sx={{ color: allReviewed ? '#166534' : '#854d0e' }}
+                  >
+                    {allReviewed
+                      ? `Ready: ${completedCount} completed, ${skippedCount} skipped.`
+                      : 'Every record must be set to Completed (green) or Skipped (red) before submit.'}
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    disabled={!allReviewed || isSaving}
+                    onClick={() => setConfirmOpen(true)}
+                  >
+                    {isSaving ? 'Saving...' : 'Submit All to Database'}
+                  </Button>
+                </Box>
+              </>
+            );
+          })()}
         </Box>
       )}
 
