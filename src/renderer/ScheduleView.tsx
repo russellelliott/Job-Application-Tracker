@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import Badge from '@mui/material/Badge';
 import { getAllApplications } from './db';
 import { JobApplication, TimelineEvent } from '../types';
 
@@ -50,17 +51,7 @@ export default function ScheduleView() {
         now.getMonth(),
         now.getDate(),
       ).getTime();
-      const twoWeeksAgo = todayStart - 14 * 24 * 60 * 60 * 1000;
-
       apps.forEach((app) => {
-        // Collect all candidate items for this app
-        const candidates: Array<{
-          app: JobApplication;
-          event: TimelineEvent;
-          sortDate: number;
-          type: 'upcoming' | 'received' | 'completed';
-        }> = [];
-
         (app.timeline || []).forEach((ev) => {
           if (isAssessmentOrInterview(ev)) {
             // Check Completed
@@ -68,8 +59,6 @@ export default function ScheduleView() {
               const cDate = parseDate((ev as any).completed_at);
               if (cDate) {
                  const cTime = new Date(cDate.getFullYear(), cDate.getMonth(), cDate.getDate()).getTime();
-                 // Add to candidates as completed
-                 candidates.push({ app, event: ev, sortDate: cTime, type: 'completed' });
                  // Always add to allComp list
                  allComp.push({ app, event: ev, sortDate: cTime });
               }
@@ -80,7 +69,6 @@ export default function ScheduleView() {
                 const tDue = new Date(dDue.getFullYear(), dDue.getMonth(), dDue.getDate()).getTime();
                  if (tDue < todayStart) {
                    // Past interviews are completed
-                   candidates.push({ app, event: ev, sortDate: tDue, type: 'completed' });
                    allComp.push({ app, event: ev, sortDate: tDue });
                  }
               }
@@ -94,7 +82,7 @@ export default function ScheduleView() {
               if (dDue) {
                 const tDue = new Date(dDue.getFullYear(), dDue.getMonth(), dDue.getDate()).getTime();
                 if (tDue >= todayStart) {
-                  candidates.push({ app, event: ev, sortDate: tDue, type: 'upcoming' });
+                  up.push({ app, event: ev, sortDate: tDue });
                 }
               }
             }
@@ -104,40 +92,20 @@ export default function ScheduleView() {
             const dRec = parseDate(receivedDate);
             if (dRec) {
               const tRec = new Date(dRec.getFullYear(), dRec.getMonth(), dRec.getDate()).getTime();
-              const isInterview =
-                typeof ev.stage === 'string' && ev.stage.startsWith('Interview');
-              const hasInterviewDate = !!parseDate((ev as any).due_date);
+              const hasDueDate = !!parseDate((ev as any).due_date);
               const isCompletedAssessment =
                 ev.stage === 'Assessment' && !!parseDate((ev as any).completed_at);
 
-              // Received should only include unscheduled interviews and incomplete assessments.
+              // Received should include items that were received but are still unscheduled.
               const shouldIncludeReceived =
-                (!isInterview || !hasInterviewDate) && !isCompletedAssessment;
+                !hasDueDate && !isCompletedAssessment;
 
-              if (tRec >= twoWeeksAgo && shouldIncludeReceived) {
-                candidates.push({ app, event: ev, sortDate: tRec, type: 'received' });
+              if (shouldIncludeReceived) {
+                rec.push({ app, event: ev, sortDate: tRec });
               }
             }
           }
         });
-
-        // SELECT BEST CANDIDATE FOR THIS APP for UPCOMING/RECEIVED tabs
-        const appUpcoming = candidates.filter(c => c.type === 'upcoming').sort((a,b) => a.sortDate - b.sortDate);
-        const appReceived = candidates.filter(c => c.type === 'received').sort((a,b) => b.sortDate - a.sortDate);
-        // Note: completed are handled globally in allComp now, but we still use candidates logic for prioritizing display in other tabs?
-        // Actually, previous logic was: if app has Upcoming, show in Upcoming. If not, if Received, show in Received. If not, show in Completed.
-        // But requested change is "Show ALL completed interviews" in Completed tab.
-        // So Completed tab is independent of Upcoming/Received status.
-
-        if (appUpcoming.length > 0) {
-           up.push(appUpcoming[0]);
-        } else if (appReceived.length > 0) {
-           // Ensure received item is not actually a completed task
-           // (Logic simplified: if it's in received list, and not completed? Assessment received & completed is both.
-           // If completed, we shouldn't show in Received list? The original code had this check.)
-           // Let's keep logic simple: push top received event.
-           rec.push(appReceived[0]);
-        }
       });
 
       // Sort final lists
@@ -155,6 +123,12 @@ export default function ScheduleView() {
     const d = parseDate(s);
     return d ? d.toLocaleDateString() : '';
   };
+
+  const upcomingInterviewCount = upcoming.filter(({ event }) =>
+    typeof event.stage === 'string' && event.stage.startsWith('Interview'),
+  ).length;
+
+  const receivedCount = received.length;
 
   const renderTable = (
     items: typeof upcoming,
@@ -323,8 +297,32 @@ export default function ScheduleView() {
       {/* Tab Navigation */}
       <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
         <Tabs value={activeTab} onChange={(e, newValue) => setActiveTab(newValue)} aria-label="schedule tabs">
-          <Tab label="Upcoming" value="upcoming" />
-          <Tab label="Received" value="received" />
+          <Tab
+            label={
+              <Badge
+                badgeContent={upcomingInterviewCount}
+                color="primary"
+                showZero
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+              >
+                <span>Upcoming</span>
+              </Badge>
+            }
+            value="upcoming"
+          />
+          <Tab
+            label={
+              <Badge
+                badgeContent={receivedCount}
+                color="secondary"
+                showZero
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+              >
+                <span>Received</span>
+              </Badge>
+            }
+            value="received"
+          />
           <Tab label="Completed" value="completed" />
         </Tabs>
       </Box>
