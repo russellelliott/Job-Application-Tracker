@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -9,13 +9,22 @@ import Box from '@mui/material/Box';
 import db, { getAllApplications } from './db';
 
 export default function Sidebar({ children }: { children: React.ReactNode }) {
-  const [counts, setCounts] = useState({ today: 0, upcoming: 0 });
+  const [counts, setCounts] = useState({ interviews: 0 });
 
-  const fetchCounts = async () => {
+  const parseDate = (dStr?: string | null) => {
+    if (!dStr) return null;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dStr)) {
+      return new Date(`${dStr}T00:00:00`);
+    }
+    const parsed = new Date(dStr);
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
+  };
+
+  const fetchCounts = useCallback(async () => {
     try {
       const apps = await getAllApplications();
-      let todayC = 0;
-      let upcomingC = 0;
+      let upcomingInterviewCount = 0;
+      let receivedInterviewCount = 0;
       const now = new Date();
       // Reset to beginning of today
       const todayStart = new Date(
@@ -27,54 +36,52 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
       apps.forEach((app) => {
         (app.timeline || []).forEach((ev: any) => {
           const stage = ev.stage || '';
-          const isInterviewOrAssessment =
+          const isAssessmentOrInterview =
             stage === 'Assessment' ||
             (typeof stage === 'string' && stage.startsWith('Interview'));
 
-          if (isInterviewOrAssessment) {
-            const dueStr = ev.due_date;
-            if (dueStr) {
-              let d: Date;
-              if (/^\d{4}-\d{2}-\d{2}$/.test(dueStr)) {
-                // Parse YYYY-MM-DD as local midnight
-                const [y, m, day] = dueStr.split('-').map(Number);
-                d = new Date(y, m - 1, day);
-              } else {
-                d = new Date(dueStr);
-              }
+          if (!isAssessmentOrInterview) {
+            return;
+          }
 
-              // Normalize to midnight local time
-              const dTime = new Date(
-                d.getFullYear(),
-                d.getMonth(),
-                d.getDate(),
+          const isDoneAssessment =
+            stage === 'Assessment' && !!(ev as any).completed_at;
+
+          if (!isDoneAssessment) {
+            const dueDate = parseDate(ev.due_date);
+            if (dueDate) {
+              const dueTime = new Date(
+                dueDate.getFullYear(),
+                dueDate.getMonth(),
+                dueDate.getDate(),
               ).getTime();
 
-              if (!Number.isNaN(dTime)) {
-                // Determine if event is active (not completed)
-                let isComplete = false;
-                if (stage === 'Assessment' && ev.completed_at) {
-                  isComplete = true;
-                }
-                // Red badge = events scheduled for today.
-                // Orange badge = events scheduled strictly after today.
-                if (!isComplete) {
-                  if (dTime === todayStart) {
-                    todayC += 1;
-                  } else if (dTime > todayStart) {
-                    upcomingC += 1;
-                  }
+              if (typeof stage === 'string' && stage.startsWith('Interview')) {
+                if (dueTime >= todayStart) {
+                  upcomingInterviewCount += 1;
                 }
               }
             }
           }
+
+          const receivedDate = parseDate(ev.date);
+          if (receivedDate) {
+            const hasDueDate = !!parseDate(ev.due_date);
+            const shouldIncludeReceived = !hasDueDate && !isDoneAssessment;
+
+            if (shouldIncludeReceived) {
+              receivedInterviewCount += 1;
+            }
+          }
         });
       });
-      setCounts({ today: todayC, upcoming: upcomingC });
+      setCounts({
+        interviews: upcomingInterviewCount + receivedInterviewCount,
+      });
     } catch {
       // Intentionally ignore transient count refresh failures.
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchCounts();
@@ -86,7 +93,7 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
     return () => {
       changes.cancel();
     };
-  }, []);
+  }, [fetchCounts]);
 
   return (
     <div className="flex flex-col h-screen">
@@ -102,16 +109,10 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
             <Button color="inherit" component={NavLink} to="/applications">
               Applications
             </Button>
-            <Badge
-              badgeContent={counts.upcoming}
-              color="warning"
-              anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-            >
-              <Badge badgeContent={counts.today} color="error">
-                <Button color="inherit" component={NavLink} to="/schedule">
-                  Schedule
-                </Button>
-              </Badge>
+            <Badge badgeContent={counts.interviews} color="error">
+              <Button color="inherit" component={NavLink} to="/schedule">
+                Schedule
+              </Button>
             </Badge>
             <Button color="inherit" component={NavLink} to="/analytics">
               Analytics
