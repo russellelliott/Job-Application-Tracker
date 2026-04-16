@@ -25,7 +25,7 @@ function isAssessmentOrInterview(evt: TimelineEvent) {
 }
 
 export default function ScheduleView() {
-  const [activeTab, setActiveTab] = useState<'upcoming' | 'received' | 'completed'>('upcoming');
+  const [activeTab, setActiveTab] = useState<'received' | 'upcoming' | 'completed'>('received');
   const [completedView, setCompletedView] = useState<'unique' | 'all'>('unique');
   const [upcoming, setUpcoming] = useState<
     Array<{ app: JobApplication; event: TimelineEvent; sortDate: number }>
@@ -281,7 +281,9 @@ export default function ScheduleView() {
                     colSpan={6}
                     className="px-4 py-8 text-center text-gray-500"
                   >
-                    No pending assessments or interviews.
+                    {mode === 'upcoming'
+                      ? 'No upcoming/scheduled assessments or interviews.'
+                      : 'No pending assessments or interviews.'}
                   </td>
                 </tr>
               )}
@@ -300,19 +302,6 @@ export default function ScheduleView() {
           <Tab
             label={
               <Badge
-                badgeContent={upcomingInterviewCount}
-                color="primary"
-                showZero
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-              >
-                <span>Upcoming</span>
-              </Badge>
-            }
-            value="upcoming"
-          />
-          <Tab
-            label={
-              <Badge
                 badgeContent={receivedCount}
                 color="secondary"
                 showZero
@@ -323,13 +312,26 @@ export default function ScheduleView() {
             }
             value="received"
           />
+          <Tab
+            label={
+              <Badge
+                badgeContent={upcomingInterviewCount}
+                color="primary"
+                showZero
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+              >
+                <span>Upcoming</span>
+              </Badge>
+            }
+            value="upcoming"
+          />
           <Tab label="Completed" value="completed" />
         </Tabs>
       </Box>
 
       <div className="flex-1 flex flex-col min-h-0 relative">
-        {activeTab === 'upcoming' && renderTable(upcoming, 'upcoming')}
         {activeTab === 'received' && renderTable(received, 'received')}
+        {activeTab === 'upcoming' && renderTable(upcoming, 'upcoming')}
         {activeTab === 'completed' && renderTable(completed, 'completed')}
       </div>
     </div>
