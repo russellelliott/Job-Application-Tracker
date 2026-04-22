@@ -27,8 +27,7 @@ function isAssessmentOrInterview(evt: TimelineEvent) {
 export default function ScheduleView() {
   const [activeTab, setActiveTab] = useState<'received' | 'upcoming' | 'completed'>('received');
   const [completedView, setCompletedView] = useState<'unique' | 'all'>('unique');
-  const getTableViewportHeight = () =>
-    Math.max(240, window.innerHeight - 320);
+  const getTableViewportHeight = () => Math.max(220, window.innerHeight - 300);
   const [tableViewportHeight, setTableViewportHeight] = useState<number>(
     typeof window === 'undefined' ? 420 : getTableViewportHeight(),
   );
@@ -182,7 +181,11 @@ export default function ScheduleView() {
         )}
         <div
           className="flex-1 overflow-auto border border-gray-200 rounded-lg shadow-sm bg-white"
-          style={{ height: tableViewportHeight, overflowY: 'auto' }}
+          style={{
+            minHeight: 0,
+            height: tableViewportHeight,
+            overflowY: 'scroll',
+          }}
         >
           <table className="min-w-full bg-white data-table sticky-header">
             <thead className="bg-gray-50 border-b border-gray-200 sticky top-0 z-10">

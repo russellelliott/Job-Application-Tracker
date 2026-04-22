@@ -125,7 +125,10 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
           flex: 1,
           backgroundColor: '#f8fafc',
           padding: 16,
-          overflow: 'auto',
+          overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: 0,
         }}
       >
         {children}

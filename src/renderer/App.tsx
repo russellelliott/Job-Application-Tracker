@@ -19,11 +19,35 @@ import BulkNetworkingImport from './BulkNetworkingImport';
 import AddApplicationOptionsDialog from './AddApplicationOptionsDialog';
 
 function Applications() {
-  return <ApplicationsTable />;
+  return (
+    <div
+      style={{
+        height: '100%',
+        minHeight: 0,
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
+      }}
+    >
+      <ApplicationsTable />
+    </div>
+  );
 }
 
 function Schedule() {
-  return <ScheduleView />;
+  return (
+    <div
+      style={{
+        height: '100%',
+        minHeight: 0,
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
+      }}
+    >
+      <ScheduleView />
+    </div>
+  );
 }
 
 export default function App() {
@@ -66,8 +90,25 @@ export default function App() {
 
   return (
     <Sidebar>
-      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100%' }}>
-        <div style={{ flex: 1, minHeight: 0 }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+          minHeight: 0,
+          paddingBottom: showGlobalAddBar ? 78 : 0,
+          boxSizing: 'border-box',
+        }}
+      >
+        <div
+          style={{
+            flex: 1,
+            minHeight: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden',
+          }}
+        >
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/applications" element={<Applications />} />
@@ -91,14 +132,15 @@ export default function App() {
         {showGlobalAddBar && (
           <div
             style={{
-              position: 'sticky',
+              position: 'fixed',
+              left: 0,
+              right: 0,
               bottom: 0,
               background: '#fff',
               paddingTop: 12,
               paddingBottom: 12,
-              marginTop: 12,
               borderTop: '1px solid #e5e7eb',
-              zIndex: 20,
+              zIndex: 1200,
               display: 'flex',
               justifyContent: 'center',
             }}

@@ -10,10 +10,9 @@ import { getAllApplications } from './db';
 export default function ApplicationsTable() {
   const [jobs, setJobs] = useState<any[]>([]);
   const [search, setSearch] = useState('');
-  const getTableViewportHeight = () =>
-    Math.max(260, window.innerHeight - 300);
+  const getTableViewportHeight = () => Math.max(260, window.innerHeight - 230);
   const [tableViewportHeight, setTableViewportHeight] = useState<number>(
-    typeof window === 'undefined' ? 420 : getTableViewportHeight(),
+    typeof window === 'undefined' ? 460 : getTableViewportHeight(),
   );
   const navigate = useNavigate();
 
@@ -80,7 +79,14 @@ export default function ApplicationsTable() {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        minHeight: 0,
+      }}
+    >
       <div className="flex mb-4">
         <TextField
           fullWidth
@@ -101,7 +107,9 @@ export default function ApplicationsTable() {
       <div
         style={{
           height: tableViewportHeight,
-          overflowY: 'auto',
+          overflowY: 'scroll',
+          overflowX: 'hidden',
+          scrollbarGutter: 'stable',
           border: '1px solid #ddd',
         }}
       >
@@ -117,11 +125,11 @@ export default function ApplicationsTable() {
           <colgroup>
             <col style={{ width: '18%' }} />
             <col />
-            <col style={{ width: 140 }} />
-            <col style={{ width: 140 }} />
-            <col style={{ width: 90 }} />
-            <col style={{ width: 130 }} />
-            <col style={{ width: 100 }} />
+            <col style={{ width: '13%' }} />
+            <col style={{ width: '13%' }} />
+            <col style={{ width: '9%' }} />
+            <col style={{ width: '12%' }} />
+            <col style={{ width: '9%' }} />
             <col style={{ width: 64 }} />
           </colgroup>
           <thead>
@@ -159,7 +167,12 @@ export default function ApplicationsTable() {
                   key={app.id || app._id}
                   style={stagnant ? { backgroundColor: '#fff8e1' } : undefined}
                 >
-                  <td className="px-2 py-0">{app.company_name}</td>
+                  <td
+                    className="px-2 py-0 whitespace-nowrap overflow-hidden text-ellipsis"
+                    title={app.company_name || ''}
+                  >
+                    {app.company_name}
+                  </td>
                   <td
                     className="px-2 py-0 whitespace-nowrap overflow-hidden text-ellipsis"
                     title={app.role_title || ''}
@@ -168,25 +181,24 @@ export default function ApplicationsTable() {
                   </td>
                   <td
                     className="px-2 py-0 whitespace-nowrap overflow-hidden text-ellipsis"
-                    style={{ maxWidth: 160 }}
                     title={app.location || ''}
                   >
                     {app.location}
                   </td>
                   <td
                     className="px-2 py-0 whitespace-nowrap overflow-hidden text-ellipsis"
-                    style={{ maxWidth: 160 }}
                     title={app.source || ''}
                   >
                     {app.source}
                   </td>
-                  <td className="px-2 py-0">
+                  <td className="px-2 py-0 whitespace-nowrap overflow-hidden text-ellipsis">
                     {app.job_url ? (
                       <a
                         href={app.job_url}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-blue-600 hover:underline"
+                        className="text-blue-600 hover:underline whitespace-nowrap overflow-hidden text-ellipsis"
+                        style={{ display: 'inline-block', maxWidth: '100%' }}
                       >
                         Link
                       </a>
@@ -195,7 +207,8 @@ export default function ApplicationsTable() {
                       app.contacts[0].email ? (
                       <a
                         href={`mailto:${app.contacts[0].email}`}
-                        className="text-blue-600 hover:underline"
+                        className="text-blue-600 hover:underline whitespace-nowrap overflow-hidden text-ellipsis"
+                        style={{ display: 'inline-block', maxWidth: '100%' }}
                       >
                         {app.contacts[0].email}
                       </a>
@@ -203,10 +216,13 @@ export default function ApplicationsTable() {
                       ''
                     )}
                   </td>
-                  <td className="px-2 py-0">
+                  <td
+                    className="px-2 py-0 whitespace-nowrap overflow-hidden text-ellipsis"
+                    title={app.timeline?.[app.timeline.length - 1]?.stage || ''}
+                  >
                     {app.timeline?.[app.timeline.length - 1]?.stage}
                   </td>
-                  <td className="px-2 py-0">
+                  <td className="px-2 py-0 whitespace-nowrap overflow-hidden text-ellipsis">
                     {statusDate
                       ? new Date(statusDate).toLocaleDateString()
                       : ''}
