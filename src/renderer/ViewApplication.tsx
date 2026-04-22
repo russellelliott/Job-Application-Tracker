@@ -7,6 +7,10 @@ import Tooltip from '@mui/material/Tooltip';
 import Stack from '@mui/material/Stack';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -92,6 +96,7 @@ export default function ViewApplication() {
   const [app, setApp] = useState<JobApplication | null>(null);
   const [applicationIds, setApplicationIds] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
+  const [confirmSubmitOpen, setConfirmSubmitOpen] = useState(false);
   const [submittedSnackOpen, setSubmittedSnackOpen] = useState(false);
 
   useEffect(() => {
@@ -395,12 +400,43 @@ export default function ViewApplication() {
           color="success"
           startIcon={<CheckCircleIcon />}
           disabled={hasSubmitted || submitting}
-          onClick={markAsSubmittedToday}
+          onClick={() => setConfirmSubmitOpen(true)}
         >
           {hasSubmitted ? 'Already Submitted' : 'Mark Submitted Today'}
         </Button>
         </div>
       </div>
+
+      <Dialog
+        open={confirmSubmitOpen}
+        onClose={() => {
+          if (!submitting) setConfirmSubmitOpen(false);
+        }}
+      >
+        <DialogTitle>Mark as submitted today?</DialogTitle>
+        <DialogContent>
+          This will add an Application Submitted timeline event for today.
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => setConfirmSubmitOpen(false)}
+            disabled={submitting}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            color="success"
+            disabled={submitting}
+            onClick={async () => {
+              await markAsSubmittedToday();
+              setConfirmSubmitOpen(false);
+            }}
+          >
+            {submitting ? 'Saving...' : 'Confirm'}
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <Snackbar
         open={submittedSnackOpen}
