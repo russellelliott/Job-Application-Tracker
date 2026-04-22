@@ -2,9 +2,16 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 import Stack from '@mui/material/Stack';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
-import { getApplication } from './db';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { getAllApplications, getApplication, updateApplication } from './db';
 import { JobApplication, TimelineEvent } from '../types';
 
 function isEmail(value: string) {
@@ -83,6 +90,9 @@ export default function ViewApplication() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [app, setApp] = useState<JobApplication | null>(null);
+  const [applicationIds, setApplicationIds] = useState<string[]>([]);
+  const [submitting, setSubmitting] = useState(false);
+  const [submittedSnackOpen, setSubmittedSnackOpen] = useState(false);
 
   useEffect(() => {
     if (!id) {
@@ -99,7 +109,87 @@ export default function ViewApplication() {
       .catch(() => setLoading(false));
   }, [id]);
 
+  useEffect(() => {
+    // Keep order aligned with the applications table: most recent activity first.
+    const getDisplayDate = (application: any) => {
+      const timeline = application.timeline || [];
+      if (timeline.length === 0) return -Infinity;
+      const lastEvent = timeline[timeline.length - 1] || null;
+      if (!lastEvent) return -Infinity;
+      const stage = lastEvent.stage || '';
+      const dateStr =
+        typeof stage === 'string' && stage.toLowerCase().includes('interview')
+          ? lastEvent.due_date || lastEvent.date
+          : lastEvent.date;
+      if (!dateStr) return -Infinity;
+      const t = new Date(dateStr).getTime();
+      return Number.isNaN(t) ? -Infinity : t;
+    };
+
+    getAllApplications()
+      .then((all) => {
+        const sorted = [...all].sort((a: any, b: any) => {
+          const aDate = getDisplayDate(a);
+          const bDate = getDisplayDate(b);
+          if (aDate === bDate) {
+            const idA = Number(a._id);
+            const idB = Number(b._id);
+            if (!Number.isNaN(idA) && !Number.isNaN(idB)) return idB - idA;
+            return String(b._id || b.id || '').localeCompare(
+              String(a._id || a.id || ''),
+            );
+          }
+          return bDate - aDate;
+        });
+        setApplicationIds(
+          sorted
+            .map((application: any) => application.id || application._id)
+            .filter(Boolean),
+        );
+      })
+      .catch(() => setApplicationIds([]));
+  }, [id]);
+
   const appId = useMemo(() => app?.id || (app as any)?._id || id, [app, id]);
+  const currentIndex = useMemo(() => {
+    if (!appId) return -1;
+    return applicationIds.indexOf(appId);
+  }, [applicationIds, appId]);
+  const previousId = currentIndex > 0 ? applicationIds[currentIndex - 1] : null;
+  const nextId =
+    currentIndex >= 0 && currentIndex < applicationIds.length - 1
+      ? applicationIds[currentIndex + 1]
+      : null;
+  const hasSubmitted = useMemo(
+    () =>
+      (app?.timeline || []).some(
+        (ev) => (ev?.stage || '') === 'Application Submitted',
+      ),
+    [app],
+  );
+
+  const markAsSubmittedToday = async () => {
+    if (!app || !appId || hasSubmitted || submitting) return;
+    setSubmitting(true);
+    const today = new Date();
+    const nowDateOnly = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}T00:00:00`;
+    const timeline = [
+      ...(app.timeline || []),
+      {
+        stage: 'Application Submitted',
+        date: nowDateOnly,
+        notes: null,
+      } as TimelineEvent,
+    ];
+
+    try {
+      await updateApplication({ ...(app as JobApplication), id: appId, timeline });
+      setApp((prev) => (prev ? { ...prev, timeline } : prev));
+      setSubmittedSnackOpen(true);
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -117,7 +207,13 @@ export default function ViewApplication() {
     <div
       style={{
         padding: 24,
+        paddingBottom: 96,
         boxSizing: 'border-box',
+        height: '100%',
+        minHeight: 0,
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
       }}
     >
       <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 12 }}>
@@ -126,7 +222,49 @@ export default function ViewApplication() {
 
       <div
         style={{
-          height: 'calc(100vh - 250px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: 8,
+          gap: 12,
+        }}
+      >
+        <div style={{ color: '#4b5563', fontSize: 13 }}>
+          {currentIndex >= 0 && applicationIds.length > 0
+            ? `${currentIndex + 1} of ${applicationIds.length}`
+            : ''}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          <Tooltip title="Previous application">
+            <span>
+              <IconButton
+                aria-label="Previous application"
+                onClick={() =>
+                  previousId && navigate(`/applications/${previousId}/view`)
+                }
+                disabled={!previousId}
+              >
+                <ChevronLeftIcon />
+              </IconButton>
+            </span>
+          </Tooltip>
+          <Tooltip title="Next application">
+            <span>
+              <IconButton
+                aria-label="Next application"
+                onClick={() => nextId && navigate(`/applications/${nextId}/view`)}
+                disabled={!nextId}
+              >
+                <ChevronRightIcon />
+              </IconButton>
+            </span>
+          </Tooltip>
+        </div>
+      </div>
+
+      <div
+        style={{
+          flex: 1,
           minHeight: 220,
           overflowY: 'auto',
           border: '1px solid #e5e7eb',
@@ -219,15 +357,29 @@ export default function ViewApplication() {
 
       <div
         style={{
+          position: 'fixed',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: 1200,
           background: '#fff',
           paddingTop: 12,
-          paddingBottom: 8,
-          marginTop: 12,
+          paddingBottom: 12,
           borderTop: '1px solid #e5e7eb',
           display: 'flex',
-          gap: 8,
+          justifyContent: 'center',
         }}
       >
+        <div
+          style={{
+            width: 'min(1080px, calc(100% - 32px))',
+            display: 'flex',
+            gap: 8,
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+          }}
+        >
         <Button variant="text" onClick={() => navigate(-1)}>
           Back
         </Button>
@@ -238,7 +390,31 @@ export default function ViewApplication() {
         >
           Edit
         </Button>
+        <Button
+          variant="contained"
+          color="success"
+          startIcon={<CheckCircleIcon />}
+          disabled={hasSubmitted || submitting}
+          onClick={markAsSubmittedToday}
+        >
+          {hasSubmitted ? 'Already Submitted' : 'Mark Submitted Today'}
+        </Button>
+        </div>
       </div>
+
+      <Snackbar
+        open={submittedSnackOpen}
+        autoHideDuration={2200}
+        onClose={() => setSubmittedSnackOpen(false)}
+      >
+        <Alert
+          onClose={() => setSubmittedSnackOpen(false)}
+          severity="success"
+          sx={{ width: '100%' }}
+        >
+          Application marked as submitted.
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
