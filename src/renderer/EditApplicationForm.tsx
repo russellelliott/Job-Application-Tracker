@@ -180,7 +180,7 @@ export default function EditApplicationForm() {
     // Ensure required fields
     const updated: JobApplication = { ...(app as JobApplication), id };
     await updateApplication(updated as JobApplication);
-    navigate('/applications');
+    navigate(`/applications/${id}/view`);
   };
 
   const handleDelete = async () => {

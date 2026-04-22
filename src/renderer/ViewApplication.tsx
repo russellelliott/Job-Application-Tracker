@@ -269,9 +269,11 @@ export default function ViewApplication() {
 
       <div
         style={{
-          flex: 1,
+          height: 'calc(100vh - 255px)',
           minHeight: 220,
-          overflowY: 'auto',
+          overflowY: 'scroll',
+          overflowX: 'hidden',
+          scrollbarGutter: 'stable',
           border: '1px solid #e5e7eb',
           borderRadius: 8,
           background: '#fff',
