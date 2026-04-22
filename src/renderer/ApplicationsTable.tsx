@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { useNavigate } from 'react-router-dom';
 import { getAllApplications } from './db';
 import AddApplicationOptionsDialog from './AddApplicationOptionsDialog';
@@ -10,12 +12,23 @@ export default function ApplicationsTable() {
   const [jobs, setJobs] = useState<any[]>([]);
   const [search, setSearch] = useState('');
   const [optionsOpen, setOptionsOpen] = useState(false);
+  const getTableViewportHeight = () =>
+    Math.max(260, window.innerHeight - 300);
+  const [tableViewportHeight, setTableViewportHeight] = useState<number>(
+    typeof window === 'undefined' ? 420 : getTableViewportHeight(),
+  );
   const navigate = useNavigate();
 
   useEffect(() => {
     getAllApplications()
       .then((all) => setJobs(all))
       .catch(console.error);
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => setTableViewportHeight(getTableViewportHeight());
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   // Sort jobs by the date shown in the table (most-recent first)
@@ -69,7 +82,7 @@ export default function ApplicationsTable() {
   };
 
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: 0 }}>
       <div className="flex mb-4">
         <TextField
           fullWidth
@@ -89,22 +102,40 @@ export default function ApplicationsTable() {
       </div>
       <div
         style={{
-          maxHeight: '500px',
+          height: tableViewportHeight,
           overflowY: 'auto',
           border: '1px solid #ddd',
         }}
       >
-        <table className="min-w-full bg-white data-table">
+        <table
+          className="min-w-full bg-white data-table"
+          style={{
+            width: '100%',
+            tableLayout: 'fixed',
+            fontSize: '0.87rem',
+            lineHeight: 1.25,
+          }}
+        >
+          <colgroup>
+            <col style={{ width: '18%' }} />
+            <col />
+            <col style={{ width: 140 }} />
+            <col style={{ width: 140 }} />
+            <col style={{ width: 90 }} />
+            <col style={{ width: 130 }} />
+            <col style={{ width: 100 }} />
+            <col style={{ width: 64 }} />
+          </colgroup>
           <thead>
             <tr>
-              <th className="px-2 py-1">Company</th>
-              <th className="px-2 py-1">Role</th>
-              <th className="px-2 py-1">Location</th>
-              <th className="px-2 py-1">Source</th>
-              <th className="px-2 py-1">App Link</th>
-              <th className="px-2 py-1">Status</th>
-              <th className="px-2 py-1">Date</th>
-              <th className="px-2 py-1">Actions</th>
+              <th className="px-2 py-0">Company</th>
+              <th className="px-2 py-0">Role</th>
+              <th className="px-2 py-0">Location</th>
+              <th className="px-2 py-0">Source</th>
+              <th className="px-2 py-0">App Link</th>
+              <th className="px-2 py-0">Status</th>
+              <th className="px-2 py-0">Date</th>
+              <th className="px-2 py-0 text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -130,11 +161,28 @@ export default function ApplicationsTable() {
                   key={app.id || app._id}
                   style={stagnant ? { backgroundColor: '#fff8e1' } : undefined}
                 >
-                  <td className="px-2 py-1">{app.company_name}</td>
-                  <td className="px-2 py-1">{app.role_title}</td>
-                  <td className="px-2 py-1">{app.location}</td>
-                  <td className="px-2 py-1">{app.source}</td>
-                  <td className="px-2 py-1">
+                  <td className="px-2 py-0">{app.company_name}</td>
+                  <td
+                    className="px-2 py-0 whitespace-nowrap overflow-hidden text-ellipsis"
+                    title={app.role_title || ''}
+                  >
+                    {app.role_title}
+                  </td>
+                  <td
+                    className="px-2 py-0 whitespace-nowrap overflow-hidden text-ellipsis"
+                    style={{ maxWidth: 160 }}
+                    title={app.location || ''}
+                  >
+                    {app.location}
+                  </td>
+                  <td
+                    className="px-2 py-0 whitespace-nowrap overflow-hidden text-ellipsis"
+                    style={{ maxWidth: 160 }}
+                    title={app.source || ''}
+                  >
+                    {app.source}
+                  </td>
+                  <td className="px-2 py-0">
                     {app.job_url ? (
                       <a
                         href={app.job_url}
@@ -157,24 +205,25 @@ export default function ApplicationsTable() {
                       ''
                     )}
                   </td>
-                  <td className="px-2 py-1">
+                  <td className="px-2 py-0">
                     {app.timeline?.[app.timeline.length - 1]?.stage}
                   </td>
-                  <td className="px-2 py-1">
+                  <td className="px-2 py-0">
                     {statusDate
                       ? new Date(statusDate).toLocaleDateString()
                       : ''}
                   </td>
-                  <td className="px-2 py-1">
-                    <button
-                      type="button"
-                      className="btn-secondary"
+                  <td className="px-2 py-0 text-center">
+                    <IconButton
+                      size="small"
+                      aria-label="Edit application"
+                      sx={{ p: 0.25 }}
                       onClick={() =>
                         navigate(`/applications/${app.id || app._id}/edit`)
                       }
                     >
-                      Edit
-                    </button>
+                      <ModeEditIcon fontSize="small" />
+                    </IconButton>
                   </td>
                 </tr>
               );
@@ -182,7 +231,16 @@ export default function ApplicationsTable() {
           </tbody>
         </table>
       </div>
-      <div style={{ marginTop: 12 }}>
+      <div
+        style={{
+          marginTop: 8,
+          paddingTop: 10,
+          borderTop: '1px solid #ddd',
+          backgroundColor: '#fff',
+          position: 'sticky',
+          bottom: 0,
+        }}
+      >
         <button
           className="btn-primary"
           onClick={() => setOptionsOpen(true)}
