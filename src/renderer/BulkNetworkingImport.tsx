@@ -293,23 +293,18 @@ export default function BulkNetworkingImport() {
       );
       await Promise.all(
         itemsToPersist.map(async (item) => {
-          const hasTimeline =
-            item.application.timeline && item.application.timeline.length > 0;
-          const defaultTimeline: JobApplicationInput['timeline'] = [
+          const draftTimeline: JobApplicationInput['timeline'] = [
             {
               stage: 'Draft',
               date: todayLocalMidnight(),
               notes: null,
             },
           ];
-          const timeline = hasTimeline
-            ? item.application.timeline
-            : defaultTimeline;
 
           await addApplication({
             ...item.application,
             id: createUuid(),
-            timeline,
+            timeline: draftTimeline,
           });
         }),
       );
