@@ -27,6 +27,11 @@ function isAssessmentOrInterview(evt: TimelineEvent) {
 export default function ScheduleView() {
   const [activeTab, setActiveTab] = useState<'received' | 'upcoming' | 'completed'>('received');
   const [completedView, setCompletedView] = useState<'unique' | 'all'>('unique');
+  const getTableViewportHeight = () =>
+    Math.max(240, window.innerHeight - 320);
+  const [tableViewportHeight, setTableViewportHeight] = useState<number>(
+    typeof window === 'undefined' ? 420 : getTableViewportHeight(),
+  );
   const [upcoming, setUpcoming] = useState<
     Array<{ app: JobApplication; event: TimelineEvent; sortDate: number }>
   >([]);
@@ -38,6 +43,12 @@ export default function ScheduleView() {
   >([]);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleResize = () => setTableViewportHeight(getTableViewportHeight());
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     getAllApplications().then((apps) => {
@@ -171,7 +182,7 @@ export default function ScheduleView() {
         )}
         <div
           className="flex-1 overflow-auto border border-gray-200 rounded-lg shadow-sm bg-white"
-          style={{ maxHeight: '500px', overflowY: 'auto' }}
+          style={{ height: tableViewportHeight, overflowY: 'auto' }}
         >
           <table className="min-w-full bg-white data-table sticky-header">
             <thead className="bg-gray-50 border-b border-gray-200 sticky top-0 z-10">

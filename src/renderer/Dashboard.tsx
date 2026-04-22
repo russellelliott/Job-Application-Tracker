@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Button from '@mui/material/Button';
-import AddIcon from '@mui/icons-material/Add';
 import { getAllApplications } from './db';
-import AddApplicationOptionsDialog from './AddApplicationOptionsDialog';
 
 function Dashboard() {
   const [counts, setCounts] = useState({
@@ -17,7 +14,6 @@ function Dashboard() {
     offersTotal: 0,
   });
   const [loading, setLoading] = useState(true);
-  const [optionsOpen, setOptionsOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -330,40 +326,7 @@ function Dashboard() {
         </div>
       )}
 
-      {/* Spacer to push button to bottom */}
       <div style={{ flex: 1 }} />
-
-      {/* Big Add Button */}
-      <div
-        style={{
-          marginTop: 32,
-          display: 'flex',
-          justifyContent: 'center',
-          paddingBottom: 24,
-        }}
-      >
-        <Button
-          variant="contained"
-          size="large"
-          startIcon={<AddIcon />}
-          onClick={() => setOptionsOpen(true)}
-          sx={{
-            py: 2,
-            px: 6,
-            fontSize: '1.2rem',
-            textTransform: 'none',
-            borderRadius: 2,
-          }}
-        >
-          Add New Application(s)
-        </Button>
-      </div>
-      <AddApplicationOptionsDialog
-        open={optionsOpen}
-        onClose={() => setOptionsOpen(false)}
-        onSelectManual={() => navigate('/applications/add')}
-        onSelectBulk={() => navigate('/applications/bulk-import')}
-      />
     </div>
   );
 }

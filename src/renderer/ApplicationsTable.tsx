@@ -6,12 +6,10 @@ import SearchIcon from '@mui/icons-material/Search';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { useNavigate } from 'react-router-dom';
 import { getAllApplications } from './db';
-import AddApplicationOptionsDialog from './AddApplicationOptionsDialog';
 
 export default function ApplicationsTable() {
   const [jobs, setJobs] = useState<any[]>([]);
   const [search, setSearch] = useState('');
-  const [optionsOpen, setOptionsOpen] = useState(false);
   const getTableViewportHeight = () =>
     Math.max(260, window.innerHeight - 300);
   const [tableViewportHeight, setTableViewportHeight] = useState<number>(
@@ -231,29 +229,6 @@ export default function ApplicationsTable() {
           </tbody>
         </table>
       </div>
-      <div
-        style={{
-          marginTop: 8,
-          paddingTop: 10,
-          borderTop: '1px solid #ddd',
-          backgroundColor: '#fff',
-          position: 'sticky',
-          bottom: 0,
-        }}
-      >
-        <button
-          className="btn-primary"
-          onClick={() => setOptionsOpen(true)}
-        >
-          Add New Application(s)
-        </button>
-      </div>
-      <AddApplicationOptionsDialog
-        open={optionsOpen}
-        onClose={() => setOptionsOpen(false)}
-        onSelectManual={() => navigate('/applications/add')}
-        onSelectBulk={() => navigate('/applications/bulk-import')}
-      />
     </div>
   );
 }
