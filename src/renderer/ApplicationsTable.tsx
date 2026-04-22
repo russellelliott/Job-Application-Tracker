@@ -3,6 +3,7 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { useNavigate } from 'react-router-dom';
 import { getAllApplications } from './db';
@@ -109,8 +110,10 @@ export default function ApplicationsTable() {
           height: tableViewportHeight,
           overflowY: 'scroll',
           overflowX: 'hidden',
-          scrollbarGutter: 'stable',
+          scrollbarGutter: 'stable both-edges',
           border: '1px solid #ddd',
+          paddingRight: 4,
+          boxSizing: 'border-box',
         }}
       >
         <table
@@ -130,7 +133,7 @@ export default function ApplicationsTable() {
             <col style={{ width: '9%' }} />
             <col style={{ width: '12%' }} />
             <col style={{ width: '9%' }} />
-            <col style={{ width: 64 }} />
+            <col style={{ width: 92 }} />
           </colgroup>
           <thead>
             <tr>
@@ -228,6 +231,16 @@ export default function ApplicationsTable() {
                       : ''}
                   </td>
                   <td className="px-2 py-0 text-center">
+                    <IconButton
+                      size="small"
+                      aria-label="View application"
+                      sx={{ p: 0.25 }}
+                      onClick={() =>
+                        navigate(`/applications/${app.id || app._id}/view`)
+                      }
+                    >
+                      <RemoveRedEyeIcon fontSize="small" />
+                    </IconButton>
                     <IconButton
                       size="small"
                       aria-label="Edit application"

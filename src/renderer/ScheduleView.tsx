@@ -4,6 +4,9 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Badge from '@mui/material/Badge';
+import IconButton from '@mui/material/IconButton';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { getAllApplications } from './db';
 import { JobApplication, TimelineEvent } from '../types';
 
@@ -277,14 +280,26 @@ export default function ScheduleView() {
                       {event.notes}
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
-                      <button
-                        className="text-indigo-600 hover:text-indigo-900"
+                      <IconButton
+                        size="small"
+                        aria-label="View application"
+                        sx={{ p: 0.25 }}
+                        onClick={() =>
+                          navigate(`/applications/${app.id || (app as any)._id}/view`)
+                        }
+                      >
+                        <RemoveRedEyeIcon fontSize="small" />
+                      </IconButton>
+                      <IconButton
+                        size="small"
+                        aria-label="Edit application"
+                        sx={{ p: 0.25 }}
                         onClick={() =>
                           navigate(`/applications/${app.id || (app as any)._id}/edit`)
                         }
                       >
-                        Edit
-                      </button>
+                        <ModeEditIcon fontSize="small" />
+                      </IconButton>
                     </td>
                   </tr>
                 );

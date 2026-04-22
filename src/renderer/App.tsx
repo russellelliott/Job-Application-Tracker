@@ -15,6 +15,7 @@ import ScheduleView from './ScheduleView';
 import Dashboard from './Dashboard';
 import AnalyticsDashboard from './AnalyticsDashboard';
 import EditApplicationForm from './EditApplicationForm';
+import ViewApplication from './ViewApplication';
 import BulkNetworkingImport from './BulkNetworkingImport';
 import AddApplicationOptionsDialog from './AddApplicationOptionsDialog';
 
@@ -119,6 +120,10 @@ export default function App() {
             <Route
               path="/applications/:id/edit"
               element={<EditApplicationForm />}
+            />
+            <Route
+              path="/applications/:id/view"
+              element={<ViewApplication />}
             />
             <Route
               path="/applications/bulk-import"
