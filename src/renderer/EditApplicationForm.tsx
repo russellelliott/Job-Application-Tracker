@@ -264,20 +264,21 @@ export default function EditApplicationForm() {
       <form
         onSubmit={handleSubmit}
         style={{
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          minHeight: 0,
-          overflow: 'hidden',
+          display: 'block',
         }}
       >
         <div
           style={{
-            flex: 1,
-            minHeight: 0,
+            height: 'calc(100vh - 210px)',
+            minHeight: 220,
             overflowY: 'scroll',
+            overflowX: 'hidden',
             paddingRight: 12,
             scrollbarGutter: 'stable',
+            border: '1px solid #e5e7eb',
+            borderRadius: 8,
+            background: '#fff',
+            padding: '12px 16px',
           }}
         >
           <Stack spacing={2} sx={{ width: '100%' }}>
