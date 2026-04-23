@@ -14,8 +14,17 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+import CloseIcon from '@mui/icons-material/Close';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { JobApplication } from '../types';
 import { getApplication, updateApplication, deleteApplication } from './db';
+
+type DeleteFieldTarget =
+  | { type: 'auxiliary_urls'; index: number; content: string }
+  | { type: 'contacts'; index: number; content: string }
+  | { type: 'timeline'; index: number; content: string }
+  | { type: 'raw_notes'; index: number; content: string };
 
 export default function EditApplicationForm() {
   const { id } = useParams<{ id: string }>();
@@ -24,7 +33,11 @@ export default function EditApplicationForm() {
   const [originalJson, setOriginalJson] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+  const [confirmSubmitOpen, setConfirmSubmitOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [deleteFieldTarget, setDeleteFieldTarget] =
+    useState<DeleteFieldTarget | null>(null);
   useEffect(() => {
     if (!id) {
       setLoading(false);
@@ -174,13 +187,24 @@ export default function EditApplicationForm() {
       return { ...(prev || {}), timeline };
     });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const persistChanges = async () => {
     if (!app || !id) return;
     // Ensure required fields
+    setSubmitting(true);
     const updated: JobApplication = { ...(app as JobApplication), id };
-    await updateApplication(updated as JobApplication);
-    navigate(`/applications/${id}/view`);
+    try {
+      await updateApplication(updated as JobApplication);
+      navigate(`/applications/${id}/view`);
+    } finally {
+      setSubmitting(false);
+      setConfirmSubmitOpen(false);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isChanged || submitting) return;
+    setConfirmSubmitOpen(true);
   };
 
   const handleDelete = async () => {
@@ -195,20 +219,68 @@ export default function EditApplicationForm() {
     }
   };
 
+  const getDeleteFieldLabel = (target: DeleteFieldTarget | null) => {
+    if (!target) return 'field';
+    if (target.type === 'auxiliary_urls') return 'Auxiliary URL';
+    if (target.type === 'contacts') return 'Contact';
+    if (target.type === 'timeline') return 'Timeline Event';
+    return 'Note';
+  };
+
+  const confirmDeleteField = () => {
+    if (!deleteFieldTarget) return;
+    if (deleteFieldTarget.type === 'auxiliary_urls') {
+      removeAuxUrl(deleteFieldTarget.index);
+    } else if (deleteFieldTarget.type === 'contacts') {
+      removeContact(deleteFieldTarget.index);
+    } else if (deleteFieldTarget.type === 'timeline') {
+      removeTimelineEvent(deleteFieldTarget.index);
+    } else {
+      setApp((prev) => {
+        const notes = [...(prev?.raw_notes || [])];
+        notes.splice(deleteFieldTarget.index, 1);
+        return { ...(prev || {}), raw_notes: notes };
+      });
+    }
+    setDeleteFieldTarget(null);
+  };
+
   return (
-    <div style={{ padding: 24, height: '100%', boxSizing: 'border-box' }}>
+    <div
+      style={{
+        padding: 24,
+        paddingBottom: 96,
+        boxSizing: 'border-box',
+        height: '100%',
+        minHeight: 0,
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
+      }}
+    >
       <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 12 }}>
         Edit Application
       </h2>
-      <form onSubmit={handleSubmit}>
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: 0,
+          overflow: 'hidden',
+        }}
+      >
         <div
           style={{
-            maxHeight: 'calc(100vh - 180px)',
-            overflowY: 'auto',
+            flex: 1,
+            minHeight: 0,
+            overflowY: 'scroll',
             paddingRight: 12,
+            scrollbarGutter: 'stable',
           }}
         >
-          <Stack spacing={2} sx={{ maxWidth: 800 }}>
+          <Stack spacing={2} sx={{ width: '100%' }}>
             <TextField
               label="Company Name"
               value={app.company_name || ''}
@@ -257,7 +329,8 @@ export default function EditApplicationForm() {
               </div>
               {(app.auxiliary_urls || []).map((url, idx) => (
                 <div
-                  key={url ? `aux-url-${url}-${idx}` : `aux-url-${idx}`}
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={`aux-url-${idx}`}
                   style={{ display: 'flex', gap: 8, marginBottom: 8 }}
                 >
                   <TextField
@@ -265,7 +338,16 @@ export default function EditApplicationForm() {
                     value={url}
                     onChange={(e) => setAuxUrl(idx, e.target.value)}
                   />
-                  <IconButton size="small" onClick={() => removeAuxUrl(idx)}>
+                  <IconButton
+                    size="small"
+                    onClick={() =>
+                      setDeleteFieldTarget({
+                        type: 'auxiliary_urls',
+                        index: idx,
+                        content: url || '(empty)',
+                      })
+                    }
+                  >
                     <RemoveIcon />
                   </IconButton>
                 </div>
@@ -279,7 +361,8 @@ export default function EditApplicationForm() {
               <div style={{ marginBottom: 8, fontWeight: 600 }}>Contacts</div>
               {(app.contacts || []).map((c, idx) => (
                 <div
-                  key={c.email ? `contact-${c.email}-${idx}` : `contact-${idx}`}
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={`contact-${idx}`}
                   style={{
                     display: 'grid',
                     gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr auto',
@@ -323,7 +406,16 @@ export default function EditApplicationForm() {
                     }
                   />
                   <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <IconButton size="small" onClick={() => removeContact(idx)}>
+                    <IconButton
+                      size="small"
+                      onClick={() =>
+                        setDeleteFieldTarget({
+                          type: 'contacts',
+                          index: idx,
+                          content: `Name: ${c.name || 'Not provided'} | Email: ${c.email || 'Not provided'} | Phone: ${c.phone || 'Not provided'} | LinkedIn: ${c.linkedin_url || 'Not provided'} | Connection Type: ${c.connection_type || 'Not provided'}`,
+                        })
+                      }
+                    >
                       <RemoveIcon />
                     </IconButton>
                   </div>
@@ -357,12 +449,8 @@ export default function EditApplicationForm() {
                 const isAssessment = stage === 'Assessment';
                 return (
                   <div
-                    key={(() => {
-                      if (ev && (ev as any).stage) {
-                        return `timeline-${(ev as any).stage}-${idx}`;
-                      }
-                      return `timeline-${idx}`;
-                    })()}
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={`timeline-${idx}`}
                     style={{
                       border: '1px solid #e5e7eb',
                       borderRadius: 6,
@@ -567,7 +655,13 @@ export default function EditApplicationForm() {
                     <div style={{ marginTop: 8 }}>
                       <Button
                         size="small"
-                        onClick={() => removeTimelineEvent(idx)}
+                        onClick={() =>
+                          setDeleteFieldTarget({
+                            type: 'timeline',
+                            index: idx,
+                            content: `Stage: ${(ev as any).stage || 'Not provided'} | Date: ${(ev as any).date || 'Not provided'} | Due Date: ${(ev as any).due_date || 'Not provided'} | Completed At: ${(ev as any).completed_at || 'Not provided'} | Notes: ${(ev as any).notes || 'Not provided'}`,
+                          })
+                        }
                       >
                         Remove Event
                       </Button>
@@ -589,7 +683,8 @@ export default function EditApplicationForm() {
               <div style={{ marginBottom: 8, fontWeight: 600 }}>Notes</div>
               {(app.raw_notes || []).map((n, idx) => (
                 <div
-                  key={n ? `note-${n.slice(0, 8)}-${idx}` : `note-${idx}`}
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={`note-${idx}`}
                   style={{ display: 'flex', gap: 8, marginBottom: 8 }}
                 >
                   <TextField
@@ -605,13 +700,13 @@ export default function EditApplicationForm() {
                   />
                   <IconButton
                     size="small"
-                    onClick={() => {
-                      setApp((prev) => {
-                        const notes = [...(prev?.raw_notes || [])];
-                        notes.splice(idx, 1);
-                        return { ...(prev || {}), raw_notes: notes };
-                      });
-                    }}
+                    onClick={() =>
+                      setDeleteFieldTarget({
+                        type: 'raw_notes',
+                        index: idx,
+                        content: n || '(empty)',
+                      })
+                    }
                   >
                     <RemoveIcon />
                   </IconButton>
@@ -630,53 +725,134 @@ export default function EditApplicationForm() {
                 Add Note
               </Button>
             </div>
-
-            <div
-              style={{
-                position: 'sticky',
-                bottom: 0,
-                background: '#fff',
-                paddingTop: 12,
-                paddingBottom: 12,
-                marginTop: 12,
-                borderTop: '1px solid #e5e7eb',
-                zIndex: 20,
-              }}
-            >
-              <div
-                style={{
-                  display: 'flex',
-                  gap: 8,
-                  alignItems: 'center',
-                  justifyContent: 'flex-start',
-                }}
-              >
-                <Button variant="text" onClick={() => navigate(-1)}>
-                  Back
-                </Button>
-                {isChanged && (
-                  <Button variant="contained" type="submit">
-                    Submit Changes
-                  </Button>
-                )}
-                <Button
-                  variant="outlined"
-                  onClick={() => navigate('/applications')}
-                >
-                  Exit
-                </Button>
-                <Button
-                  variant="contained"
-                  color="error"
-                  onClick={() => setConfirmDeleteOpen(true)}
-                >
-                  Delete Application
-                </Button>
-              </div>
-            </div>
           </Stack>
         </div>
       </form>
+
+      <div
+        style={{
+          position: 'fixed',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: 1200,
+          background: '#fff',
+          paddingTop: 12,
+          paddingBottom: 12,
+          borderTop: '1px solid #e5e7eb',
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
+        <div
+          style={{
+            width: 'min(1080px, calc(100% - 32px))',
+            display: 'flex',
+            gap: 8,
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+          }}
+        >
+          <Button variant="text" onClick={() => navigate(-1)}>
+            Back
+          </Button>
+          <Button
+            variant="contained"
+            color="warning"
+            startIcon={<CloseIcon />}
+            onClick={() => navigate('/applications')}
+          >
+            Close
+          </Button>
+          <Button
+            variant="contained"
+            color="success"
+            startIcon={<CheckCircleIcon />}
+            disabled={!isChanged || submitting}
+            onClick={() => setConfirmSubmitOpen(true)}
+          >
+            Submit Changes
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            startIcon={<RemoveCircleIcon />}
+            onClick={() => setConfirmDeleteOpen(true)}
+          >
+            Delete Application
+          </Button>
+        </div>
+      </div>
+
+      <Dialog
+        open={confirmSubmitOpen}
+        onClose={() => {
+          if (!submitting) setConfirmSubmitOpen(false);
+        }}
+      >
+        <DialogTitle>Submit changes?</DialogTitle>
+        <DialogContent>
+          This will update this application record with your latest edits.
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => setConfirmSubmitOpen(false)}
+            disabled={submitting}
+            variant="outlined"
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={persistChanges}
+            color="success"
+            variant="contained"
+            disabled={submitting}
+          >
+            {submitting ? 'Submitting...' : 'Yes, Submit Changes'}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={!!deleteFieldTarget}
+        onClose={() => setDeleteFieldTarget(null)}
+      >
+        <DialogTitle>
+          Delete this {getDeleteFieldLabel(deleteFieldTarget)}?
+        </DialogTitle>
+        <DialogContent>
+          <div style={{ marginBottom: 12 }}>
+            This action removes this field value from the form.
+          </div>
+          <div>
+            <strong>Field:</strong> {getDeleteFieldLabel(deleteFieldTarget)}
+          </div>
+          <div
+            style={{
+              marginTop: 6,
+              whiteSpace: 'pre-wrap',
+              wordBreak: 'break-word',
+            }}
+          >
+            <strong>Content:</strong>{' '}
+            {deleteFieldTarget?.content || 'Not provided'}
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteFieldTarget(null)} variant="outlined">
+            Cancel
+          </Button>
+          <Button
+            onClick={confirmDeleteField}
+            color="error"
+            variant="contained"
+          >
+            Delete Field
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <Dialog
         open={confirmDeleteOpen}
         onClose={() => {

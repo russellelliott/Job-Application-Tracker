@@ -459,7 +459,8 @@ export default function BulkNetworkingImport() {
                     }}
                   >
                     <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                      Verify Application {currentIndex + 1} / {reviewItems.length}
+                      Verify Application {currentIndex + 1} /{' '}
+                      {reviewItems.length}
                     </Typography>
                     <Chip
                       label={getStatusLabel(currentItem.status)}
@@ -546,8 +547,7 @@ export default function BulkNetworkingImport() {
                           background: '#16a34a',
                           boxShadow: 'none',
                           padding: 0,
-                          opacity:
-                            requiredFieldErrors.length > 0 ? 0.5 : 1,
+                          opacity: requiredFieldErrors.length > 0 ? 0.5 : 1,
                           cursor:
                             requiredFieldErrors.length > 0
                               ? 'not-allowed'
@@ -557,7 +557,9 @@ export default function BulkNetworkingImport() {
                     </Box>
                   </Box>
 
-                  <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
+                  <Box
+                    sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}
+                  >
                     {reviewItems.map((item, idx) => {
                       const isCurrent = idx === currentIndex;
                       return (
@@ -602,7 +604,10 @@ export default function BulkNetworkingImport() {
                       label="Company"
                       value={currentItem.application.company_name || ''}
                       onChange={(e) =>
-                        setAppField('company_name', e.target.value.trim() || null)
+                        setAppField(
+                          'company_name',
+                          e.target.value.trim() || null,
+                        )
                       }
                     />
                     <TextField
@@ -652,19 +657,17 @@ export default function BulkNetworkingImport() {
                     />
 
                     <TextField
-                      label="Auxiliary URLs (one per line)"
+                      label="Auxiliary URLs / Context"
+                      helperText="Enter any links or context as free-form text."
                       multiline
-                      minRows={2}
-                      value={(currentItem.application.auxiliary_urls || []).join(
-                        '\n',
-                      )}
+                      minRows={3}
+                      value={(
+                        currentItem.application.auxiliary_urls || []
+                      ).join('\n\n')}
                       onChange={(e) =>
                         setAppField(
                           'auxiliary_urls',
-                          e.target.value
-                            .split('\n')
-                            .map((line) => line.trim())
-                            .filter(Boolean),
+                          e.target.value ? [e.target.value] : [],
                         )
                       }
                     />
@@ -688,8 +691,7 @@ export default function BulkNetworkingImport() {
                               key={contactKey}
                               sx={{
                                 display: 'grid',
-                                gridTemplateColumns:
-                                  '1fr 1fr 1fr 1fr 1fr auto',
+                                gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr auto',
                                 gap: 1,
                                 mb: 1,
                               }}
@@ -768,20 +770,17 @@ export default function BulkNetworkingImport() {
                     </Box>
 
                     <TextField
-                      label="Notes (one per line)"
-                      helperText="Use this for any other company, role, or context details."
+                      label="Notes"
+                      helperText="Use this for any other company, role, or context details in paragraph form."
                       multiline
-                      minRows={3}
+                      minRows={4}
                       value={(currentItem.application.raw_notes || []).join(
-                        '\n',
+                        '\n\n',
                       )}
                       onChange={(e) =>
                         setAppField(
                           'raw_notes',
-                          e.target.value
-                            .split('\n')
-                            .map((line) => line.trim())
-                            .filter(Boolean),
+                          e.target.value ? [e.target.value] : [],
                         )
                       }
                     />
