@@ -12,6 +12,8 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import { JobApplication } from '../types';
 
 interface AddApplicationFormProps {
@@ -30,7 +32,7 @@ const SOURCE_OPTIONS = [
 export default function AddApplicationForm({
   onSubmit,
 }: AddApplicationFormProps) {
-  const [form, setForm] = React.useState<Partial<JobApplication>>({
+  const initialForm: Partial<JobApplication> = {
     auxiliary_urls: [''],
     contacts: [
       { name: '', email: '', phone: '', linkedin_url: '', connection_type: '' },
@@ -38,10 +40,11 @@ export default function AddApplicationForm({
     timeline: [],
     raw_notes: [''],
     source: 'Cold Application',
-  });
+  };
+
+  const [form, setForm] = React.useState<Partial<JobApplication>>(initialForm);
 
   const [snackOpen, setSnackOpen] = React.useState(false);
-  const [confirmOpen, setConfirmOpen] = React.useState(false);
   const [createdId, setCreatedId] = React.useState<string | null>(null);
   const [submittedType, setSubmittedType] = React.useState<
     'draft' | 'submitted' | null
@@ -151,10 +154,15 @@ export default function AddApplicationForm({
     const result = await onSubmit({ ...form, timeline });
     if (typeof result === 'string') {
       setCreatedId(result);
-      setConfirmOpen(true);
+      setSnackOpen(true);
     } else {
       setSnackOpen(true);
     }
+    // Clear the form after successful save/submit
+    setForm(initialForm);
+    setAttemptedSubmit(false);
+    setSubmittedType(null);
+    setCreatedId(null);
   };
 
   const isValid = useMemo(() => {
@@ -168,6 +176,15 @@ export default function AddApplicationForm({
       form.job_url &&
       form.job_url.toString().trim() &&
       (form.source || '').toString().trim()
+    );
+  }, [form]);
+
+  const hasAnyRequired = useMemo(() => {
+    return !!(
+      (form.company_name && String(form.company_name).trim()) ||
+      (form.role_title && String(form.role_title).trim()) ||
+      (form.location && String(form.location).trim()) ||
+      (form.job_url && String(form.job_url).trim())
     );
   }, [form]);
 
@@ -419,18 +436,22 @@ export default function AddApplicationForm({
             <Button variant="text" onClick={() => navigate(-1)}>
               Back
             </Button>
-            {/* Show Save Draft always; show Submit only when required fields are filled */}
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => submitWithStatus('draft')}
-            >
-              Save Draft
-            </Button>
+            {/* Show Save Draft only when at least one required field has content; purple styling */}
+            {hasAnyRequired ? (
+              <Button
+                variant="contained"
+                startIcon={<SaveAltIcon />}
+                color="secondary"
+                onClick={() => submitWithStatus('draft')}
+              >
+                Save Draft
+              </Button>
+            ) : null}
             {isValid ? (
               <Button
                 variant="contained"
                 color="success"
+                startIcon={<CheckCircleIcon />}
                 onClick={() => submitWithStatus('submitted')}
               >
                 Submit Application
@@ -455,137 +476,13 @@ export default function AddApplicationForm({
             severity="success"
             sx={{ width: '100%' }}
           >
-            Application saved
+            {submittedType === 'submitted'
+              ? 'Application submitted'
+              : submittedType === 'draft'
+              ? 'Draft saved'
+              : 'Application saved'}
           </Alert>
         </Snackbar>
-
-        {/* Confirmation dialog after create - gives navigation options */}
-        {confirmOpen && createdId && (
-          <div
-            style={{
-              position: 'fixed',
-              inset: 0,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              zIndex: 60,
-            }}
-          >
-            <div
-              style={{
-                background: submittedType === 'draft' ? '#f3e8ff' : '#dcfce7',
-                padding: 24,
-                borderRadius: 12,
-                boxShadow: '0 8px 24px rgba(0,0,0,0.2)',
-                width: 420,
-                border:
-                  submittedType === 'draft'
-                    ? '1px solid #d8b4fe'
-                    : '1px solid #86efac',
-              }}
-            >
-              <h3
-                style={{
-                  marginTop: 0,
-                  color: submittedType === 'draft' ? '#6b21a8' : '#166534',
-                  fontSize: 20,
-                  fontWeight: 600,
-                }}
-              >
-                {submittedType === 'draft'
-                  ? 'Draft Saved'
-                  : 'Application Submitted'}
-              </h3>
-              <p
-                style={{
-                  color: submittedType === 'draft' ? '#581c87' : '#14532d',
-                  marginBottom: 24,
-                }}
-              >
-                {submittedType === 'draft'
-                  ? 'Application has been saved as a draft.'
-                  : 'Application was successfully submitted to the tracker.'}
-              </p>
-              <div
-                style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}
-              >
-                <button
-                  onClick={() => {
-                    setConfirmOpen(false);
-                    setCreatedId(null);
-                    setForm({
-                      auxiliary_urls: [''],
-                      contacts: [
-                        {
-                          name: '',
-                          email: '',
-                          phone: '',
-                          linkedin_url: '',
-                          connection_type: '',
-                        },
-                      ],
-                      timeline: [],
-                      raw_notes: [''],
-                      source: 'Cold Application',
-                      company_name: '',
-                      role_title: '',
-                      location: '',
-                      job_url: '',
-                    });
-                    setAttemptedSubmit(false);
-                    setSubmittedType(null);
-                  }}
-                  style={{
-                    background: 'white',
-                    border: '1px solid rgba(0,0,0,0.1)',
-                    padding: '8px 16px',
-                    borderRadius: 6,
-                    cursor: 'pointer',
-                    color: '#374151',
-                    fontWeight: 500,
-                  }}
-                >
-                  Add another
-                </button>
-                <button
-                  onClick={() => {
-                    setConfirmOpen(false);
-                    navigate(`/applications/${createdId}/edit`);
-                  }}
-                  style={{
-                    background:
-                      submittedType === 'draft' ? '#9333ea' : '#16a34a',
-                    border: 'none',
-                    padding: '8px 16px',
-                    borderRadius: 6,
-                    cursor: 'pointer',
-                    color: 'white',
-                    fontWeight: 500,
-                  }}
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => {
-                    setConfirmOpen(false);
-                    navigate('/applications');
-                  }}
-                  style={{
-                    background: 'transparent',
-                    border: `1px solid ${submittedType === 'draft' ? '#9333ea' : '#16a34a'}`,
-                    padding: '8px 16px',
-                    borderRadius: 6,
-                    cursor: 'pointer',
-                    color: submittedType === 'draft' ? '#9333ea' : '#16a34a',
-                    fontWeight: 500,
-                  }}
-                >
-                  Applications
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </form>
     </div>
   );

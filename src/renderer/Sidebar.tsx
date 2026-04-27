@@ -56,10 +56,9 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
                 dueDate.getDate(),
               ).getTime();
 
-              if (typeof stage === 'string' && stage.startsWith('Interview')) {
-                if (dueTime >= todayStart) {
-                  upcomingInterviewCount += 1;
-                }
+              // Count upcoming items for both Interviews and Assessments
+              if (dueTime >= todayStart) {
+                upcomingInterviewCount += 1;
               }
             }
           }

@@ -137,9 +137,8 @@ export default function ScheduleView() {
     return d ? d.toLocaleDateString() : '';
   };
 
-  const upcomingInterviewCount = upcoming.filter(({ event }) =>
-    typeof event.stage === 'string' && event.stage.startsWith('Interview'),
-  ).length;
+  // Count all upcoming items (assessments + interviews)
+  const upcomingInterviewCount = upcoming.length;
 
   const receivedCount = received.length;
 
