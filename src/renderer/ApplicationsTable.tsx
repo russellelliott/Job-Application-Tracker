@@ -1,16 +1,96 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
+import Chip from '@mui/material/Chip';
 import SearchIcon from '@mui/icons-material/Search';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { useNavigate } from 'react-router-dom';
 import { getAllApplications } from './db';
 
+type StatusKey =
+  | 'all'
+  | 'draft'
+  | 'submitted'
+  | 'assessment'
+  | 'interview_1'
+  | 'interview_2'
+  | 'interview_3';
+
+const STATUS_META: Record<
+  Exclude<StatusKey, 'all'>,
+  { label: string; color: string }
+> = {
+  draft: { label: 'Draft', color: '#9c27b0' },
+  submitted: { label: 'Submitted', color: '#6366f1' },
+  assessment: { label: 'Assessment', color: '#818cf8' },
+  interview_1: { label: 'Interview 1', color: '#fbbf24' },
+  interview_2: { label: 'Interview 2', color: '#f59e0b' },
+  interview_3: { label: 'Interview 3', color: '#d97706' },
+};
+
+const STATUS_FILTERS: Array<StatusKey> = [
+  'all',
+  'draft',
+  'submitted',
+  'assessment',
+  'interview_1',
+  'interview_2',
+  'interview_3',
+];
+
+function getStatusKey(app: any): Exclude<StatusKey, 'all'> {
+  const timeline = app.timeline || [];
+  if (timeline.length === 0) return 'draft';
+
+  // Find the most recent non-followup event
+  for (let i = timeline.length - 1; i >= 0; i--) {
+    const event = timeline[i];
+    const stage = String(event?.stage || '').trim().toLowerCase();
+    const isFollowup = stage.includes('follow-up') || stage.includes('followup');
+
+    if (!isFollowup) {
+      // This is the status we use
+      if (!stage || stage === 'draft') return 'draft';
+      if (stage === 'application submitted') return 'submitted';
+      if (stage === 'assessment') return 'assessment';
+
+      const interviewMatch = stage.match(/^interview\s*(\d+)/);
+      if (interviewMatch) {
+        if (interviewMatch[1] === '1') return 'interview_1';
+        if (interviewMatch[1] === '2') return 'interview_2';
+        if (interviewMatch[1] === '3') return 'interview_3';
+      }
+
+      return 'submitted';
+    }
+  }
+
+  // If all events are follow-ups, default to draft
+  return 'draft';
+}
+
+function hasFollowup(app: any): boolean {
+  const timeline = app.timeline || [];
+  const lastEvent = timeline[timeline.length - 1];
+  if (!lastEvent) return false;
+  const stage = String(lastEvent.stage || '').trim().toLowerCase();
+  return stage.includes('follow-up') || stage.includes('followup');
+}
+
+function getStatusLabel(status: Exclude<StatusKey, 'all'>) {
+  return STATUS_META[status].label;
+}
+
+function getStatusColor(status: Exclude<StatusKey, 'all'>) {
+  return STATUS_META[status].color;
+}
+
 export default function ApplicationsTable() {
   const [jobs, setJobs] = useState<any[]>([]);
   const [search, setSearch] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState<StatusKey>('all');
   const getTableViewportHeight = () => Math.max(260, window.innerHeight - 230);
   const [tableViewportHeight, setTableViewportHeight] = useState<number>(
     typeof window === 'undefined' ? 460 : getTableViewportHeight(),
@@ -50,19 +130,61 @@ export default function ApplicationsTable() {
     const bDate = getDisplayDate(b);
     // Sort descending (newest first)
     if (aDate === bDate) {
-      // fallback to id based sort to keep deterministic order
-      const idA = Number(a._id);
-      const idB = Number(b._id);
-      if (!isNaN(idA) && !isNaN(idB)) return idB - idA;
-      return String(b._id).localeCompare(String(a._id));
+      const companyA = String(a.company_name || '').toLowerCase();
+      const companyB = String(b.company_name || '').toLowerCase();
+      const companyCompare = companyA.localeCompare(companyB);
+      if (companyCompare !== 0) return companyCompare;
+
+      const roleA = String(a.role_title || '').toLowerCase();
+      const roleB = String(b.role_title || '').toLowerCase();
+      const roleCompare = roleA.localeCompare(roleB);
+      if (roleCompare !== 0) return roleCompare;
+
+      const idA = String(a.id || a._id || '');
+      const idB = String(b.id || b._id || '');
+      return idA.localeCompare(idB);
     }
     return bDate - aDate;
   });
 
-  const filtered = sortedJobs.filter(
-    (app) =>
-      (app.company_name || '').toLowerCase().includes(search.toLowerCase()) ||
-      (app.role_title || '').toLowerCase().includes(search.toLowerCase()),
+  const searchFilteredJobs = useMemo(
+    () =>
+      sortedJobs.filter(
+        (app) =>
+          (app.company_name || '')
+            .toLowerCase()
+            .includes(search.toLowerCase()) ||
+          (app.role_title || '').toLowerCase().includes(search.toLowerCase()),
+      ),
+    [search, sortedJobs],
+  );
+
+  const statusCounts = useMemo(() => {
+    const counts: Record<StatusKey, number> = {
+      all: searchFilteredJobs.length,
+      draft: 0,
+      submitted: 0,
+      assessment: 0,
+      interview_1: 0,
+      interview_2: 0,
+      interview_3: 0,
+    };
+
+    searchFilteredJobs.forEach((app) => {
+      counts[getStatusKey(app)] += 1;
+    });
+
+    return counts;
+  }, [searchFilteredJobs]);
+
+  const filtered = useMemo(
+    () =>
+      selectedStatus === 'all'
+        ? searchFilteredJobs
+        : searchFilteredJobs.filter(
+            (app) => getStatusKey(app) === selectedStatus,
+          ),
+    [searchFilteredJobs, selectedStatus],
   );
 
   const isStagnant = (app: any) => {
@@ -105,6 +227,39 @@ export default function ApplicationsTable() {
           }}
         />
       </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
+        {STATUS_FILTERS.map((status) => {
+          const isAll = status === 'all';
+          const isSelected = selectedStatus === status;
+          const count = statusCounts[status];
+          const label = isAll ? 'All' : getStatusLabel(status);
+          const color = isAll ? '#475569' : getStatusColor(status);
+
+          return (
+            <Chip
+              key={status}
+              label={`${label} ${count}`}
+              clickable
+              onClick={() => setSelectedStatus(status)}
+              variant={isSelected ? 'filled' : 'outlined'}
+              sx={{
+                height: 28,
+                fontWeight: 600,
+                borderColor: color,
+                color: isSelected ? '#fff' : color,
+                bgcolor: isSelected ? color : 'transparent',
+                '& .MuiChip-label': {
+                  px: 1,
+                  fontSize: '0.75rem',
+                },
+                '&:hover': {
+                  bgcolor: isSelected ? color : `${color}14`,
+                },
+              }}
+            />
+          );
+        })}
+      </div>
       <div
         style={{
           height: tableViewportHeight,
@@ -121,8 +276,8 @@ export default function ApplicationsTable() {
           style={{
             width: '100%',
             tableLayout: 'fixed',
-            fontSize: '0.87rem',
-            lineHeight: 1.25,
+            fontSize: '0.82rem',
+            lineHeight: 1.1,
           }}
         >
           <colgroup>
@@ -137,14 +292,14 @@ export default function ApplicationsTable() {
           </colgroup>
           <thead>
             <tr>
-              <th className="px-2 py-0">Company</th>
-              <th className="px-2 py-0">Role</th>
-              <th className="px-2 py-0">Location</th>
-              <th className="px-2 py-0">Source</th>
-              <th className="px-2 py-0">App Link</th>
-              <th className="px-2 py-0">Status</th>
-              <th className="px-2 py-0">Date</th>
-              <th className="px-2 py-0 text-center">Actions</th>
+              <th className="px-2 py-1">Company</th>
+              <th className="px-2 py-1">Role</th>
+              <th className="px-2 py-1">Location</th>
+              <th className="px-2 py-1">Source</th>
+              <th className="px-2 py-1">App Link</th>
+              <th className="px-2 py-1">Status</th>
+              <th className="px-2 py-1">Date</th>
+              <th className="px-2 py-1 text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -152,6 +307,12 @@ export default function ApplicationsTable() {
               const stagnant = isStagnant(app);
               const lastEvent =
                 (app.timeline || [])[app.timeline?.length - 1] || null;
+              const statusKey = getStatusKey(app);
+              const baseLabel = getStatusLabel(statusKey);
+              const statusLabel = hasFollowup(app)
+                ? `${baseLabel} · Follow-up`
+                : baseLabel;
+              const statusColor = getStatusColor(statusKey);
               const statusDate = (() => {
                 if (!lastEvent) return '';
                 const stage = (lastEvent as any).stage || '';
@@ -171,30 +332,30 @@ export default function ApplicationsTable() {
                   style={stagnant ? { backgroundColor: '#fff8e1' } : undefined}
                 >
                   <td
-                    className="px-2 py-0 whitespace-nowrap overflow-hidden text-ellipsis"
+                    className="px-2 py-1 whitespace-nowrap overflow-hidden text-ellipsis"
                     title={app.company_name || ''}
                   >
                     {app.company_name}
                   </td>
                   <td
-                    className="px-2 py-0 whitespace-nowrap overflow-hidden text-ellipsis"
+                    className="px-2 py-1 whitespace-nowrap overflow-hidden text-ellipsis"
                     title={app.role_title || ''}
                   >
                     {app.role_title}
                   </td>
                   <td
-                    className="px-2 py-0 whitespace-nowrap overflow-hidden text-ellipsis"
+                    className="px-2 py-1 whitespace-nowrap overflow-hidden text-ellipsis"
                     title={app.location || ''}
                   >
                     {app.location}
                   </td>
                   <td
-                    className="px-2 py-0 whitespace-nowrap overflow-hidden text-ellipsis"
+                    className="px-2 py-1 whitespace-nowrap overflow-hidden text-ellipsis"
                     title={app.source || ''}
                   >
                     {app.source}
                   </td>
-                  <td className="px-2 py-0 whitespace-nowrap overflow-hidden text-ellipsis">
+                  <td className="px-2 py-1 whitespace-nowrap overflow-hidden text-ellipsis">
                     {app.job_url ? (
                       <a
                         href={app.job_url}
@@ -220,17 +381,30 @@ export default function ApplicationsTable() {
                     )}
                   </td>
                   <td
-                    className="px-2 py-0 whitespace-nowrap overflow-hidden text-ellipsis"
-                    title={app.timeline?.[app.timeline.length - 1]?.stage || ''}
+                    className="px-2 py-1 whitespace-nowrap overflow-hidden text-ellipsis"
+                    title={statusLabel}
                   >
-                    {app.timeline?.[app.timeline.length - 1]?.stage}
+                    <Chip
+                      label={statusLabel}
+                      size="small"
+                      sx={{
+                        height: 22,
+                        fontSize: '0.7rem',
+                        fontWeight: 700,
+                        bgcolor: statusColor,
+                        color: '#fff',
+                        '& .MuiChip-label': {
+                          px: 1,
+                        },
+                      }}
+                    />
                   </td>
-                  <td className="px-2 py-0 whitespace-nowrap overflow-hidden text-ellipsis">
+                  <td className="px-2 py-1 whitespace-nowrap overflow-hidden text-ellipsis">
                     {statusDate
                       ? new Date(statusDate).toLocaleDateString()
                       : ''}
                   </td>
-                  <td className="px-2 py-0 text-center">
+                  <td className="px-2 py-1 text-center">
                     <IconButton
                       size="small"
                       aria-label="View application"

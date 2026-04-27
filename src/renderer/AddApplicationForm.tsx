@@ -45,7 +45,6 @@ export default function AddApplicationForm({
   const [form, setForm] = React.useState<Partial<JobApplication>>(initialForm);
 
   const [snackOpen, setSnackOpen] = React.useState(false);
-  const [createdId, setCreatedId] = React.useState<string | null>(null);
   const [submittedType, setSubmittedType] = React.useState<
     'draft' | 'submitted' | null
   >(null);
@@ -122,48 +121,7 @@ export default function AddApplicationForm({
       return { ...(prev || {}), raw_notes: n };
     });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    // Keep legacy form submit behaviour: default to draft
-    await submitWithStatus('draft');
-  };
-
   const [attemptedSubmit, setAttemptedSubmit] = React.useState(false);
-
-  const submitWithStatus = async (finalStatus: 'draft' | 'submitted') => {
-    if (finalStatus === 'submitted') setAttemptedSubmit(true);
-    // create local YYYY-MM-DD at local-midnight and append T00:00:00
-    const today = new Date();
-    const nowDateOnly = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}T00:00:00`;
-    let timeline = form.timeline || [];
-    timeline = [
-      ...timeline,
-      {
-        stage: finalStatus === 'submitted' ? 'Application Submitted' : 'Draft',
-        date: nowDateOnly,
-        notes: null,
-      },
-    ];
-
-    if (finalStatus === 'submitted' && !isValid) {
-      // don't submit if invalid
-      return;
-    }
-
-    setSubmittedType(finalStatus);
-    const result = await onSubmit({ ...form, timeline });
-    if (typeof result === 'string') {
-      setCreatedId(result);
-      setSnackOpen(true);
-    } else {
-      setSnackOpen(true);
-    }
-    // Clear the form after successful save/submit
-    setForm(initialForm);
-    setAttemptedSubmit(false);
-    setSubmittedType(null);
-    setCreatedId(null);
-  };
 
   const isValid = useMemo(() => {
     return !!(
@@ -187,6 +145,48 @@ export default function AddApplicationForm({
       (form.job_url && String(form.job_url).trim())
     );
   }, [form]);
+
+  const submitWithStatus = async (finalStatus: 'draft' | 'submitted') => {
+    if (finalStatus === 'submitted') setAttemptedSubmit(true);
+    // create local YYYY-MM-DD at local-midnight and append T00:00:00
+    const today = new Date();
+    const nowDateOnly = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}T00:00:00`;
+    let timeline = form.timeline || [];
+    timeline = [
+      ...timeline,
+      {
+        stage: finalStatus === 'submitted' ? 'Application Submitted' : 'Draft',
+        date: nowDateOnly,
+        notes: null,
+      },
+    ];
+
+    if (finalStatus === 'submitted' && !isValid) {
+      // don't submit if invalid
+      return;
+    }
+
+    setSubmittedType(finalStatus);
+    await onSubmit({ ...form, timeline });
+    setSnackOpen(true);
+    // Clear the form after successful save/submit
+    setForm(initialForm);
+    setAttemptedSubmit(false);
+    setSubmittedType(null);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    // Keep legacy form submit behaviour: default to draft
+    await submitWithStatus('draft');
+  };
+
+  let toastMessage = 'Application saved';
+  if (submittedType === 'submitted') {
+    toastMessage = 'Application submitted';
+  } else if (submittedType === 'draft') {
+    toastMessage = 'Draft saved';
+  }
 
   return (
     <div
@@ -473,14 +473,25 @@ export default function AddApplicationForm({
         >
           <Alert
             onClose={() => setSnackOpen(false)}
-            severity="success"
-            sx={{ width: '100%' }}
+            severity={submittedType === 'draft' ? 'info' : 'success'}
+            variant="filled"
+            sx={(theme) => ({
+              width: '100%',
+              ...(submittedType === 'draft'
+                ? {
+                    bgcolor: theme.palette.secondary.main,
+                    color: theme.palette.secondary.contrastText,
+                    '& .MuiAlert-icon': {
+                      color: theme.palette.secondary.contrastText,
+                    },
+                    '& .MuiAlert-action': {
+                      color: theme.palette.secondary.contrastText,
+                    },
+                  }
+                : {}),
+            })}
           >
-            {submittedType === 'submitted'
-              ? 'Application submitted'
-              : submittedType === 'draft'
-              ? 'Draft saved'
-              : 'Application saved'}
+            {toastMessage}
           </Alert>
         </Snackbar>
       </form>
