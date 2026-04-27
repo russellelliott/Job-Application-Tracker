@@ -6,6 +6,7 @@ import Chip from '@mui/material/Chip';
 import SearchIcon from '@mui/icons-material/Search';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import LinkIcon from '@mui/icons-material/Link';
 import { useNavigate } from 'react-router-dom';
 import { getAllApplications } from './db';
 
@@ -85,6 +86,10 @@ function getStatusLabel(status: Exclude<StatusKey, 'all'>) {
 
 function getStatusColor(status: Exclude<StatusKey, 'all'>) {
   return STATUS_META[status].color;
+}
+
+function getSourceColor(source: string): string {
+  return source === 'Cold Application' ? '#2563eb' : '#eab308';
 }
 
 export default function ApplicationsTable() {
@@ -282,13 +287,12 @@ export default function ApplicationsTable() {
         >
           <colgroup>
             <col style={{ width: '18%' }} />
-            <col />
-            <col style={{ width: '13%' }} />
-            <col style={{ width: '13%' }} />
-            <col style={{ width: '9%' }} />
+            <col style={{ width: '18%' }} />
+            <col style={{ width: '11%' }} />
+            <col style={{ width: '10%' }} />
             <col style={{ width: '12%' }} />
+            <col style={{ width: '7%' }} />
             <col style={{ width: '9%' }} />
-            <col style={{ width: 92 }} />
           </colgroup>
           <thead>
             <tr>
@@ -296,7 +300,6 @@ export default function ApplicationsTable() {
               <th className="px-2 py-1">Role</th>
               <th className="px-2 py-1">Location</th>
               <th className="px-2 py-1">Source</th>
-              <th className="px-2 py-1">App Link</th>
               <th className="px-2 py-1">Status</th>
               <th className="px-2 py-1">Date</th>
               <th className="px-2 py-1 text-center">Actions</th>
@@ -353,31 +356,21 @@ export default function ApplicationsTable() {
                     className="px-2 py-1 whitespace-nowrap overflow-hidden text-ellipsis"
                     title={app.source || ''}
                   >
-                    {app.source}
-                  </td>
-                  <td className="px-2 py-1 whitespace-nowrap overflow-hidden text-ellipsis">
-                    {app.job_url ? (
-                      <a
-                        href={app.job_url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-blue-600 hover:underline whitespace-nowrap overflow-hidden text-ellipsis"
-                        style={{ display: 'inline-block', maxWidth: '100%' }}
-                      >
-                        Link
-                      </a>
-                    ) : app.contacts &&
-                      app.contacts[0] &&
-                      app.contacts[0].email ? (
-                      <a
-                        href={`mailto:${app.contacts[0].email}`}
-                        className="text-blue-600 hover:underline whitespace-nowrap overflow-hidden text-ellipsis"
-                        style={{ display: 'inline-block', maxWidth: '100%' }}
-                      >
-                        {app.contacts[0].email}
-                      </a>
-                    ) : (
-                      ''
+                    {app.source && (
+                      <Chip
+                        label={app.source}
+                        size="small"
+                        sx={{
+                          height: 22,
+                          fontSize: '0.7rem',
+                          fontWeight: 700,
+                          bgcolor: getSourceColor(app.source),
+                          color: '#fff',
+                          '& .MuiChip-label': {
+                            px: 1,
+                          },
+                        }}
+                      />
                     )}
                   </td>
                   <td
@@ -425,6 +418,25 @@ export default function ApplicationsTable() {
                     >
                       <ModeEditIcon fontSize="small" />
                     </IconButton>
+                    {(app.job_url ||
+                      (app.contacts && app.contacts[0]?.email)) && (
+                      <IconButton
+                        size="small"
+                        aria-label="Open link"
+                        sx={{ p: 0.25 }}
+                        component="a"
+                        href={
+                          app.job_url ||
+                          (app.contacts && app.contacts[0]?.email
+                            ? `mailto:${app.contacts[0].email}`
+                            : undefined)
+                        }
+                        target={app.job_url ? '_blank' : undefined}
+                        rel={app.job_url ? 'noreferrer' : undefined}
+                      >
+                        <LinkIcon fontSize="small" />
+                      </IconButton>
+                    )}
                   </td>
                 </tr>
               );
