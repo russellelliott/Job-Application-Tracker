@@ -9,6 +9,7 @@ import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import LinkIcon from '@mui/icons-material/Link';
 import { useNavigate } from 'react-router-dom';
 import { getAllApplications } from './db';
+import { compareApplicationsForTableOrder } from './applicationOrdering';
 
 type StatusKey =
   | 'all'
@@ -114,43 +115,7 @@ export default function ApplicationsTable() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Sort jobs by the date shown in the table (most-recent first)
-  const getDisplayDate = (app: any) => {
-    const timeline = app.timeline || [];
-    if (timeline.length === 0) return -Infinity;
-    const lastEvent = timeline[timeline.length - 1] || null;
-    if (!lastEvent) return -Infinity;
-    const stage = lastEvent.stage || '';
-    const dateStr =
-      typeof stage === 'string' && stage.toLowerCase().includes('interview')
-        ? lastEvent.due_date || lastEvent.date
-        : lastEvent.date;
-    if (!dateStr) return -Infinity;
-    const t = new Date(dateStr).getTime();
-    return Number.isNaN(t) ? -Infinity : t;
-  };
-
-  const sortedJobs = [...jobs].sort((a, b) => {
-    const aDate = getDisplayDate(a);
-    const bDate = getDisplayDate(b);
-    // Sort descending (newest first)
-    if (aDate === bDate) {
-      const companyA = String(a.company_name || '').toLowerCase();
-      const companyB = String(b.company_name || '').toLowerCase();
-      const companyCompare = companyA.localeCompare(companyB);
-      if (companyCompare !== 0) return companyCompare;
-
-      const roleA = String(a.role_title || '').toLowerCase();
-      const roleB = String(b.role_title || '').toLowerCase();
-      const roleCompare = roleA.localeCompare(roleB);
-      if (roleCompare !== 0) return roleCompare;
-
-      const idA = String(a.id || a._id || '');
-      const idB = String(b.id || b._id || '');
-      return idA.localeCompare(idB);
-    }
-    return bDate - aDate;
-  });
+  const sortedJobs = [...jobs].sort(compareApplicationsForTableOrder);
 
   const searchFilteredJobs = useMemo(
     () =>
@@ -403,7 +368,13 @@ export default function ApplicationsTable() {
                       aria-label="View application"
                       sx={{ p: 0.25 }}
                       onClick={() =>
-                        navigate(`/applications/${app.id || app._id}/view`)
+                        navigate(`/applications/${app.id || app._id}/view`, {
+                          state: {
+                            orderedApplicationIds: filtered
+                              .map((row) => String(row.id || row._id || ''))
+                              .filter(Boolean),
+                          },
+                        })
                       }
                     >
                       <RemoveRedEyeIcon fontSize="small" />

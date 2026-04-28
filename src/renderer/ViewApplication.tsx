@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import IconButton from '@mui/material/IconButton';
@@ -16,6 +16,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { getAllApplications, getApplication, updateApplication } from './db';
+import { getApplicationIdsInTableOrder } from './applicationOrdering';
 import { JobApplication, TimelineEvent } from '../types';
 
 function isEmail(value: string) {
@@ -92,6 +93,7 @@ function formatDate(value?: string | null) {
 export default function ViewApplication() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState(true);
   const [app, setApp] = useState<JobApplication | null>(null);
   const [applicationIds, setApplicationIds] = useState<string[]>([]);
@@ -115,45 +117,18 @@ export default function ViewApplication() {
   }, [id]);
 
   useEffect(() => {
-    // Keep order aligned with the applications table: most recent activity first.
-    const getDisplayDate = (application: any) => {
-      const timeline = application.timeline || [];
-      if (timeline.length === 0) return -Infinity;
-      const lastEvent = timeline[timeline.length - 1] || null;
-      if (!lastEvent) return -Infinity;
-      const stage = lastEvent.stage || '';
-      const dateStr =
-        typeof stage === 'string' && stage.toLowerCase().includes('interview')
-          ? lastEvent.due_date || lastEvent.date
-          : lastEvent.date;
-      if (!dateStr) return -Infinity;
-      const t = new Date(dateStr).getTime();
-      return Number.isNaN(t) ? -Infinity : t;
-    };
+    const navStateIds = (location.state as any)?.orderedApplicationIds;
+    if (Array.isArray(navStateIds) && navStateIds.length > 0) {
+      setApplicationIds(
+        navStateIds.map((value: any) => String(value)).filter(Boolean),
+      );
+      return;
+    }
 
     getAllApplications()
-      .then((all) => {
-        const sorted = [...all].sort((a: any, b: any) => {
-          const aDate = getDisplayDate(a);
-          const bDate = getDisplayDate(b);
-          if (aDate === bDate) {
-            const idA = Number(a._id);
-            const idB = Number(b._id);
-            if (!Number.isNaN(idA) && !Number.isNaN(idB)) return idB - idA;
-            return String(b._id || b.id || '').localeCompare(
-              String(a._id || a.id || ''),
-            );
-          }
-          return bDate - aDate;
-        });
-        setApplicationIds(
-          sorted
-            .map((application: any) => application.id || application._id)
-            .filter(Boolean),
-        );
-      })
+      .then((all) => setApplicationIds(getApplicationIdsInTableOrder(all)))
       .catch(() => setApplicationIds([]));
-  }, [id]);
+  }, [id, location.state]);
 
   const appId = useMemo(() => app?.id || (app as any)?._id || id, [app, id]);
   const currentIndex = useMemo(() => {
@@ -245,7 +220,10 @@ export default function ViewApplication() {
               <IconButton
                 aria-label="Previous application"
                 onClick={() =>
-                  previousId && navigate(`/applications/${previousId}/view`)
+                  previousId &&
+                  navigate(`/applications/${previousId}/view`, {
+                    state: { orderedApplicationIds: applicationIds },
+                  })
                 }
                 disabled={!previousId}
               >
@@ -257,7 +235,12 @@ export default function ViewApplication() {
             <span>
               <IconButton
                 aria-label="Next application"
-                onClick={() => nextId && navigate(`/applications/${nextId}/view`)}
+                onClick={() =>
+                  nextId &&
+                  navigate(`/applications/${nextId}/view`, {
+                    state: { orderedApplicationIds: applicationIds },
+                  })
+                }
                 disabled={!nextId}
               >
                 <ChevronRightIcon />
