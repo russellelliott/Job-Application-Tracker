@@ -16,6 +16,15 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  const parseDate = (dStr?: string | null) => {
+    if (!dStr) return null;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dStr)) {
+      return new Date(`${dStr}T00:00:00`);
+    }
+    const parsed = new Date(dStr);
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
+  };
+
   useEffect(() => {
     let mounted = true;
     getAllApplications()
@@ -77,7 +86,8 @@ function Dashboard() {
               interviewsTotal++;
               const dueStr = ev.due_date || ev.date;
               if (dueStr) {
-                const d = new Date(dueStr);
+                const d = parseDate(dueStr);
+                if (!d) return;
                 const t = new Date(
                   d.getFullYear(),
                   d.getMonth(),
@@ -92,22 +102,21 @@ function Dashboard() {
             // Assessments
             if (stage === 'Assessment') {
               assessmentsTotal++;
+              if ((ev as any).completed_at) {
+                return;
+              }
+
               const dueStr = ev.due_date;
-              if (dueStr) {
-                let d: Date;
-                if (/^\d{4}-\d{2}-\d{2}$/.test(dueStr)) {
-                  d = new Date(`${dueStr}T00:00:00`);
-                } else {
-                  d = new Date(dueStr);
-                }
-                const t = new Date(
-                  d.getFullYear(),
-                  d.getMonth(),
-                  d.getDate(),
-                ).getTime();
-                if (t >= todayStart) {
-                  assessmentsUpcoming++;
-                }
+              const d = parseDate(dueStr);
+              if (!d) return;
+
+              const t = new Date(
+                d.getFullYear(),
+                d.getMonth(),
+                d.getDate(),
+              ).getTime();
+              if (t >= todayStart) {
+                assessmentsUpcoming++;
               }
             }
 
