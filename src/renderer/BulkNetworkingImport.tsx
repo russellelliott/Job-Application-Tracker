@@ -606,7 +606,7 @@ export default function BulkNetworkingImport() {
                       onChange={(e) =>
                         setAppField(
                           'company_name',
-                          e.target.value.trim() || null,
+                          e.target.value || null,
                         )
                       }
                     />
@@ -614,14 +614,14 @@ export default function BulkNetworkingImport() {
                       label="Role Title"
                       value={currentItem.application.role_title || ''}
                       onChange={(e) =>
-                        setAppField('role_title', e.target.value.trim() || null)
+                        setAppField('role_title', e.target.value || null)
                       }
                     />
                     <TextField
                       label="Location"
                       value={currentItem.application.location || ''}
                       onChange={(e) =>
-                        setAppField('location', e.target.value.trim() || null)
+                        setAppField('location', e.target.value || null)
                       }
                     />
 
@@ -652,7 +652,7 @@ export default function BulkNetworkingImport() {
                       label="Primary Job URL"
                       value={currentItem.application.job_url || ''}
                       onChange={(e) =>
-                        setAppField('job_url', e.target.value.trim() || null)
+                        setAppField('job_url', e.target.value || null)
                       }
                     />
 
