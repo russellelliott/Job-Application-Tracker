@@ -1,5 +1,13 @@
 // TypeScript interfaces for Job Application Tracker
 
+// Backup file envelope shape (docs have _rev stripped during export)
+export interface BackupFile {
+  format: 'job-application-tracker-backup';
+  version: 1;
+  createdAt: string; // ISO timestamp
+  docs: JobApplication[];
+}
+
 export interface Contact {
   name: string | null;
   email: string | null;

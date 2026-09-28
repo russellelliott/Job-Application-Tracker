@@ -2,7 +2,6 @@ import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import React from 'react';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
-
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import Sidebar from './Sidebar';
@@ -18,6 +17,8 @@ import EditApplicationForm from './EditApplicationForm';
 import ViewApplication from './ViewApplication';
 import BulkNetworkingImport from './BulkNetworkingImport';
 import AddApplicationOptionsDialog from './AddApplicationOptionsDialog';
+import BackupRestoreDialog from './BackupRestoreDialog';
+import type { BackupFile } from '../types';
 
 function Applications() {
   return (
@@ -52,42 +53,183 @@ function Schedule() {
 }
 
 export default function App() {
-  React.useEffect(() => {
-    importInitialDataIfNeeded();
-  }, []);
-
-  // Add Application handler
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Snackbar state
   const [snackOpen, setSnackOpen] = React.useState(false);
+  const [snackMessage, setSnackMessage] = React.useState('');
+  const [snackSeverity, setSnackSeverity] = React.useState<
+    'success' | 'error' | 'info'
+  >('success');
+
+  // Add application options dialog
   const [optionsOpen, setOptionsOpen] = React.useState(false);
 
-  const showGlobalAddBar =
-    location.pathname === '/' ||
-    location.pathname === '/applications' ||
-    location.pathname === '/schedule' ||
-    location.pathname === '/analytics';
+  // Backup/Restore state
+  const [restoreDialogOpen, setRestoreDialogOpen] = React.useState(false);
+  const [restoreBackup, setRestoreBackup] = React.useState<BackupFile | null>(
+    null
+  );
+  const [restoreError, setRestoreError] = React.useState<string | null>(null);
+  const [restoreLoading, setRestoreLoading] = React.useState(false);
+
+  React.useEffect(() => {
+    importInitialDataIfNeeded();
+
+    // Listen for backup trigger events from the menu
+    const handleBackupCreateTrigger = () => {
+      handleCreateBackup();
+    };
+    const handleBackupRestoreTrigger = () => {
+      handleRestoreBackup();
+    };
+
+    window.electron.ipcRenderer.on(
+      'backup:create:trigger',
+      handleBackupCreateTrigger
+    );
+    window.electron.ipcRenderer.on(
+      'backup:restore:trigger',
+      handleBackupRestoreTrigger
+    );
+
+    return () => {
+      window.electron.ipcRenderer.removeListener(
+        'backup:create:trigger',
+        handleBackupCreateTrigger
+      );
+      window.electron.ipcRenderer.removeListener(
+        'backup:restore:trigger',
+        handleBackupRestoreTrigger
+      );
+    };
+  }, []);
+
+  // Snackbar auto-close
+  React.useEffect(() => {
+    if (snackOpen) {
+      const timer = setTimeout(
+        () => setSnackOpen(false),
+        snackSeverity === 'error' ? 5000 : 3000
+      );
+      return () => clearTimeout(timer);
+    }
+  }, [snackOpen, snackSeverity]);
+
+  // Add Application handler
   const handleAddApplication = async (app: any) => {
-    // Use a UUID for new application IDs
     const generateUuid = () => {
       if (typeof crypto !== 'undefined' && (crypto as any).randomUUID)
         return (crypto as any).randomUUID();
-      // fallback simple uuid v4
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
         /[xy]/g,
         function (c) {
           const r = (Math.random() * 16) | 0;
           const v = c === 'x' ? r : (r & 0x3) | 0x8;
           return v.toString(16);
-        },
+        }
       );
     };
 
     const id = generateUuid();
     await addApplication({ ...app, id });
+    setSnackMessage('Application added');
+    setSnackSeverity('success');
     setSnackOpen(true);
     return id;
   };
+
+  // Backup handler: trigger main process to open save dialog and write backup
+  const handleCreateBackup = async () => {
+    try {
+      const result = await window.electron.exportBackup();
+      if (result.success && result.filePath) {
+        setSnackMessage('Backup saved to ' + result.filePath);
+        setSnackSeverity('success');
+      } else {
+        setSnackMessage(result.error || 'Backup failed');
+        setSnackSeverity('error');
+      }
+    } catch (err: any) {
+      setSnackMessage(err?.message || 'Backup failed');
+      setSnackSeverity('error');
+    }
+    setSnackOpen(true);
+  };
+
+  // Restore handler: trigger main process to open file dialog, read, validate
+  const handleRestoreBackup = async () => {
+    setRestoreError(null);
+    setRestoreBackup(null);
+    setRestoreLoading(true);
+
+    try {
+      const result = await window.electron.requestRestore();
+
+      if (result.error === 'Cancelled') {
+        // User cancelled, no error to show
+        return;
+      }
+
+      if (!result.valid || !result.backup) {
+        setRestoreError(result.error || 'Failed to load backup');
+        setRestoreDialogOpen(true);
+        return;
+      }
+
+      setRestoreBackup(result.backup);
+      setRestoreDialogOpen(true);
+    } catch (err: any) {
+      setRestoreError(err?.message || 'Restore failed');
+    } finally {
+      setRestoreLoading(false);
+    }
+  };
+
+  const handleRestoreConfirm = async () => {
+    setRestoreLoading(true);
+    try {
+      const result = await window.electron.confirmRestore();
+      if (!result.success) {
+        setRestoreError(result.error || 'Restore failed');
+      } else {
+        // Main process will reload the window after successful restore
+        setSnackMessage('Backup restored successfully');
+        setSnackSeverity('success');
+        setSnackOpen(true);
+      }
+    } catch (err: any) {
+      setRestoreError(err?.message || 'Restore failed');
+    } finally {
+      setRestoreLoading(false);
+      if (!restoreLoading) {
+        setRestoreDialogOpen(false);
+        setRestoreBackup(null);
+      }
+    }
+  };
+
+  const handleRestoreCancel = async () => {
+    try {
+      await window.electron.cancelRestore();
+    } catch {
+      // Ignore cancel errors
+    }
+    setRestoreDialogOpen(false);
+    setRestoreBackup(null);
+  };
+
+  const handleCloseRestoreDialog = () => {
+    setRestoreDialogOpen(false);
+    setRestoreBackup(null);
+  };
+
+  const showGlobalAddBar =
+    location.pathname === '/' ||
+    location.pathname === '/applications' ||
+    location.pathname === '/schedule' ||
+    location.pathname === '/analytics';
 
   return (
     <Sidebar>
@@ -108,6 +250,7 @@ export default function App() {
             display: 'flex',
             flexDirection: 'column',
             overflow: 'hidden',
+            position: 'relative',
           }}
         >
           <Routes>
@@ -174,19 +317,31 @@ export default function App() {
         onSelectManual={() => navigate('/applications/add')}
         onSelectBulk={() => navigate('/applications/bulk-import')}
       />
+
       <Snackbar
         open={snackOpen}
-        autoHideDuration={2000}
+        autoHideDuration={3000}
         onClose={() => setSnackOpen(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
         <Alert
           onClose={() => setSnackOpen(false)}
-          severity="success"
+          severity={snackSeverity}
           sx={{ width: '100%' }}
         >
-          Application added
+          {snackMessage}
         </Alert>
       </Snackbar>
+
+      <BackupRestoreDialog
+        open={restoreDialogOpen}
+        backup={restoreBackup}
+        error={restoreError}
+        loading={restoreLoading}
+        onClose={handleCloseRestoreDialog}
+        onConfirm={handleRestoreConfirm}
+        onCancel={handleRestoreCancel}
+      />
     </Sidebar>
   );
 }
