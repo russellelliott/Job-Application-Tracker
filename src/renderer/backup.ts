@@ -1,62 +1,60 @@
 import db from './db';
-import { BackupFile as BackupFileType, JobApplication } from '../types';
+import { validateBackup } from '../backupValidation';
+import type { BackupFile, JobApplication } from '../types';
 
-// Re-export for convenience
-export type BackupFile = BackupFileType;
+export { validateBackup } from '../backupValidation';
 
-// Raw PouchDB document type with internal metadata for stripping
-interface RawPouchDoc extends JobApplication {
-   _rev?: string;
-   _id?: string;
-}
-
-// Export all PouchDB documents into a versioned backup object
+/**
+ * Export all PouchDB documents into a versioned backup object.
+ * This function runs in the renderer where PouchDB lives.
+ */
 export async function exportBackup(): Promise<BackupFile> {
-  const rawDocs = await db.allDocs<RawPouchDoc>({
+  const rawDocs = await db.allDocs<JobApplication & { _rev?: string }>({
     include_docs: true,
     attachments: true,
     binary: false,
-    });
+  });
 
   const docs = rawDocs.rows
-       .map((row) => row.doc)
-       .filter(Boolean) as RawPouchDoc[];
+    .map((row) => row.doc)
+    .filter(Boolean) as (JobApplication & { _rev?: string })[];
 
-   // Strip PouchDB internal fields (_rev, _id) for portable backup
+  // Strip PouchDB internal fields (_rev) for portable backup
   return {
     format: 'job-application-tracker-backup',
     version: 1,
     createdAt: new Date().toISOString(),
     docs: docs.map(({ _rev, ...doc }) => doc),
-   };
+  };
 }
 
-// Validate a backup file object (also used by main process)
-export function validateBackup(data: unknown): data is BackupFile {
-  if (!data || typeof data !== 'object') return false;
+/**
+ * Bulk restore documents into PouchDB.
+ * This function runs in the renderer where PouchDB lives.
+ * @param docs - The documents to restore (from a validated backup)
+ */
+export async function restoreBackupDocs(docs: JobApplication[]): Promise<void> {
+     // Get all existing documents and delete them
+  const existing = await db.allDocs<{ _id: string; _rev: string }>({ include_docs: false });
+  const toDelete: Array<any> = existing.rows
+       .filter((row) => row.doc != null)
+       .map((row) => ({
+         _id: (row.doc as any)._id,
+         _rev: row.value.rev,
+         _deleted: true,
+       }));
 
-  const backup = data as Record<string, unknown>;
+  if (toDelete.length > 0) {
+    await db.bulkDocs(toDelete);
+    }
 
-  // Check format string
-  if (backup.format !== 'job-application-tracker-backup') return false;
+   // Insert backup documents (add _id back for PouchDB)
+  const toInsert = docs.map((doc) => ({ ...doc, _id: doc.id }));
+  const result = await db.bulkDocs(toInsert as any);
 
-  // Check version
-  if (backup.version !== 1) return false;
-
-  // Check createdAt is a valid ISO date string
-  if (typeof backup.createdAt !== 'string') return false;
-  const date = new Date(backup.createdAt);
-  if (isNaN(date.getTime())) return false;
-
-  // Check docs is a non-null array
-  if (!Array.isArray(backup.docs)) return false;
-
-  // Validate each document has required fields
-  for (const doc of backup.docs) {
-    if (!doc || typeof doc !== 'object') return false;
-    // Documents must have an id (we keep IDs for consistency)
-    if (typeof doc.id !== 'string') return false;
-  }
-
-  return true;
+   // Check for failures
+  const failures = result.filter((item) => item && 'error' in item && item.error);
+  if (failures.length > 0) {
+    throw new Error(`Restore failed for ${failures.length} document(s)`);
+   }
 }
