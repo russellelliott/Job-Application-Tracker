@@ -128,9 +128,10 @@ export const getCompanyContacts = async (companyName: string): Promise<Contact[]
 };
 
 /**
- * Get all unique contacts across all applications, grouped by company.
- * Returns an array of contact objects enriched with associated companies.
- */
+  * Get all unique contacts across all applications, grouped by company.
+  * Only returns contacts that have at least one application.
+  * Contacts are sorted alphabetically by company name.
+  */
 export const getAllContacts = async (): Promise< Array<{
   name: string | null;
   email: string | null;
@@ -141,69 +142,108 @@ export const getAllContacts = async (): Promise< Array<{
   applications: Array<{ id: string; company_name: string | null; role_title: string | null; date: string }>;
 }> > => {
   const all = await getAllApplications();
-  // Map: contactKey -> { contact, companies, applications }
+
+   // Step 1: Group applications by company (normalized lowercase)
+  const companyAppsMap = new Map<string, JobApplication[]>();
+
+  for (const app of all) {
+    const companyName = app.company_name?.trim() || '';
+    if (!companyName) continue; // Skip applications without a company name
+    const normalized = companyName.toLowerCase();
+    if (!companyAppsMap.has(normalized)) {
+      companyAppsMap.set(normalized, []);
+    }
+    companyAppsMap.get(normalized)!.push(app);
+   }
+
+   // Step 2: For each company, collect all contacts from its applications
+   // Map: contactKey -> { contact, companies, applications }
   const contactMap = new Map<string, {
     contact: Contact;
     companies: Set<string>;
     applications: Array<{ id: string; company_name: string | null; role_title: string | null; date: string }>;
-  }>();
+   }>();
 
-  for (const app of all) {
-    const contacts = app.contacts || [];
-    for (const contact of contacts) {
-      // Use the full 5-field combination as the key
-      const key = [
-        contact.name || '',
-        contact.email || '',
-        contact.phone || '',
-        contact.linkedin_url || '',
-        contact.connection_type || '',
-      ].join('|');
+  for (const [normalizedCompany, apps] of companyAppsMap.entries()) {
+    const displayName = apps[0]?.company_name || normalizedCompany;
 
-      if (!contactMap.has(key)) {
-        contactMap.set(key, {
-          contact: { ...contact },
-          companies: new Set<string>(),
-          applications: [],
-        });
+    for (const app of apps) {
+      const contacts = app.contacts || [];
+      for (const contact of contacts) {
+         // Only consider a contact if it has at least one field filled
+        const hasAnyField = !!(contact.name || contact.email || contact.phone || contact.linkedin_url || contact.connection_type);
+        if (!hasAnyField) continue;
+
+         // Use the full 5-field combination as the key
+        const key = [
+          contact.name || '',
+          contact.email || '',
+          contact.phone || '',
+          contact.linkedin_url || '',
+          contact.connection_type || '',
+         ].join('|');
+
+        if (!contactMap.has(key)) {
+          contactMap.set(key, {
+            contact: { ...contact },
+            companies: new Set<string>(),
+            applications: [],
+           });
+         }
+
+        const entry = contactMap.get(key)!;
+        entry.companies.add(displayName);
+
+         // Find the most recent timeline date from this application
+        let mostRecentDate = '';
+        if (app.timeline && app.timeline.length > 0) {
+          const dates = app.timeline.map((t: any) => t.date || '').filter(Boolean).sort().reverse();
+          mostRecentDate = dates[0] || '';
+         }
+
+        entry.applications.push({
+          id: app.id,
+          company_name: app.company_name,
+          role_title: app.role_title,
+          date: mostRecentDate,
+         });
        }
-
-      const entry = contactMap.get(key)!;
-      if (app.company_name && app.company_name.trim()) {
-        entry.companies.add(app.company_name.trim());
-       }
-
-      // Find the most recent timeline date
-      let mostRecentDate = '';
-      if (app.timeline && app.timeline.length > 0) {
-        const dates = app.timeline.map((t: any) => t.date || '').filter(Boolean).sort().reverse();
-        mostRecentDate = dates[0] || '';
-       }
-
-      entry.applications.push({
-        id: app.id,
-        company_name: app.company_name,
-        role_title: app.role_title,
-        date: mostRecentDate,
-       });
      }
    }
 
-  // Sort applications by date descending within each contact
-  for (const entry of contactMap.values()) {
+  // Step 3: Filter out contacts with no applications
+  const contactsWithApps = Array.from(contactMap.entries()).filter(([, entry]) => entry.applications.length > 0);
+
+  // Step 4: Sort applications by date descending within each contact
+  for (const [, entry] of contactsWithApps) {
     entry.applications.sort((a, b) => {
       if (!a.date && !b.date) return 0;
       if (!a.date) return 1;
       if (!b.date) return -1;
       return b.date.localeCompare(a.date);
-     });
-   }
+    });
+  }
 
-  return Array.from(contactMap.values()).map((entry) => ({
+   // Step 5: Sort contacts alphabetically by company name (primary), then by contact fields (secondary)
+  contactsWithApps.sort((a, b) => {
+    const aCompanies = Array.from(a[1].companies);
+    const bCompanies = Array.from(b[1].companies);
+    const aPrimaryCompany = aCompanies.length > 0 ? aCompanies[0].toLowerCase() : '';
+    const bPrimaryCompany = bCompanies.length > 0 ? bCompanies[0].toLowerCase() : '';
+    const cmp = aPrimaryCompany.localeCompare(bPrimaryCompany);
+    if (cmp !== 0) return cmp;
+     // Secondary sort by contact key fields for consistent ordering within same company
+    const aKey = [a[0], a[1].contact.email || '', a[1].contact.phone || ''];
+    const bKey = [b[0], b[1].contact.email || '', b[1].contact.phone || ''];
+    return aKey.join('|').localeCompare(bKey.join('|'));
+   });
+
+  // Step 6: Return sorted results with companies sorted alphabetically
+  return contactsWithApps.map(([, entry]) => ({
     ...entry.contact,
     companies: Array.from(entry.companies).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase())),
     applications: entry.applications,
-   }));
+  }));
 };
 
 /**
