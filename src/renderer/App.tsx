@@ -18,6 +18,7 @@ import ViewApplication from './ViewApplication';
 import BulkNetworkingImport from './BulkNetworkingImport';
 import AddApplicationOptionsDialog from './AddApplicationOptionsDialog';
 import BackupRestoreDialog from './BackupRestoreDialog';
+import ContactsPage from './ContactsPage';
 import { exportBackup, restoreBackupDocs } from './backup';
 import type { BackupFile, JobApplication } from '../types';
 
@@ -231,7 +232,8 @@ export default function App() {
     location.pathname === '/' ||
     location.pathname === '/applications' ||
     location.pathname === '/schedule' ||
-    location.pathname === '/analytics';
+    location.pathname === '/analytics' ||
+    location.pathname === '/contacts';
 
   return (
      <Sidebar>
@@ -275,8 +277,9 @@ export default function App() {
                element={<BulkNetworkingImport />}
                />
               <Route path="/schedule" element={<Schedule />} />
-              <Route path="/analytics" element={<AnalyticsDashboard />} />
-            </Routes>
+<Route path="/analytics" element={<AnalyticsDashboard />} />
+               <Route path="/contacts" element={<ContactsPage />} />
+             </Routes>
            </div>
 
            {showGlobalAddBar && (

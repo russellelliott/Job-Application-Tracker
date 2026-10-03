@@ -1,5 +1,51 @@
 import PouchDB from 'pouchdb-browser';
-import { JobApplication } from '../types';
+import { JobApplication, Contact } from '../types';
+
+// --- Contact deduplication & merge utilities ---
+
+/**
+ * Check if two contacts are duplicates (all 5 fields match).
+ * Empty/null values are treated as equal to each other.
+ */
+export function isDuplicateContact(a: Contact, b: Contact): boolean {
+  return (
+     (a.name || '') === (b.name || '') &&
+     (a.email || '') === (b.email || '') &&
+     (a.phone || '') === (b.phone || '') &&
+     (a.linkedin_url || '') === (b.linkedin_url || '') &&
+     (a.connection_type || '') === (b.connection_type || '')
+   );
+}
+
+/**
+ * Merge two contacts by combining non-null/non-empty fields.
+ */
+export function mergeContacts(a: Contact, b: Contact): Contact {
+  return {
+    name: a.name || b.name,
+    email: a.email || b.email,
+    phone: a.phone || b.phone,
+    linkedin_url: a.linkedin_url || b.linkedin_url,
+    connection_type: a.connection_type || b.connection_type,
+  };
+}
+
+/**
+ * Merge an array of contacts into a deduplicated list.
+ * Duplicates are merged by combining non-null fields.
+ */
+export function mergeContactArray(contacts: Contact[]): Contact[] {
+  const merged: Contact[] = [];
+  for (const contact of contacts) {
+    const dupIndex = merged.findIndex((c) => isDuplicateContact(c, contact));
+    if (dupIndex >= 0) {
+      merged[dupIndex] = mergeContacts(merged[dupIndex], contact);
+    } else {
+      merged.push({ ...contact });
+    }
+  }
+  return merged;
+}
 
 // Create or open the PouchDB database
 const db = new PouchDB<JobApplication>('job-applications');
@@ -47,12 +93,172 @@ const normalizeTimeline = (timeline?: JobApplication['timeline']) => {
   }
 })();
 
-// CRUD utility functions
+// --- Contact sharing helpers ---
+
+/**
+ * Get a sorted list of distinct company names from all applications.
+ */
+export const getDistinctCompanies = async (): Promise<string[]> => {
+  const all = await getAllApplications();
+  const companies = new Set<string>();
+  for (const app of all) {
+    if (app.company_name && app.company_name.trim()) {
+      companies.add(app.company_name.trim());
+     }
+   }
+  return Array.from(companies).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+};
+
+/**
+ * Get the union of all contacts across all applications for a given company.
+ * Contacts are deduplicated using the 5-field match (name, email, phone, linkedin_url, connection_type).
+ */
+export const getCompanyContacts = async (companyName: string): Promise<Contact[]> => {
+  const all = await getAllApplications();
+  const normalizedCompany = companyName.trim().toLowerCase();
+  const allContacts: Contact[] = [];
+  for (const app of all) {
+    if ((app.company_name || '').trim().toLowerCase() === normalizedCompany) {
+      if (app.contacts && Array.isArray(app.contacts)) {
+        allContacts.push(...app.contacts);
+       }
+     }
+   }
+  return mergeContactArray(allContacts);
+};
+
+/**
+ * Get all unique contacts across all applications, grouped by company.
+ * Returns an array of contact objects enriched with associated companies.
+ */
+export const getAllContacts = async (): Promise< Array<{
+  name: string | null;
+  email: string | null;
+  phone: string | null;
+  linkedin_url: string | null;
+  connection_type: string | null;
+  companies: string[];
+  applications: Array<{ id: string; company_name: string | null; role_title: string | null; date: string }>;
+}> > => {
+  const all = await getAllApplications();
+  // Map: contactKey -> { contact, companies, applications }
+  const contactMap = new Map<string, {
+    contact: Contact;
+    companies: Set<string>;
+    applications: Array<{ id: string; company_name: string | null; role_title: string | null; date: string }>;
+  }>();
+
+  for (const app of all) {
+    const contacts = app.contacts || [];
+    for (const contact of contacts) {
+      // Use the full 5-field combination as the key
+      const key = [
+        contact.name || '',
+        contact.email || '',
+        contact.phone || '',
+        contact.linkedin_url || '',
+        contact.connection_type || '',
+      ].join('|');
+
+      if (!contactMap.has(key)) {
+        contactMap.set(key, {
+          contact: { ...contact },
+          companies: new Set<string>(),
+          applications: [],
+        });
+       }
+
+      const entry = contactMap.get(key)!;
+      if (app.company_name && app.company_name.trim()) {
+        entry.companies.add(app.company_name.trim());
+       }
+
+      // Find the most recent timeline date
+      let mostRecentDate = '';
+      if (app.timeline && app.timeline.length > 0) {
+        const dates = app.timeline.map((t: any) => t.date || '').filter(Boolean).sort().reverse();
+        mostRecentDate = dates[0] || '';
+       }
+
+      entry.applications.push({
+        id: app.id,
+        company_name: app.company_name,
+        role_title: app.role_title,
+        date: mostRecentDate,
+       });
+     }
+   }
+
+  // Sort applications by date descending within each contact
+  for (const entry of contactMap.values()) {
+    entry.applications.sort((a, b) => {
+      if (!a.date && !b.date) return 0;
+      if (!a.date) return 1;
+      if (!b.date) return -1;
+      return b.date.localeCompare(a.date);
+     });
+   }
+
+  return Array.from(contactMap.values()).map((entry) => ({
+    ...entry.contact,
+    companies: Array.from(entry.companies).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase())),
+    applications: entry.applications,
+   }));
+};
+
+/**
+ * Update all applications for a given company with a new contacts list.
+ */
+const updateCompanyContacts = async (companyName: string, contacts: Contact[]): Promise<void> => {
+  const all = await getAllApplications();
+  const normalizedCompany = companyName.trim().toLowerCase();
+  const updates: Promise<any>[] = [];
+
+  for (const app of all) {
+    if ((app.company_name || '').trim().toLowerCase() === normalizedCompany) {
+      const updatedApp = { ...app, contacts: [...contacts] } as any;
+      updatedApp.timeline = normalizeTimeline(updatedApp.timeline as any);
+      updates.push(db.put(updatedApp));
+     }
+   }
+
+  await Promise.all(updates);
+};
+
 export const addApplication = async (app: JobApplication) => {
-  // store both _id and id to make retrieval consistent
+   // store both _id and id to make retrieval consistent
   const doc = { ...app, _id: app.id, id: app.id } as any;
   if (doc.timeline) doc.timeline = normalizeTimeline(doc.timeline as any);
-  return db.put(doc);
+  const result = await db.put(doc);
+
+  // Propagate contacts to all other applications for the same company
+  if (app.company_name && app.contacts && app.contacts.length > 0) {
+    try {
+      const allApps = await getAllApplications();
+      const normalizedCompany = app.company_name.trim().toLowerCase();
+      const companyApps = allApps.filter(
+        (a) => (a.company_name || '').trim().toLowerCase() === normalizedCompany && a.id !== app.id
+      );
+
+      // Build merged contacts: existing contacts from all apps + new app's contacts
+      const allContacts: Contact[] = [];
+      for (const a of companyApps) {
+        if (a.contacts && Array.isArray(a.contacts)) {
+          allContacts.push(...a.contacts);
+         }
+       }
+      allContacts.push(...app.contacts);
+      const merged = mergeContactArray(allContacts);
+
+      // Update all other applications for this company
+      await updateCompanyContacts(app.company_name, merged);
+     } catch (e) {
+       // Don't fail the application add if contact propagation fails
+       console.error('Failed to propagate contacts:', e);
+     }
+   }
+
+  return result;
 };
 
 export const getAllApplications = async (): Promise<JobApplication[]> => {
@@ -84,7 +290,35 @@ export const updateApplication = async (app: JobApplication) => {
   const merged = { ...existing, ...app } as any;
   if (merged.timeline)
     merged.timeline = normalizeTimeline(merged.timeline as any);
-  return db.put(merged);
+  const result = await db.put(merged);
+
+   // Propagate contact changes to all other applications for the same company
+  if (app.company_name && app.contacts) {
+    try {
+      const allApps = await getAllApplications();
+      const normalizedCompany = app.company_name.trim().toLowerCase();
+      const companyApps = allApps.filter(
+         (a) => (a.company_name || '').trim().toLowerCase() === normalizedCompany && a.id !== app.id
+       );
+
+        // Build merged contacts: existing contacts from all apps + updated app's contacts
+      const allContacts: Contact[] = [];
+      for (const a of companyApps) {
+        if (a.contacts && Array.isArray(a.contacts)) {
+          allContacts.push(...a.contacts);
+          }
+        }
+      allContacts.push(...app.contacts);
+      const mergedContacts = mergeContactArray(allContacts);
+
+       // Update all other applications for this company
+      await updateCompanyContacts(app.company_name, mergedContacts);
+      } catch (e) {
+       console.error('Failed to propagate contact updates:', e);
+      }
+    }
+
+  return result;
 };
 
 export const deleteApplication = async (id: string) => {

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -14,7 +14,9 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
+import Autocomplete from '@mui/material/Autocomplete';
 import { JobApplication } from '../types';
+import { getDistinctCompanies, getCompanyContacts } from './db';
 
 interface AddApplicationFormProps {
   onSubmit: (
@@ -35,7 +37,13 @@ export default function AddApplicationForm({
   const initialForm: Partial<JobApplication> = {
     auxiliary_urls: [''],
     contacts: [
-      { name: '', email: '', phone: '', linkedin_url: '', connection_type: '' },
+      {
+        name: '',
+        email: '',
+        phone: '',
+        linkedin_url: '',
+        connection_type: '',
+      },
     ],
     timeline: [],
     raw_notes: [''],
@@ -43,12 +51,44 @@ export default function AddApplicationForm({
   };
 
   const [form, setForm] = React.useState<Partial<JobApplication>>(initialForm);
-
-  const [snackOpen, setSnackOpen] = React.useState(false);
+  const [companyOptions, setCompanyOptions] = useState<string[]>([]);
+  const [selectedCompany, setSelectedCompany] = useState<string | null>(null);
+  const [snackOpen, setSnackOpen] = useState(false);
   const [submittedType, setSubmittedType] = React.useState<
     'draft' | 'submitted' | null
   >(null);
   const navigate = useNavigate();
+
+   // Load distinct companies on mount
+  useEffect(() => {
+     (async () => {
+       const companies = await getDistinctCompanies();
+       setCompanyOptions(companies);
+      })();
+   }, []);
+
+  // Load contacts when a company is selected from autocomplete
+  const handleCompanyChange = useCallback(async (value: string | null) => {
+    setSelectedCompany(value);
+    if (value) {
+      const contacts = await getCompanyContacts(value);
+      setForm((prev) => ({ ...(prev || {}), contacts }));
+    } else {
+      // Reset to single empty contact when no company selected
+      setForm((prev) => ({
+        ...(prev || {}),
+        contacts: [
+          {
+            name: '',
+            email: '',
+            phone: '',
+            linkedin_url: '',
+            connection_type: '',
+          },
+        ],
+      }));
+    }
+  }, []);
 
   const handleChange = (name: string, value: any) =>
     setForm((prev) => ({ ...(prev || {}), [name]: value }));
@@ -171,6 +211,7 @@ export default function AddApplicationForm({
     setSnackOpen(true);
     // Clear the form after successful save/submit
     setForm(initialForm);
+    setSelectedCompany(null);
     setAttemptedSubmit(false);
     setSubmittedType(null);
   };
@@ -220,22 +261,45 @@ export default function AddApplicationForm({
           }}
         >
           <Stack spacing={2} sx={{ maxWidth: 720 }}>
-            <TextField
-              required
-              label="Company Name"
-              value={form.company_name || ''}
-              onChange={(e) => handleChange('company_name', e.target.value)}
-              error={
-                attemptedSubmit &&
-                !(form.company_name && form.company_name.toString().trim())
+            {/* Company Name with Autocomplete */}
+            <Autocomplete
+              value={
+                selectedCompany ||
+                (form.company_name ? String(form.company_name) : '')
               }
-              helperText={
-                attemptedSubmit &&
-                !(form.company_name && form.company_name.toString().trim())
-                  ? 'Required'
-                  : ''
-              }
+              onChange={(event, newValue) => {
+                handleChange('company_name', newValue);
+                handleCompanyChange(newValue);
+                if (!newValue) {
+                  setSelectedCompany(null);
+                }
+              }}
+              options={companyOptions}
+              filterOptions={(x) => x}
+              isOptionEqualToValue={(option, value) => option === value}
+              selectOnFocus
+              clearOnBlur
+              handleHomeEndKeys
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Company Name"
+                  required
+                  error={
+                    attemptedSubmit &&
+                    !(form.company_name && form.company_name.toString().trim())
+                  }
+                  helperText={
+                    attemptedSubmit &&
+                    !(form.company_name && form.company_name.toString().trim())
+                      ? 'Required'
+                      : ''
+                  }
+                />
+              )}
+              renderOption={(props, option) => <li {...props}>{option}</li>}
             />
+
             <TextField
               required
               label="Role Title"
@@ -370,7 +434,11 @@ export default function AddApplicationForm({
                     label="Connection Type"
                     value={c.connection_type || ''}
                     onChange={(e) =>
-                      handleContactChange(idx, 'connection_type', e.target.value)
+                      handleContactChange(
+                        idx,
+                        'connection_type',
+                        e.target.value,
+                      )
                     }
                   />
                   <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -495,6 +563,6 @@ export default function AddApplicationForm({
           </Alert>
         </Snackbar>
       </form>
-    </div>
-  );
+     </div>
+   );
 }

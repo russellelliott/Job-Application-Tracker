@@ -105,10 +105,13 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
             <Button color="inherit" component={NavLink} to="/">
               Dashboard
             </Button>
-            <Button color="inherit" component={NavLink} to="/applications">
-              Applications
-            </Button>
-            <Badge badgeContent={counts.interviews} color="error">
+<Button color="inherit" component={NavLink} to="/applications">
+               Applications
+              </Button>
+              <Button color="inherit" component={NavLink} to="/contacts">
+               Contacts
+              </Button>
+              <Badge badgeContent={counts.interviews} color="error">
               <Button color="inherit" component={NavLink} to="/schedule">
                 Schedule
               </Button>
