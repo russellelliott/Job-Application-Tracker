@@ -64,9 +64,17 @@ function filterContactsByCompany(
 ): ContactRowData[] {
   if (!searchQuery.trim()) return contacts;
   const query = searchQuery.toLowerCase();
-  return contacts.filter((contact) =>
-    contact.companies.some((company) => company.toLowerCase().includes(query))
-  );
+  return contacts.filter((contact) => {
+     // Search by company name
+    const matchesCompany = contact.companies.some((company) =>
+      company.toLowerCase().includes(query)
+    );
+     // Search by contact name
+    const matchesName = contact.name?.toLowerCase().includes(query) ?? false;
+     // Search by email
+    const matchesEmail = contact.email?.toLowerCase().includes(query) ?? false;
+    return matchesCompany || matchesName || matchesEmail;
+   });
 }
 
 export default function ContactsPage() {
@@ -108,8 +116,8 @@ export default function ContactsPage() {
         </div>
 
         {/* Search bar for filtering contacts by company */}
-        <TextField
-          placeholder="Search by company name..."
+<TextField
+          placeholder="Search by company name or contact name..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           variant="outlined"
@@ -120,10 +128,10 @@ export default function ContactsPage() {
             startAdornment: (
               <InputAdornment position="start">
                 <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-        />
+               </InputAdornment>
+             ),
+           }}
+         />
 
         <TableContainer
         component={Paper}
