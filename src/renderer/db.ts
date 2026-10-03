@@ -128,17 +128,20 @@ export const getCompanyContacts = async (companyName: string): Promise<Contact[]
 };
 
 /**
-  * Get all unique contacts across all applications, grouped by company.
-  * Only returns contacts that have at least one application.
-  * Contacts are sorted alphabetically by company name.
-  */
+   * Get all contacts across all applications, grouped by company.
+   * Each contact is listed per company - the same contact name at different
+   * companies will appear as separate rows. Within a company, duplicate
+   * contacts (matching all 5 fields) are merged together.
+   * Only returns contacts that have at least one application and at least one field filled.
+   * Contacts are sorted alphabetically by company name (primary), then contact name (secondary).
+   */
 export const getAllContacts = async (): Promise< Array<{
   name: string | null;
   email: string | null;
   phone: string | null;
   linkedin_url: string | null;
   connection_type: string | null;
-  companies: string[];
+  company: string;
   applications: Array<{ id: string; company_name: string | null; role_title: string | null; date: string }>;
 }> > => {
   const all = await getAllApplications();
@@ -156,11 +159,10 @@ export const getAllContacts = async (): Promise< Array<{
     companyAppsMap.get(normalized)!.push(app);
    }
 
-   // Step 2: For each company, collect all contacts from its applications
-   // Map: contactKey -> { contact, companies, applications }
+   // Step 2: For each company, collect and deduplicate contacts
+   // Key: normalizedCompany + '|' + 5fieldContactKey
   const contactMap = new Map<string, {
     contact: Contact;
-    companies: Set<string>;
     applications: Array<{ id: string; company_name: string | null; role_title: string | null; date: string }>;
    }>();
 
@@ -170,80 +172,83 @@ export const getAllContacts = async (): Promise< Array<{
     for (const app of apps) {
       const contacts = app.contacts || [];
       for (const contact of contacts) {
-         // Only consider a contact if it has at least one field filled
+          // Only consider a contact if it has at least one field filled
         const hasAnyField = !!(contact.name || contact.email || contact.phone || contact.linkedin_url || contact.connection_type);
         if (!hasAnyField) continue;
 
-         // Use the full 5-field combination as the key
-        const key = [
+          // Use company + 5-field combination as the key to keep contacts separate per company
+        const contactKey = [
+          normalizedCompany,
           contact.name || '',
           contact.email || '',
           contact.phone || '',
           contact.linkedin_url || '',
           contact.connection_type || '',
-         ].join('|');
+          ].join('|');
 
-        if (!contactMap.has(key)) {
-          contactMap.set(key, {
+        if (!contactMap.has(contactKey)) {
+          contactMap.set(contactKey, {
             contact: { ...contact },
-            companies: new Set<string>(),
             applications: [],
-           });
-         }
+            });
+          }
 
-        const entry = contactMap.get(key)!;
-        entry.companies.add(displayName);
+        const entry = contactMap.get(contactKey)!;
 
-         // Find the most recent timeline date from this application
+          // Find the most recent timeline date from this application
         let mostRecentDate = '';
         if (app.timeline && app.timeline.length > 0) {
           const dates = app.timeline.map((t: any) => t.date || '').filter(Boolean).sort().reverse();
           mostRecentDate = dates[0] || '';
-         }
+          }
 
         entry.applications.push({
           id: app.id,
           company_name: app.company_name,
           role_title: app.role_title,
           date: mostRecentDate,
-         });
-       }
-     }
-   }
+          });
+        }
+      }
+    }
 
-  // Step 3: Filter out contacts with no applications
-  const contactsWithApps = Array.from(contactMap.entries()).filter(([, entry]) => entry.applications.length > 0);
+   // Step 3: Filter out contacts with no applications and build result
+  const contactsWithApps = Array.from(contactMap.entries())
+    .filter(([, entry]) => entry.applications.length > 0)
+    .map(([key, entry]) => {
+      // Extract the company from the key (first part before '|')
+      const companyNormalized = key.split('|')[0];
+      const displayName = Array.from(companyAppsMap.values())
+        .find((apps) => apps[0]?.company_name?.toLowerCase() === companyNormalized)?.[0]?.company_name || companyNormalized;
 
-  // Step 4: Sort applications by date descending within each contact
-  for (const [, entry] of contactsWithApps) {
+      return {
+        ...entry.contact,
+        company: displayName,
+        applications: entry.applications,
+       };
+      });
+
+   // Step 4: Sort applications by date descending within each contact
+  for (const entry of contactsWithApps) {
     entry.applications.sort((a, b) => {
       if (!a.date && !b.date) return 0;
       if (!a.date) return 1;
       if (!b.date) return -1;
       return b.date.localeCompare(a.date);
-    });
-  }
+     });
+   }
 
-   // Step 5: Sort contacts alphabetically by company name (primary), then by contact fields (secondary)
+   // Step 5: Sort contacts alphabetically by company name (primary), then by contact name (secondary)
   contactsWithApps.sort((a, b) => {
-    const aCompanies = Array.from(a[1].companies);
-    const bCompanies = Array.from(b[1].companies);
-    const aPrimaryCompany = aCompanies.length > 0 ? aCompanies[0].toLowerCase() : '';
-    const bPrimaryCompany = bCompanies.length > 0 ? bCompanies[0].toLowerCase() : '';
-    const cmp = aPrimaryCompany.localeCompare(bPrimaryCompany);
+    const cmp = a.company.toLowerCase().localeCompare(b.company.toLowerCase());
     if (cmp !== 0) return cmp;
-     // Secondary sort by contact key fields for consistent ordering within same company
-    const aKey = [a[0], a[1].contact.email || '', a[1].contact.phone || ''];
-    const bKey = [b[0], b[1].contact.email || '', b[1].contact.phone || ''];
-    return aKey.join('|').localeCompare(bKey.join('|'));
-   });
+     // Secondary sort by contact name, then email
+    const aName = a.name || a.email || '';
+    const bName = b.name || b.email || '';
+    return aName.toLowerCase().localeCompare(bName.toLowerCase());
+    });
 
-  // Step 6: Return sorted results with companies sorted alphabetically
-  return contactsWithApps.map(([, entry]) => ({
-    ...entry.contact,
-    companies: Array.from(entry.companies).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase())),
-    applications: entry.applications,
-  }));
+  return contactsWithApps;
 };
 
 /**

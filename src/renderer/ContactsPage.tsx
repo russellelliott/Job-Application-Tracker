@@ -22,13 +22,13 @@ interface ContactRowData {
  phone: string | null;
  linkedin_url: string | null;
  connection_type: string | null;
- companies: string[];
+ company: string;
  applications: Array<{
    id: string;
    company_name: string | null;
    role_title: string | null;
    date: string;
-  }>;
+   }>;
 }
 
 function getContactDisplay(contact: ContactRowData): string {
@@ -65,16 +65,14 @@ function filterContactsByCompany(
   if (!searchQuery.trim()) return contacts;
   const query = searchQuery.toLowerCase();
   return contacts.filter((contact) => {
-     // Search by company name
-    const matchesCompany = contact.companies.some((company) =>
-      company.toLowerCase().includes(query)
-    );
-     // Search by contact name
+      // Search by company name
+    const matchesCompany = contact.company.toLowerCase().includes(query);
+      // Search by contact name
     const matchesName = contact.name?.toLowerCase().includes(query) ?? false;
-     // Search by email
+      // Search by email
     const matchesEmail = contact.email?.toLowerCase().includes(query) ?? false;
     return matchesCompany || matchesName || matchesEmail;
-   });
+    });
 }
 
 export default function ContactsPage() {
@@ -165,11 +163,9 @@ export default function ContactsPage() {
                   onClick={() => setOpenContactId(isOpen ? null : key)}
                   sx={{ cursor: 'pointer', bgcolor: isOpen ? '#f0f7ff' : '#fff' }}
                   >
-                   <TableCell>
-                     {contact.companies.length > 0
-                       ? contact.companies.join(', ')
-                       : '(No company)'}
-                    </TableCell>
+<TableCell>
+                       {contact.company || '(No company)'}
+                      </TableCell>
                    <TableCell>{getContactDisplay(contact)}</TableCell>
                    <TableCell>
                      {contact.email ? (
