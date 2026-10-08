@@ -53,6 +53,7 @@ export default function AddApplicationForm({
   const [form, setForm] = React.useState<Partial<JobApplication>>(initialForm);
   const [companyOptions, setCompanyOptions] = useState<string[]>([]);
   const [selectedCompany, setSelectedCompany] = useState<string | null>(null);
+  const [companyInput, setCompanyInput] = useState('');
   const [snackOpen, setSnackOpen] = useState(false);
   const [submittedType, setSubmittedType] = React.useState<
     'draft' | 'submitted' | null
@@ -212,6 +213,7 @@ export default function AddApplicationForm({
     // Clear the form after successful save/submit
     setForm(initialForm);
     setSelectedCompany(null);
+    setCompanyInput('');
     setAttemptedSubmit(false);
     setSubmittedType(null);
   };
@@ -263,22 +265,29 @@ export default function AddApplicationForm({
           <Stack spacing={2} sx={{ maxWidth: 720 }}>
             {/* Company Name with Autocomplete */}
             <Autocomplete
-              value={
-                selectedCompany ||
-                (form.company_name ? String(form.company_name) : '')
-              }
+              freeSolo
+              value={selectedCompany}
+              inputValue={companyInput}
+              onInputChange={(event, newInputValue, reason) => {
+                setCompanyInput(newInputValue);
+                if (reason !== 'reset') {
+                  handleChange('company_name', newInputValue);
+                  setSelectedCompany(null);
+                }
+              }}
               onChange={(event, newValue) => {
-                handleChange('company_name', newValue);
-                handleCompanyChange(newValue);
+                const companyName = newValue || '';
+                handleChange('company_name', companyName);
+                setCompanyInput(companyName);
+                handleCompanyChange(companyName || null);
                 if (!newValue) {
                   setSelectedCompany(null);
                 }
               }}
               options={companyOptions}
-              filterOptions={(x) => x}
               isOptionEqualToValue={(option, value) => option === value}
               selectOnFocus
-              clearOnBlur
+              clearOnBlur={false}
               handleHomeEndKeys
               renderInput={(params) => (
                 <TextField
