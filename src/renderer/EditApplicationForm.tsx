@@ -12,13 +12,14 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
+import Autocomplete from '@mui/material/Autocomplete';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { JobApplication } from '../types';
-import { getApplication, updateApplication, deleteApplication } from './db';
+import { getApplication, updateApplication, deleteApplication, searchAllContacts } from './db';
 
 type DeleteFieldTarget =
   | { type: 'auxiliary_urls'; index: number; content: string }
@@ -38,6 +39,24 @@ export default function EditApplicationForm() {
   const [deleting, setDeleting] = useState(false);
   const [deleteFieldTarget, setDeleteFieldTarget] =
     useState<DeleteFieldTarget | null>(null);
+
+  // Load all contacts (for autocomplete) once on mount
+  const [allContacts, setAllContacts] = useState<
+    Array<{
+      name: string | null;
+      email: string | null;
+      phone: string | null;
+      linkedin_url: string | null;
+      connection_type: string | null;
+      company: string;
+    }>
+  >([]);
+  useEffect(() => {
+    (async () => {
+      const contacts = await searchAllContacts('');
+      setAllContacts(contacts);
+    })();
+  }, []);
   useEffect(() => {
     if (!id) {
       setLoading(false);
@@ -371,40 +390,100 @@ export default function EditApplicationForm() {
                     marginBottom: 8,
                   }}
                 >
-                  <TextField
-                    label="Name"
-                    value={c.name || ''}
-                    onChange={(e) =>
-                      setContactField(idx, 'name', e.target.value)
-                    }
+                  <Autocomplete freeSolo options={allContacts.filter((ct) => {
+                    if (ct.name?.toLowerCase().includes((c.name || '').toLowerCase())) return true;
+                    return ct.email?.toLowerCase().includes((c.name || '').toLowerCase()) || ct.phone?.toLowerCase().includes((c.name || '').toLowerCase()) || ct.linkedin_url?.toLowerCase().includes((c.name || '').toLowerCase()) || ct.connection_type?.toLowerCase().includes((c.name || '').toLowerCase());
+                  })} isOptionEqualToValue={(option, value) => option.company + (option.name || '') === (value as any).company + ((value as any).name || '')} value={c.name ? { ...c, company: '' } : null}
+                    onChange={(event, newValue) => {
+                      if (newValue && typeof newValue !== 'string') {
+                        setApp((prev) => {
+                          const contacts = [...(prev?.contacts || [])];
+                          contacts[idx] = { name: newValue.name, email: newValue.email, phone: newValue.phone, linkedin_url: newValue.linkedin_url, connection_type: newValue.connection_type } as any;
+                          return { ...(prev || {}), contacts };
+                        });
+                      }
+                    }} getOptionLabel={(option) => { if (typeof option === 'string') return option; const label = option.name || option.email || ''; return option.company ? `${label} (${option.company})` : label; }}
+                    renderInput={(params) => (<TextField {...params} label="Name" onChange={(e) => setContactField(idx, 'name', e.target.value)} />)}
+                    renderOption={(props, option) => (<li {...props}><div><div>{option.name || option.email || '(no name)'}</div><div style={{ fontSize: 12, color: '#666' }}>{option.company}{[option.email, option.phone, option.linkedin_url].filter(Boolean).join(' · ')}</div></div></li>)}
                   />
-                  <TextField
-                    label="Email"
-                    value={c.email || ''}
-                    onChange={(e) =>
-                      setContactField(idx, 'email', e.target.value)
-                    }
+                  <Autocomplete freeSolo options={allContacts.filter((ct) => {
+                    if (ct.email?.toLowerCase().includes((c.email || '').toLowerCase())) return true;
+                    return ct.name?.toLowerCase().includes((c.email || '').toLowerCase()) || ct.phone?.toLowerCase().includes((c.email || '').toLowerCase()) || ct.linkedin_url?.toLowerCase().includes((c.email || '').toLowerCase()) || ct.connection_type?.toLowerCase().includes((c.email || '').toLowerCase());
+                  })} isOptionEqualToValue={(option, value) => option.company + (option.email || '') === (value as any).company + ((value as any).email || '')} value={c.email ? { ...c, company: '' } : null}
+                    onChange={(event, newValue) => {
+                      if (newValue && typeof newValue !== 'string') {
+                        setApp((prev) => {
+                          const contacts = [...(prev?.contacts || [])];
+                          contacts[idx] = { name: newValue.name, email: newValue.email, phone: newValue.phone, linkedin_url: newValue.linkedin_url, connection_type: newValue.connection_type } as any;
+                          return { ...(prev || {}), contacts };
+                        });
+                      }
+                    }} getOptionLabel={(option) => { if (typeof option === 'string') return option; const label = option.name || option.email || ''; return option.company ? `${label} (${option.company})` : label; }}
+                    renderInput={(params) => (<TextField {...params} label="Email" onChange={(e) => setContactField(idx, 'email', e.target.value)} />)}
+                    renderOption={(props, option) => (<li {...props}><div><div>{option.name || option.email || '(no name)'}</div><div style={{ fontSize: 12, color: '#666' }}>{option.company}{[option.email, option.phone, option.linkedin_url].filter(Boolean).join(' · ')}</div></div></li>)}
                   />
-                  <TextField
-                    label="Phone"
-                    value={c.phone || ''}
-                    onChange={(e) =>
-                      setContactField(idx, 'phone', e.target.value)
-                    }
+                  <Autocomplete
+                    freeSolo
+                    options={allContacts.filter((ct) => {
+                      if (ct.phone?.toLowerCase().includes((c.phone || '').toLowerCase())) return true;
+                      return ct.name?.toLowerCase().includes((c.phone || '').toLowerCase()) || ct.email?.toLowerCase().includes((c.phone || '').toLowerCase()) || ct.linkedin_url?.toLowerCase().includes((c.phone || '').toLowerCase()) || ct.connection_type?.toLowerCase().includes((c.phone || '').toLowerCase());
+                    })}
+                    isOptionEqualToValue={(option, value) => option.company + (option.phone || '') === (value as any).company + ((value as any).phone || '')}
+                    value={c.phone ? { ...c, company: '' } : null}
+                    onChange={(event, newValue) => {
+                      if (newValue && typeof newValue !== 'string') {
+                        setApp((prev) => {
+                          const contacts = [...(prev?.contacts || [])];
+                          contacts[idx] = { name: newValue.name, email: newValue.email, phone: newValue.phone, linkedin_url: newValue.linkedin_url, connection_type: newValue.connection_type } as any;
+                          return { ...(prev || {}), contacts };
+                        });
+                      }
+                    }}
+                    getOptionLabel={(option) => { if (typeof option === 'string') return option; const label = option.phone || option.name || ''; return option.company ? `${label} (${option.company})` : label; }}
+                    renderInput={(params) => (<TextField {...params} label="Phone" onChange={(e) => setContactField(idx, 'phone', e.target.value)} />)}
+                    renderOption={(props, option) => (<li {...props}><div><div>{option.name || option.email || '(no name)'}</div><div style={{ fontSize: 12, color: '#666' }}>{option.company}{[option.phone, option.linkedin_url].filter(Boolean).join(' · ')}</div></div></li>)}
                   />
-                  <TextField
-                    label="LinkedIn"
-                    value={c.linkedin_url || ''}
-                    onChange={(e) =>
-                      setContactField(idx, 'linkedin_url', e.target.value)
-                    }
+                  <Autocomplete
+                    freeSolo
+                    options={allContacts.filter((ct) => {
+                      if (ct.linkedin_url?.toLowerCase().includes((c.linkedin_url || '').toLowerCase())) return true;
+                      return ct.name?.toLowerCase().includes((c.linkedin_url || '').toLowerCase()) || ct.email?.toLowerCase().includes((c.linkedin_url || '').toLowerCase()) || ct.phone?.toLowerCase().includes((c.linkedin_url || '').toLowerCase()) || ct.connection_type?.toLowerCase().includes((c.linkedin_url || '').toLowerCase());
+                    })}
+                    isOptionEqualToValue={(option, value) => option.company + (option.linkedin_url || '') === (value as any).company + ((value as any).linkedin_url || '')}
+                    value={c.linkedin_url ? { ...c, company: '' } : null}
+                    onChange={(event, newValue) => {
+                      if (newValue && typeof newValue !== 'string') {
+                        setApp((prev) => {
+                          const contacts = [...(prev?.contacts || [])];
+                          contacts[idx] = { name: newValue.name, email: newValue.email, phone: newValue.phone, linkedin_url: newValue.linkedin_url, connection_type: newValue.connection_type } as any;
+                          return { ...(prev || {}), contacts };
+                        });
+                      }
+                    }}
+                    getOptionLabel={(option) => { if (typeof option === 'string') return option; const label = option.linkedin_url || option.name || ''; return option.company ? `${label} (${option.company})` : label; }}
+                    renderInput={(params) => (<TextField {...params} label="LinkedIn" onChange={(e) => setContactField(idx, 'linkedin_url', e.target.value)} />)}
+                    renderOption={(props, option) => (<li {...props}><div><div>{option.name || option.email || '(no name)'}</div><div style={{ fontSize: 12, color: '#666' }}>{option.company}{[option.linkedin_url, option.email].filter(Boolean).join(' · ')}</div></div></li>)}
                   />
-                  <TextField
-                    label="Connection Type"
-                    value={c.connection_type || ''}
-                    onChange={(e) =>
-                      setContactField(idx, 'connection_type', e.target.value)
-                    }
+                  <Autocomplete
+                    freeSolo
+                    options={allContacts.filter((ct) => {
+                      if (ct.connection_type?.toLowerCase().includes((c.connection_type || '').toLowerCase())) return true;
+                      return ct.name?.toLowerCase().includes((c.connection_type || '').toLowerCase()) || ct.email?.toLowerCase().includes((c.connection_type || '').toLowerCase()) || ct.phone?.toLowerCase().includes((c.connection_type || '').toLowerCase()) || ct.linkedin_url?.toLowerCase().includes((c.connection_type || '').toLowerCase());
+                    })}
+                    isOptionEqualToValue={(option, value) => option.company + (option.connection_type || '') === (value as any).company + ((value as any).connection_type || '')}
+                    value={c.connection_type ? { ...c, company: '' } : null}
+                    onChange={(event, newValue) => {
+                      if (newValue && typeof newValue !== 'string') {
+                        setApp((prev) => {
+                          const contacts = [...(prev?.contacts || [])];
+                          contacts[idx] = { name: newValue.name, email: newValue.email, phone: newValue.phone, linkedin_url: newValue.linkedin_url, connection_type: newValue.connection_type } as any;
+                          return { ...(prev || {}), contacts };
+                        });
+                      }
+                    }}
+                    getOptionLabel={(option) => { if (typeof option === 'string') return option; const label = option.connection_type || option.name || ''; return option.company ? `${label} (${option.company})` : label; }}
+                    renderInput={(params) => (<TextField {...params} label="Connection Type" onChange={(e) => setContactField(idx, 'connection_type', e.target.value)} />)}
+                    renderOption={(props, option) => (<li {...props}><div><div>{option.name || option.email || '(no name)'}</div><div style={{ fontSize: 12, color: '#666' }}>{option.company}{[option.connection_type].filter(Boolean).join(' · ')}</div></div></li>)}
                   />
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <IconButton
