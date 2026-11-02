@@ -293,7 +293,7 @@ export default function AddApplicationForm({
             paddingBottom: 160,
           }}
         >
-          <Stack spacing={2} sx={{ maxWidth: 720 }}>
+          <Stack spacing={2}>
             {/* Company Name with Autocomplete */}
             <Autocomplete
               freeSolo
