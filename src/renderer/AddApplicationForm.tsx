@@ -91,27 +91,36 @@ export default function AddApplicationForm({
    }, []);
 
   // Load contacts when a company is selected from autocomplete
-  const handleCompanyChange = useCallback(async (value: string | null) => {
-    setSelectedCompany(value);
-    if (value) {
-      const contacts = await getCompanyContacts(value);
-      setForm((prev) => ({ ...(prev || {}), contacts }));
-    } else {
-      // Reset to single empty contact when no company selected
-      setForm((prev) => ({
-        ...(prev || {}),
-        contacts: [
-          {
-            name: '',
-            email: '',
-            phone: '',
-            linkedin_url: '',
-            connection_type: '',
-          },
-        ],
-      }));
-    }
-  }, []);
+  const handleCompanyChange = useCallback(
+    async (value: string | null) => {
+      setSelectedCompany(value);
+      if (value) {
+        const contacts = await getCompanyContacts(value);
+        setForm((prev) => ({ ...(prev || {}), contacts }));
+        // Refresh autocomplete list to include contacts from the selected company
+        const all = await searchAllContacts('');
+        setAllContacts(all);
+      } else {
+        // Reset to single empty contact when no company selected
+        setForm((prev) => ({
+          ...(prev || {}),
+          contacts: [
+            {
+              name: '',
+              email: '',
+              phone: '',
+              linkedin_url: '',
+              connection_type: '',
+            },
+          ],
+        }));
+        // Also refresh autocomplete when company is cleared
+        const all = await searchAllContacts('');
+        setAllContacts(all);
+      }
+    },
+    [],
+  );
 
   const handleChange = (name: string, value: any) =>
     setForm((prev) => ({ ...(prev || {}), [name]: value }));
@@ -436,13 +445,17 @@ export default function AddApplicationForm({
                   <Autocomplete
                     freeSolo
                     options={allContacts.filter(
-                      (ct) =>
-                        !c.name ||
-                        ct.name?.toLowerCase().includes((c.name || '').toLowerCase()) ||
-                        ct.email?.toLowerCase().includes((c.name || '').toLowerCase()) ||
-                        ct.phone?.toLowerCase().includes((c.name || '').toLowerCase()) ||
-                        ct.linkedin_url?.toLowerCase().includes((c.name || '').toLowerCase()) ||
-                        ct.connection_type?.toLowerCase().includes((c.name || '').toLowerCase()),
+                      (ct) => {
+                        // Primary match: contact.name contains the typed name
+                        if (ct.name?.toLowerCase().includes((c.name || '').toLowerCase())) return true;
+                        // Fallback: match any other field
+                        return (
+                          ct.email?.toLowerCase().includes((c.name || '').toLowerCase()) ||
+                          ct.phone?.toLowerCase().includes((c.name || '').toLowerCase()) ||
+                          ct.linkedin_url?.toLowerCase().includes((c.name || '').toLowerCase()) ||
+                          ct.connection_type?.toLowerCase().includes((c.name || '').toLowerCase())
+                        );
+                      },
                     )}
                     isOptionEqualToValue={(option, value) =>
                       option.company + (option.name || '') ===
@@ -495,13 +508,17 @@ export default function AddApplicationForm({
                   <Autocomplete
                     freeSolo
                     options={allContacts.filter(
-                      (ct) =>
-                        !c.email ||
-                        ct.name?.toLowerCase().includes((c.email || '').toLowerCase()) ||
-                        ct.email?.toLowerCase().includes((c.email || '').toLowerCase()) ||
-                        ct.phone?.toLowerCase().includes((c.email || '').toLowerCase()) ||
-                        ct.linkedin_url?.toLowerCase().includes((c.email || '').toLowerCase()) ||
-                        ct.connection_type?.toLowerCase().includes((c.email || '').toLowerCase()),
+                      (ct) => {
+                        // Primary match: contact.email contains the typed email
+                        if (ct.email?.toLowerCase().includes((c.email || '').toLowerCase())) return true;
+                        // Fallback: match any other field
+                        return (
+                          ct.name?.toLowerCase().includes((c.email || '').toLowerCase()) ||
+                          ct.phone?.toLowerCase().includes((c.email || '').toLowerCase()) ||
+                          ct.linkedin_url?.toLowerCase().includes((c.email || '').toLowerCase()) ||
+                          ct.connection_type?.toLowerCase().includes((c.email || '').toLowerCase())
+                        );
+                      },
                     )}
                     isOptionEqualToValue={(option, value) =>
                       option.company + (option.email || '') ===
@@ -554,13 +571,17 @@ export default function AddApplicationForm({
                   <Autocomplete
                     freeSolo
                     options={allContacts.filter(
-                      (ct) =>
-                        !c.phone ||
-                        ct.name?.toLowerCase().includes((c.phone || '').toLowerCase()) ||
-                        ct.email?.toLowerCase().includes((c.phone || '').toLowerCase()) ||
-                        ct.phone?.toLowerCase().includes((c.phone || '').toLowerCase()) ||
-                        ct.linkedin_url?.toLowerCase().includes((c.phone || '').toLowerCase()) ||
-                        ct.connection_type?.toLowerCase().includes((c.phone || '').toLowerCase()),
+                      (ct) => {
+                        // Primary match: contact.phone contains the typed phone
+                        if (ct.phone?.toLowerCase().includes((c.phone || '').toLowerCase())) return true;
+                        // Fallback: match any other field
+                        return (
+                          ct.name?.toLowerCase().includes((c.phone || '').toLowerCase()) ||
+                          ct.email?.toLowerCase().includes((c.phone || '').toLowerCase()) ||
+                          ct.linkedin_url?.toLowerCase().includes((c.phone || '').toLowerCase()) ||
+                          ct.connection_type?.toLowerCase().includes((c.phone || '').toLowerCase())
+                        );
+                      },
                     )}
                     isOptionEqualToValue={(option, value) =>
                       option.company + (option.phone || '') ===
@@ -613,13 +634,17 @@ export default function AddApplicationForm({
                   <Autocomplete
                     freeSolo
                     options={allContacts.filter(
-                      (ct) =>
-                        !c.linkedin_url ||
-                        ct.name?.toLowerCase().includes((c.linkedin_url || '').toLowerCase()) ||
-                        ct.email?.toLowerCase().includes((c.linkedin_url || '').toLowerCase()) ||
-                        ct.phone?.toLowerCase().includes((c.linkedin_url || '').toLowerCase()) ||
-                        ct.linkedin_url?.toLowerCase().includes((c.linkedin_url || '').toLowerCase()) ||
-                        ct.connection_type?.toLowerCase().includes((c.linkedin_url || '').toLowerCase()),
+                      (ct) => {
+                        // Primary match: contact.linkedin_url contains the typed URL
+                        if (ct.linkedin_url?.toLowerCase().includes((c.linkedin_url || '').toLowerCase())) return true;
+                        // Fallback: match any other field
+                        return (
+                          ct.name?.toLowerCase().includes((c.linkedin_url || '').toLowerCase()) ||
+                          ct.email?.toLowerCase().includes((c.linkedin_url || '').toLowerCase()) ||
+                          ct.phone?.toLowerCase().includes((c.linkedin_url || '').toLowerCase()) ||
+                          ct.connection_type?.toLowerCase().includes((c.linkedin_url || '').toLowerCase())
+                        );
+                      },
                     )}
                     isOptionEqualToValue={(option, value) =>
                       option.company + (option.linkedin_url || '') ===
@@ -672,13 +697,17 @@ export default function AddApplicationForm({
                   <Autocomplete
                     freeSolo
                     options={allContacts.filter(
-                      (ct) =>
-                        !c.connection_type ||
-                        ct.name?.toLowerCase().includes((c.connection_type || '').toLowerCase()) ||
-                        ct.email?.toLowerCase().includes((c.connection_type || '').toLowerCase()) ||
-                        ct.phone?.toLowerCase().includes((c.connection_type || '').toLowerCase()) ||
-                        ct.linkedin_url?.toLowerCase().includes((c.connection_type || '').toLowerCase()) ||
-                        ct.connection_type?.toLowerCase().includes((c.connection_type || '').toLowerCase()),
+                      (ct) => {
+                        // Primary match: contact.connection_type contains the typed value
+                        if (ct.connection_type?.toLowerCase().includes((c.connection_type || '').toLowerCase())) return true;
+                        // Fallback: match any other field
+                        return (
+                          ct.name?.toLowerCase().includes((c.connection_type || '').toLowerCase()) ||
+                          ct.email?.toLowerCase().includes((c.connection_type || '').toLowerCase()) ||
+                          ct.phone?.toLowerCase().includes((c.connection_type || '').toLowerCase()) ||
+                          ct.linkedin_url?.toLowerCase().includes((c.connection_type || '').toLowerCase())
+                        );
+                      },
                     )}
                     isOptionEqualToValue={(option, value) =>
                       option.company + (option.connection_type || '') ===
