@@ -252,6 +252,97 @@ export const getAllContacts = async (): Promise< Array<{
 };
 
 /**
+ * Search contacts by a query string across all fields (name, email, phone,
+ * linkedin_url, connection_type).  Returns a deduplicated list, sorted by
+ * name (or email when name is absent).  Each result also includes the
+ * company name for display context.
+ *
+ * Only contacts that have at least one non-null/non-empty field are included.
+ */
+export const searchAllContacts = async (
+  query: string,
+): Promise<
+  Array<{
+    name: string | null;
+    email: string | null;
+    phone: string | null;
+    linkedin_url: string | null;
+    connection_type: string | null;
+    company: string;
+  }>
+> => {
+  const all = await getAllApplications();
+  const normalizedQuery = (query || '').toLowerCase();
+
+  // Collect every contact from every application that has at least one field.
+  const contactEntries: Array<{
+    contact: Contact;
+    company: string;
+  }> = [];
+
+  for (const app of all) {
+    const companyName = app.company_name?.trim();
+    if (!companyName) continue;
+    const contacts = app.contacts || [];
+    for (const c of contacts) {
+      const hasAnyField = !!(
+        c.name || c.email || c.phone || c.linkedin_url || c.connection_type
+      );
+      if (!hasAnyField) continue;
+      contactEntries.push({ contact: { ...c }, company: companyName });
+    }
+  }
+
+  // Deduplicate by company + 5-field key.
+  const seen = new Set<string>();
+  const deduped: Array<{ contact: Contact; company: string }> = [];
+  for (const entry of contactEntries) {
+    const key = [
+      entry.company.toLowerCase(),
+      entry.contact.name || '',
+      entry.contact.email || '',
+      entry.contact.phone || '',
+      entry.contact.linkedin_url || '',
+      entry.contact.connection_type || '',
+    ].join('|');
+    if (!seen.has(key)) {
+      seen.add(key);
+      deduped.push(entry);
+    }
+  }
+
+  // Filter by query: match any non-null/non-empty field (case-insensitive
+  // partial match).  Empty query returns everything.
+  const filtered = deduped.filter(({ contact }) => {
+    if (!normalizedQuery) return true;
+    const fields = [
+      contact.name,
+      contact.email,
+      contact.phone,
+      contact.linkedin_url,
+      contact.connection_type,
+    ];
+    return fields.some(
+      (f) => f && f.toLowerCase().includes(normalizedQuery),
+    );
+  });
+
+  // Build result, sorted by name then email.
+  return filtered
+    .map(({ contact, company }) => ({
+      ...contact,
+      company,
+    }))
+    .sort((a, b) => {
+      const aName = a.name || a.email || '';
+      const bName = b.name || b.email || '';
+      const cmp = aName.toLowerCase().localeCompare(bName.toLowerCase());
+      if (cmp !== 0) return cmp;
+      return (a.company || '').localeCompare(b.company || '');
+    });
+};
+
+/**
  * Update all applications for a given company with a new contacts list.
  */
 const updateCompanyContacts = async (companyName: string, contacts: Contact[]): Promise<void> => {

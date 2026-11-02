@@ -16,7 +16,11 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import Autocomplete from '@mui/material/Autocomplete';
 import { JobApplication } from '../types';
-import { getDistinctCompanies, getCompanyContacts } from './db';
+import {
+  getDistinctCompanies,
+  getCompanyContacts,
+  searchAllContacts,
+} from './db';
 
 interface AddApplicationFormProps {
   onSubmit: (
@@ -59,6 +63,24 @@ export default function AddApplicationForm({
     'draft' | 'submitted' | null
   >(null);
   const navigate = useNavigate();
+
+  // Load all contacts (for autocomplete) once on mount
+  const [allContacts, setAllContacts] = useState<
+    Array<{
+      name: string | null;
+      email: string | null;
+      phone: string | null;
+      linkedin_url: string | null;
+      connection_type: string | null;
+      company: string;
+    }>
+  >([]);
+  React.useEffect(() => {
+    (async () => {
+      const contacts = await searchAllContacts('');
+      setAllContacts(contacts);
+    })();
+  }, []);
 
    // Load distinct companies on mount
   useEffect(() => {
@@ -411,44 +433,298 @@ export default function AddApplicationForm({
                     marginBottom: 8,
                   }}
                 >
-                  <TextField
-                    label="Name"
-                    value={c.name || ''}
-                    onChange={(e) =>
-                      handleContactChange(idx, 'name', e.target.value)
+                  <Autocomplete
+                    freeSolo
+                    options={allContacts.filter(
+                      (ct) =>
+                        !c.name ||
+                        ct.name?.toLowerCase().includes((c.name || '').toLowerCase()) ||
+                        ct.email?.toLowerCase().includes((c.name || '').toLowerCase()) ||
+                        ct.phone?.toLowerCase().includes((c.name || '').toLowerCase()) ||
+                        ct.linkedin_url?.toLowerCase().includes((c.name || '').toLowerCase()) ||
+                        ct.connection_type?.toLowerCase().includes((c.name || '').toLowerCase()),
+                    )}
+                    isOptionEqualToValue={(option, value) =>
+                      option.company + (option.name || '') ===
+                      (value as any).company + ((value as any).name || '')
                     }
+                    value={c.name ? { ...c, company: '' } : null}
+                    onChange={(event, newValue) => {
+                      if (newValue && typeof newValue !== 'string') {
+                        setForm((prev) => {
+                          const contacts = [...(prev?.contacts || [])];
+                          contacts[idx] = {
+                            name: newValue.name,
+                            email: newValue.email,
+                            phone: newValue.phone,
+                            linkedin_url: newValue.linkedin_url,
+                            connection_type: newValue.connection_type,
+                          } as any;
+                          return { ...(prev || {}), contacts };
+                        });
+                      }
+                    }}
+                    getOptionLabel={(option) => {
+                      if (typeof option === 'string') return option;
+                      const label = option.name || option.email || '';
+                      return option.company ? `${label} (${option.company})` : label;
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Name"
+                        onChange={(e) =>
+                          handleContactChange(idx, 'name', e.target.value)
+                        }
+                      />
+                    )}
+                    renderOption={(props, option) => (
+                      <li {...props}>
+                        <div>
+                          <div>{option.name || option.email || '(no name)'}</div>
+                          <div style={{ fontSize: 12, color: '#666' }}>
+                            {option.company}
+                            {[option.email, option.phone, option.linkedin_url]
+                              .filter(Boolean)
+                              .join(' · ')}
+                          </div>
+                        </div>
+                      </li>
+                    )}
                   />
-                  <TextField
-                    label="Email"
-                    value={c.email || ''}
-                    onChange={(e) =>
-                      handleContactChange(idx, 'email', e.target.value)
+                  <Autocomplete
+                    freeSolo
+                    options={allContacts.filter(
+                      (ct) =>
+                        !c.email ||
+                        ct.name?.toLowerCase().includes((c.email || '').toLowerCase()) ||
+                        ct.email?.toLowerCase().includes((c.email || '').toLowerCase()) ||
+                        ct.phone?.toLowerCase().includes((c.email || '').toLowerCase()) ||
+                        ct.linkedin_url?.toLowerCase().includes((c.email || '').toLowerCase()) ||
+                        ct.connection_type?.toLowerCase().includes((c.email || '').toLowerCase()),
+                    )}
+                    isOptionEqualToValue={(option, value) =>
+                      option.company + (option.email || '') ===
+                      (value as any).company + ((value as any).email || '')
                     }
+                    value={c.email ? { ...c, company: '' } : null}
+                    onChange={(event, newValue) => {
+                      if (newValue && typeof newValue !== 'string') {
+                        setForm((prev) => {
+                          const contacts = [...(prev?.contacts || [])];
+                          contacts[idx] = {
+                            name: newValue.name,
+                            email: newValue.email,
+                            phone: newValue.phone,
+                            linkedin_url: newValue.linkedin_url,
+                            connection_type: newValue.connection_type,
+                          } as any;
+                          return { ...(prev || {}), contacts };
+                        });
+                      }
+                    }}
+                    getOptionLabel={(option) => {
+                      if (typeof option === 'string') return option;
+                      const label = option.name || option.email || '';
+                      return option.company ? `${label} (${option.company})` : label;
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Email"
+                        onChange={(e) =>
+                          handleContactChange(idx, 'email', e.target.value)
+                        }
+                      />
+                    )}
+                    renderOption={(props, option) => (
+                      <li {...props}>
+                        <div>
+                          <div>{option.name || option.email || '(no name)'}</div>
+                          <div style={{ fontSize: 12, color: '#666' }}>
+                            {option.company}
+                            {[option.email, option.phone, option.linkedin_url]
+                              .filter(Boolean)
+                              .join(' · ')}
+                          </div>
+                        </div>
+                      </li>
+                    )}
                   />
-                  <TextField
-                    label="Phone"
-                    value={c.phone || ''}
-                    onChange={(e) =>
-                      handleContactChange(idx, 'phone', e.target.value)
+                  <Autocomplete
+                    freeSolo
+                    options={allContacts.filter(
+                      (ct) =>
+                        !c.phone ||
+                        ct.name?.toLowerCase().includes((c.phone || '').toLowerCase()) ||
+                        ct.email?.toLowerCase().includes((c.phone || '').toLowerCase()) ||
+                        ct.phone?.toLowerCase().includes((c.phone || '').toLowerCase()) ||
+                        ct.linkedin_url?.toLowerCase().includes((c.phone || '').toLowerCase()) ||
+                        ct.connection_type?.toLowerCase().includes((c.phone || '').toLowerCase()),
+                    )}
+                    isOptionEqualToValue={(option, value) =>
+                      option.company + (option.phone || '') ===
+                      (value as any).company + ((value as any).phone || '')
                     }
+                    value={c.phone ? { ...c, company: '' } : null}
+                    onChange={(event, newValue) => {
+                      if (newValue && typeof newValue !== 'string') {
+                        setForm((prev) => {
+                          const contacts = [...(prev?.contacts || [])];
+                          contacts[idx] = {
+                            name: newValue.name,
+                            email: newValue.email,
+                            phone: newValue.phone,
+                            linkedin_url: newValue.linkedin_url,
+                            connection_type: newValue.connection_type,
+                          } as any;
+                          return { ...(prev || {}), contacts };
+                        });
+                      }
+                    }}
+                    getOptionLabel={(option) => {
+                      if (typeof option === 'string') return option;
+                      const label = option.phone || option.name || '';
+                      return option.company ? `${label} (${option.company})` : label;
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Phone"
+                        onChange={(e) =>
+                          handleContactChange(idx, 'phone', e.target.value)
+                        }
+                      />
+                    )}
+                    renderOption={(props, option) => (
+                      <li {...props}>
+                        <div>
+                          <div>{option.name || option.email || '(no name)'}</div>
+                          <div style={{ fontSize: 12, color: '#666' }}>
+                            {option.company}
+                            {[option.phone, option.linkedin_url]
+                              .filter(Boolean)
+                              .join(' · ')}
+                          </div>
+                        </div>
+                      </li>
+                    )}
                   />
-                  <TextField
-                    label="LinkedIn"
-                    value={c.linkedin_url || ''}
-                    onChange={(e) =>
-                      handleContactChange(idx, 'linkedin_url', e.target.value)
+                  <Autocomplete
+                    freeSolo
+                    options={allContacts.filter(
+                      (ct) =>
+                        !c.linkedin_url ||
+                        ct.name?.toLowerCase().includes((c.linkedin_url || '').toLowerCase()) ||
+                        ct.email?.toLowerCase().includes((c.linkedin_url || '').toLowerCase()) ||
+                        ct.phone?.toLowerCase().includes((c.linkedin_url || '').toLowerCase()) ||
+                        ct.linkedin_url?.toLowerCase().includes((c.linkedin_url || '').toLowerCase()) ||
+                        ct.connection_type?.toLowerCase().includes((c.linkedin_url || '').toLowerCase()),
+                    )}
+                    isOptionEqualToValue={(option, value) =>
+                      option.company + (option.linkedin_url || '') ===
+                      (value as any).company + ((value as any).linkedin_url || '')
                     }
+                    value={c.linkedin_url ? { ...c, company: '' } : null}
+                    onChange={(event, newValue) => {
+                      if (newValue && typeof newValue !== 'string') {
+                        setForm((prev) => {
+                          const contacts = [...(prev?.contacts || [])];
+                          contacts[idx] = {
+                            name: newValue.name,
+                            email: newValue.email,
+                            phone: newValue.phone,
+                            linkedin_url: newValue.linkedin_url,
+                            connection_type: newValue.connection_type,
+                          } as any;
+                          return { ...(prev || {}), contacts };
+                        });
+                      }
+                    }}
+                    getOptionLabel={(option) => {
+                      if (typeof option === 'string') return option;
+                      const label = option.linkedin_url || option.name || '';
+                      return option.company ? `${label} (${option.company})` : label;
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="LinkedIn"
+                        onChange={(e) =>
+                          handleContactChange(idx, 'linkedin_url', e.target.value)
+                        }
+                      />
+                    )}
+                    renderOption={(props, option) => (
+                      <li {...props}>
+                        <div>
+                          <div>{option.name || option.email || '(no name)'}</div>
+                          <div style={{ fontSize: 12, color: '#666' }}>
+                            {option.company}
+                            {[option.linkedin_url, option.email]
+                              .filter(Boolean)
+                              .join(' · ')}
+                          </div>
+                        </div>
+                      </li>
+                    )}
                   />
-                  <TextField
-                    label="Connection Type"
-                    value={c.connection_type || ''}
-                    onChange={(e) =>
-                      handleContactChange(
-                        idx,
-                        'connection_type',
-                        e.target.value,
-                      )
+                  <Autocomplete
+                    freeSolo
+                    options={allContacts.filter(
+                      (ct) =>
+                        !c.connection_type ||
+                        ct.name?.toLowerCase().includes((c.connection_type || '').toLowerCase()) ||
+                        ct.email?.toLowerCase().includes((c.connection_type || '').toLowerCase()) ||
+                        ct.phone?.toLowerCase().includes((c.connection_type || '').toLowerCase()) ||
+                        ct.linkedin_url?.toLowerCase().includes((c.connection_type || '').toLowerCase()) ||
+                        ct.connection_type?.toLowerCase().includes((c.connection_type || '').toLowerCase()),
+                    )}
+                    isOptionEqualToValue={(option, value) =>
+                      option.company + (option.connection_type || '') ===
+                      (value as any).company + ((value as any).connection_type || '')
                     }
+                    value={c.connection_type ? { ...c, company: '' } : null}
+                    onChange={(event, newValue) => {
+                      if (newValue && typeof newValue !== 'string') {
+                        setForm((prev) => {
+                          const contacts = [...(prev?.contacts || [])];
+                          contacts[idx] = {
+                            name: newValue.name,
+                            email: newValue.email,
+                            phone: newValue.phone,
+                            linkedin_url: newValue.linkedin_url,
+                            connection_type: newValue.connection_type,
+                          } as any;
+                          return { ...(prev || {}), contacts };
+                        });
+                      }
+                    }}
+                    getOptionLabel={(option) => {
+                      if (typeof option === 'string') return option;
+                      const label = option.connection_type || option.name || '';
+                      return option.company ? `${label} (${option.company})` : label;
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Connection Type"
+                        onChange={(e) =>
+                          handleContactChange(idx, 'connection_type', e.target.value)
+                        }
+                      />
+                    )}
+                    renderOption={(props, option) => (
+                      <li {...props}>
+                        <div>
+                          <div>{option.name || option.email || '(no name)'}</div>
+                          <div style={{ fontSize: 12, color: '#666' }}>
+                            {option.company}
+                            {[option.connection_type].filter(Boolean).join(' · ')}
+                          </div>
+                        </div>
+                      </li>
+                    )}
                   />
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <IconButton size="small" onClick={() => removeContact(idx)}>
